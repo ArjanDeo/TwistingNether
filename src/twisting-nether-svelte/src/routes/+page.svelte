@@ -1,13 +1,22 @@
 <script lang="ts">
+	import { browser } from "$app/environment";
 	import { goto } from "$app/navigation";
-	import type { CharacterData } from "$lib/types";
-    import {realms } from "$lib/realms"
+    import { realms } from "$lib/realms";
+	import type { Character } from "$lib/types";
+	import { writable } from 'svelte/store';
+import { ClassColors } from "$lib/types";
 	let characterName = "";
 	let characterRealm = "";
 	let characterRegion = "default";
-	let showError = false; // Controls visibility of the error alert
-	let errorMessage = "Character not found"; // Error message text
-	let characterFound = false
+	let showError = false;
+	let errorMessage = "Character not found";
+	let characterFound = false;
+	let recentCharacters: Array<Character> = []
+	// Recently searched characters (load from localStorage)
+	if (browser) {
+		recentCharacters = JSON.parse(localStorage.getItem("recentCharacters") || "[]");
+	}
+	
 
 	let invalidFields = {
 		characterName: false,
@@ -16,41 +25,47 @@
 	};
 
 	async function getCharacter() {
-	// Reset invalid fields
-	invalidFields = {
-		characterName: !characterName.trim(),
-		characterRealm: !characterRealm.trim(),
-		characterRegion: !characterRegion.trim(),
-	};
+		invalidFields = {
+			characterName: !characterName.trim(),
+			characterRealm: !characterRealm.trim(),
+			characterRegion: !characterRegion.trim(),
+		};
 
-	// Check if there are any invalid fields
-	if (Object.values(invalidFields).some((isInvalid) => isInvalid)) {
-        errorMessage =  "Please fill out all fields"// Read the response body for a more specific error message
-		showError = true;
-		return;
-	}
+		if (Object.values(invalidFields).some((isInvalid) => isInvalid)) {
+			errorMessage = "Please fill out all fields";
+			showError = true;
+			return;
+		}
 
-	try {
-		const res = await fetch(
-			`https://localhost:7176/api/character/ping?name=${characterName}&realm=${characterRealm}&region=${characterRegion}`
-		);
+		try {
+			const res = await fetch(
+				`https://localhost:7176/api/character/ping?name=${characterName}&realm=${characterRealm}&region=${characterRegion}`
+			);
+			const resData: Character = await res.json();
+			if (res.ok) {
+				showError = false;
+				const newCharacter: Character = {
+					name: resData.name,
+					realm: resData.realm,
+					region: resData.region,
+					class: resData.class
+				};
 
-		if (res.ok) {
-			showError = false; // Clear any previous errors
-			goto(`/character/${characterRegion.toLowerCase()}/${characterRealm.toLowerCase()}/${characterName.toLowerCase()}`);
-			characterFound = true;
-		} else {
-            var x = await res.json();
-			errorMessage =  x;
+				// Update recent characters
+				updateRecentCharacters(newCharacter);
+
+				goto(`/character/${characterRegion.toLowerCase()}/${characterRealm.toLowerCase()}/${characterName.toLowerCase()}`);
+				characterFound = true;
+			} else {
+				const errorResponse = await res.json();
+				errorMessage = errorResponse;
+				showError = true;
+			}
+		} catch (error: any) {
+			errorMessage = error.message || "An unexpected error occurred.";
 			showError = true;
 		}
-	} catch (error: any) {
-		// Network or other errors
-		errorMessage = error.message || "An unexpected error occurred.";
-		showError = true;
 	}
-}
-
 
 	function validateField(field: keyof typeof invalidFields, value: string) {
 		invalidFields[field] = !value.trim();
@@ -58,6 +73,34 @@
 
 	function dismissError() {
 		showError = false;
+	}
+
+	function updateRecentCharacters(character: Character) {
+		// Check for duplicates
+		recentCharacters = recentCharacters.filter(
+			(c) =>
+				c.name.toLowerCase() !== character.name.toLowerCase() ||
+				c.realm.toLowerCase() !== character.realm.toLowerCase() ||
+				c.region.toLowerCase() !== character.region.toLowerCase() ||
+				c.class.toLowerCase() !== character.class.toLowerCase()
+		);
+
+		// Add to the front of the list
+		recentCharacters.unshift(character);
+
+		// Keep the list at a max size (e.g., 5 items)
+		recentCharacters = recentCharacters.slice(0, 5);
+
+		// Persist in localStorage
+		localStorage.setItem("recentCharacters", JSON.stringify(recentCharacters));
+	}
+
+	function loadCharacter(character: { name: string; realm: string; region: string }) {
+		characterName = character.name;
+		characterRealm = character.realm;
+		characterRegion = character.region;
+
+		getCharacter();
 	}
 </script>
 {#if characterFound} 
@@ -85,52 +128,71 @@
 	</div>
 </div>
 {/if}
-
-<div class="card glass w-fit mx-auto p-10">
-	<div class="card-body">
-		<form on:submit|preventDefault={getCharacter} class="flex flex-col gap-4">
-			<input
-				bind:value={characterName}
-				class="input input-primary"
-				placeholder="Character Name"
-				type="text"
-				class:input-invalid={invalidFields.characterName}
-				on:blur={() => validateField("characterName", characterName)}				
-			/>
-			<input
-				bind:value={characterRealm}
-				class="input input-primary"
-				placeholder="Character Realm"
-				type="text"
-                list="realms"
-				class:input-invalid={invalidFields.characterRealm}
-				on:blur={() => validateField("characterRealm", characterRealm)}				
-			/>
-            <datalist id="realms">
-                {#each realms
-                    .sort((a, b) => a.realmName.localeCompare(b.realmName))
-                    as realm (realm.realmName)}
-                    <option value="{realm.realmName}">{realm.realmName}</option>
-                {/each}
-            </datalist>
-			<select
-				bind:value={characterRegion}
-				class="input input-primary {characterRegion === "default" ? "text-gray-500" : ""}"
-				placeholder="Character Region"
-				class:input-invalid={invalidFields.characterRegion}
-				on:blur={() => validateField("characterRegion", characterRegion)}>
-                <option value="default" disabled selected>Character Region</option>
-                <option value="US">US</option>
-                <option value="EU">EU</option>
-                <option value="KR">KR</option>
-            </select>
-			<div class="flex justify-center mt-4">
-				<input class="btn btn-primary" type="submit" value="Submit" />
-			</div>
-		</form>
+<div class="flex justify-center items-start gap-4 mt-10">
+	<div class="card glass w-fit p-10">
+		<div class="card-body">
+			<form on:submit|preventDefault={getCharacter} class="flex flex-col gap-4">
+				<input
+					bind:value={characterName}
+					class="input input-primary"
+					placeholder="Character Name"
+					type="text"
+					class:input-invalid={invalidFields.characterName}
+					on:blur={() => validateField("characterName", characterName)}				
+				/>
+				<input
+					bind:value={characterRealm}
+					class="input input-primary"
+					placeholder="Character Realm"
+					type="text"
+					list="realms"
+					class:input-invalid={invalidFields.characterRealm}
+					on:blur={() => validateField("characterRealm", characterRealm)}				
+				/>
+				<datalist id="realms">
+					{#each realms
+						.sort((a, b) => a.realmName.localeCompare(b.realmName))
+						as realm (realm.realmName)}
+						<option value="{realm.realmName}">{realm.realmName}</option>
+					{/each}
+				</datalist>
+				<select
+					bind:value={characterRegion}
+					class="input input-primary {characterRegion === "default" ? "text-gray-500" : ""}"
+					placeholder="Character Region"
+					class:input-invalid={invalidFields.characterRegion}
+					on:blur={() => validateField("characterRegion", characterRegion)}>
+					<option value="default" disabled selected>Character Region</option>
+					<option value="US">US</option>
+					<option value="EU">EU</option>
+					<option value="KR">KR</option>
+				</select>
+				<div class="flex justify-center mt-4">
+					<input class="btn btn-primary" type="submit" value="Submit" />
+				</div>
+			</form>
+		</div>
 	</div>
-</div>
 
+	{#if recentCharacters.length > 0}
+	<div class="recent-characters card glass w-fit p-4">
+		<h3 class="font-bold text-lg mb-2">Recently Searched</h3>
+		<ul class="list-none">
+			{#each recentCharacters as character}
+			<li class="mb-2">
+				<button
+				    style="color: {ClassColors[character.class]};"
+					class="btn btn-outline btn-sm w-full hover:scale-110 transition-transform ease-in-out duration-500"
+					on:click={() => loadCharacter(character)}
+				>
+					{character.name} - {character.realm} ({character.region.toUpperCase()})
+				</button>
+			</li>
+			{/each}
+		</ul>
+	</div>
+	{/if}
+</div>
 <style>
 	.input-invalid {
 		border-color: red;
@@ -150,5 +212,11 @@
 		75% {
 			transform: translateX(-5px);
 		}
+	}
+	.recent-characters {
+		padding-top: 1rem;
+	}
+	.recent-characters button {
+		text-align: left;
 	}
 </style>

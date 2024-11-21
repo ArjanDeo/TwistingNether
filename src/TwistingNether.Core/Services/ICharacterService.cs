@@ -10,6 +10,6 @@ namespace TwistingNether.Core.Services
     public interface ICharacterService
     {
         Task<CharacterModel> GetCharacter(string name, string realm, string region);
-        Task<bool> PingCharacter (string name, string realm, string region);
+        Task<object?> PingCharacter (string name, string realm, string region);
     }
 }

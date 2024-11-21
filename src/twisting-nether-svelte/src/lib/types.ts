@@ -492,3 +492,25 @@ export type CharacterData = {
     }[];
     url: string;
   }
+  export type Character = {
+    name: string;
+    realm: string;
+    region: string;
+    class: keyof typeof ClassColors;
+  }
+  
+  export const ClassColors = {
+    Warrior: '#C69B6D',
+    Hunter: '#AAD372',
+    Mage: '#3FC7EB',
+    Rogue: '#FFF468',
+    Priest: '#FFFFFF',
+    Warlock: '#8788EE',
+    Paladin: '#F48CBA',
+    Druid: '#FF7C0A',
+    Shaman: '#0070DD',
+    Monk: '#00FF98',
+    DemonHunter: '#A330C9',
+    DeathKnight: '#C41E3A',
+    Evoker: '#33937F',
+  } as const;

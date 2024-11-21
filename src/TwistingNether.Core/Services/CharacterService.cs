@@ -55,7 +55,7 @@ namespace TwistingNether.Core.Services
                 CharacterMedia = characterMediaList
             };
         }
-        public async Task<bool> PingCharacter(string name, string realm, string region)
+        public async Task<object?> PingCharacter(string name, string realm, string region)
         {
             try
             {
@@ -65,11 +65,19 @@ namespace TwistingNether.Core.Services
                       .WithArgument("name", name)
                       .WithArgument("realm", realm.Replace(" ", "-"))
                       .As<RaiderIOCharacterDataModel>();
-                return true;
+
+
+                return new
+                {
+                    Name = data.name,
+                    Realm = data.realm,
+                    Region = data.region,
+                    Class = data.char_class.Replace(" ", "")
+                };
             }
-            catch (ApiException ex)
+            catch
             {
-                return false;
+                return null;
             }
         }
     }

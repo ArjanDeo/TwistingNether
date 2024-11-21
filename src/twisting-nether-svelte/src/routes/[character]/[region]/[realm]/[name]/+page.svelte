@@ -4,6 +4,7 @@
     let { data }: { data: PageData } = $props();
 	import { ItemQuality, type Affix } from '$lib/types';
 	import { onMount } from 'svelte';
+	import { run } from 'svelte/legacy';
 
     let head = data.character.raiderIOCharacterData.gear.items.head;
     let neck = data.character.raiderIOCharacterData.gear.items.neck;
@@ -82,7 +83,10 @@ onMount(async () => {
             <h1 class="text-4xl font-semibold">
                 {data.character.raiderIOCharacterData.name}-{data.character.raiderIOCharacterData.realm} <a target="_blank" class="hover:text-purple-700 transition-colors ease-in-out duration-300" href="https://worldofwarcraft.blizzard.com/en-us/guild/{data.character.raiderIOCharacterData.region}/{data.character.raiderIOCharacterData.guild.realm.replace('\'', "")}/{data.character.raiderIOCharacterData.guild.name.replace(' ', '-')}/">&lt;{data.character.raiderIOCharacterData.guild.name}&gt;</a>
             </h1>
-            <p class="text-xl">{data.character.raiderIOCharacterData.race} {data.character.raiderIOCharacterData.active_spec_name} {data.character.raiderIOCharacterData.char_class}</p>
+            <div class="mt-2">
+                <div style="color: {data.character.classColor}; border-color: {data.character.classColor};" class="text-center text-xl badge p-3">{data.character.raiderIOCharacterData.race}</div>
+                <div style="color: {data.character.classColor}; border-color: {data.character.classColor};" class="text-center text-xl badge p-3">{data.character.raiderIOCharacterData.active_spec_name} {data.character.raiderIOCharacterData.char_class}</div> 
+            </div>
         </header>
         
         <div class="flex mb-8 items-start">           
@@ -182,15 +186,27 @@ onMount(async () => {
                     <li class="text-xl text-[#1eff00]">
                         {data.character.raiderIOCharacterData.raid_progression.nerubarpalace.normal_bosses_killed}/{data.character.raiderIOCharacterData.raid_progression.nerubarpalace.total_bosses}N
                     </li>
+                    {:else}
+                    <li class="text-xl text-[#1eff00]">
+                        0/{data.character.raiderIOCharacterData.raid_progression.nerubarpalace.total_bosses}N    
+                    </li>
                     {/if}
                     {#if data.character.raiderIOCharacterData.raid_progression.nerubarpalace.heroic_bosses_killed > 0}
                     <li class="text-xl text-[#1873da]">
                         {data.character.raiderIOCharacterData.raid_progression.nerubarpalace.heroic_bosses_killed}/{data.character.raiderIOCharacterData.raid_progression.nerubarpalace.total_bosses}H
                     </li>
+                    {:else}
+                    <li class="text-xl text-[#1873da]">
+                        0/{data.character.raiderIOCharacterData.raid_progression.nerubarpalace.total_bosses}H
+                    </li>
                     {/if}
                     {#if data.character.raiderIOCharacterData.raid_progression.nerubarpalace.mythic_bosses_killed > 0}
                     <li class="text-xl text-[#a837e8]">
                         {data.character.raiderIOCharacterData.raid_progression.nerubarpalace.mythic_bosses_killed}/{data.character.raiderIOCharacterData.raid_progression.nerubarpalace.total_bosses}M
+                    </li>
+                    {:else}
+                    <li class="text-xl text-[#a837e8]">
+                        0/{data.character.raiderIOCharacterData.raid_progression.nerubarpalace.total_bosses}M
                     </li>
                     {/if}
                 </ul>
@@ -203,18 +219,21 @@ onMount(async () => {
                     </select>
                 </div>
                 {#each topRuns() as run}
-                    <div style="border-color: {data.character.classColor};" class="border my-1 rounded-md px-1">
-                        <h2 class="text-2xl">{'+'.repeat(run.num_keystone_upgrades)}{run.mythic_level} {run.dungeon}</h2>
-                        <div class="flex gap-x-3 justify-center">
-                            {#each run.affixes as affix}
-                            <img class="max-w-10 my-1" alt="{affix.name}" src="{affixList.find((item) => item.id === affix.id)?.icon || "Unknown"}"/>
-                            {/each}
+                    <a href="{run.url}" target="_blank">
+                        <div style="--classColor: {data.character.classColor}; border-color: {data.character.classColor};" class="border my-1 rounded-md px-1 hover:bg-[var(--classColor)] hover:text-black transition-colors ease-in-out">
+                            <h2 class="text-2xl">{'+'.repeat(run.num_keystone_upgrades)}{run.mythic_level} {run.dungeon}</h2>
+                            <div class="flex gap-x-3 justify-center">
+                                {#each run.affixes as affix}                            
+                                <img class="max-w-10 my-1" alt="{affix.name}" src="{affixList.find((item) => item.id === affix.id)?.icon || "Unknown"}"/>
+                                
+                                {/each}
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 {/each}
             </div>
         </div>
     </div>
     {:else if loading}
-        <span class="loading loading-spinner text-success mx-auto"></span>
-{/if} 
+        <span class="loading loading-spinner text-success mx-auto block justify-center scale-150 self-center my-auto"></span>
+{/if}
