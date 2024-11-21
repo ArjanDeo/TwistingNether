@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35323.107
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwistingNether.API", "src\TwistingNether.API\TwistingNether.API.csproj", "{9B532825-AF7E-4169-9E3A-69DE422DD456}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwistingNether.Core", "src\TwistingNether.Core\TwistingNether.Core.csproj", "{E7374E2C-395B-45AB-A9BD-3849FD13D156}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwistingNether.DataAccess", "src\TwistingNether.DataAccess\TwistingNether.DataAccess.csproj", "{9A5E509C-D1F6-4852-9B48-D34A2E9491AB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9B532825-AF7E-4169-9E3A-69DE422DD456}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B532825-AF7E-4169-9E3A-69DE422DD456}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B532825-AF7E-4169-9E3A-69DE422DD456}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B532825-AF7E-4169-9E3A-69DE422DD456}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7374E2C-395B-45AB-A9BD-3849FD13D156}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7374E2C-395B-45AB-A9BD-3849FD13D156}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7374E2C-395B-45AB-A9BD-3849FD13D156}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7374E2C-395B-45AB-A9BD-3849FD13D156}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A5E509C-D1F6-4852-9B48-D34A2E9491AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A5E509C-D1F6-4852-9B48-D34A2E9491AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A5E509C-D1F6-4852-9B48-D34A2E9491AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A5E509C-D1F6-4852-9B48-D34A2E9491AB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EAFB16D9-E6FD-47DD-A281-0DD8C5E9779F}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,6 @@
+@TwistingNether.API_HostAddress = http://localhost:5138
+
+GET {{TwistingNether.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
