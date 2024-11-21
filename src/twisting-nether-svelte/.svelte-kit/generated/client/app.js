@@ -5,14 +5,16 @@ export const nodes = [
 	() => import('./nodes/1'),
 	() => import('./nodes/2'),
 	() => import('./nodes/3'),
-	() => import('./nodes/4')
+	() => import('./nodes/4'),
+	() => import('./nodes/5')
 ];
 
 export const server_loads = [];
 
 export const dictionary = {
 		"/": [3],
-		"/[character]/[region]/[realm]/[name]": [4,[],[2]]
+		"/about": [4],
+		"/[character]/[region]/[realm]/[name]": [5,[],[2]]
 	};
 
 export const hooks = {

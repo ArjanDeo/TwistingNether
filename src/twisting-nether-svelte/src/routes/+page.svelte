@@ -128,8 +128,8 @@ import { ClassColors } from "$lib/types";
 	</div>
 </div>
 {/if}
-<div class="flex justify-center items-start gap-4 mt-10">
-	<div class="card glass w-fit p-10">
+<div class="flex flex-col md:flex-row justify-center items-start gap-4 mt-10">
+	<div class="card glass w-fit p-10 mx-auto md:mx-0">
 		<div class="card-body">
 			<form on:submit|preventDefault={getCharacter} class="flex flex-col gap-4">
 				<input
@@ -175,7 +175,7 @@ import { ClassColors } from "$lib/types";
 	</div>
 
 	{#if recentCharacters.length > 0}
-	<div class="recent-characters card glass w-fit p-4">
+	<div class="recent-characters card glass w-fit p-4 mx-auto md:mx-0">
 		<h3 class="font-bold text-lg mb-2">Recently Searched</h3>
 		<ul class="list-none">
 			{#each recentCharacters as character}

@@ -67,6 +67,9 @@ const topRuns = () => {
         return data.character.raiderIOCharacterData.mythic_plus_weekly_highest_level_runs
             .slice(0, mythicRunAmount);
     };
+    function updateCharacter() {
+        alert('This function has not been implemented yet.')
+    }
 onMount(async () => {
     await getAffixMedia();
     for (let i = 0; i < mythicRunAmount; i++)
@@ -77,10 +80,10 @@ onMount(async () => {
 	<title>{data.character.raiderIOCharacterData.name} - {data.character.raiderIOCharacterData.realm}</title>
 </svelte:head>
 {#if data.character && !loading}
-    <div class="flex flex-col p-8 min-h-screen backdrop-blur-sm" style="color: {data.character.classColor};">
+    <div class="flex flex-col p-8 min-h-screen" style="color: {data.character.classColor};">
         <!-- Character Header -->
         <header class=" mb-8">
-            <h1 class="text-4xl font-semibold">
+            <h1 class="text-2xl lg:text-4xl font-semibold">
                 {data.character.raiderIOCharacterData.name}-{data.character.raiderIOCharacterData.realm} <a target="_blank" class="hover:text-purple-700 transition-colors ease-in-out duration-300" href="https://worldofwarcraft.blizzard.com/en-us/guild/{data.character.raiderIOCharacterData.region}/{data.character.raiderIOCharacterData.guild.realm.replace('\'', "")}/{data.character.raiderIOCharacterData.guild.name.replace(' ', '-')}/">&lt;{data.character.raiderIOCharacterData.guild.name}&gt;</a>
             </h1>
             <div class="mt-2">
@@ -89,10 +92,10 @@ onMount(async () => {
             </div>
         </header>
         
-        <div class="flex mb-8 items-start">           
-            <div class="flex flex-col gap-x-1.5 justify-center">
+        <div class="lg:flex mb-8 items-start md:mx-auto lg:mx-0">           
+            <div class="flex lg:flex-col flex-row sm:mx-auto lg:mx-0 lg:order-none order-1 md:gap-x-2">
                 {#each [head, neck, shoulders, back, chest] as item}
-                <div class="has-tooltip flex flex-col items-center">
+                <div class="has-tooltip flex items-center">
                     <a target="_blank" href="https://www.wowhead.com/item={item.item_id}/">
                         <img style="border-color: {itemRarityColor(item.item_quality)};" class="max-w-11 mb-2 hover:cursor-pointer border" src="https://wow.zamimg.com/images/wow/icons/large/{item.icon}.jpg" alt="{item.name}">
                     </a>
@@ -115,15 +118,15 @@ onMount(async () => {
                     {/if}
                 </div>
                 {/each}
-                <div class="has-tooltip flex flex-col items-center">
+                <div class="has-tooltip flex flex-row items-center">
                     <img style="border-color: {itemRarityColor(1)};" class="max-w-11 mb-2 hover:cursor-pointer border" src="https://wow.zamimg.com/images/wow/icons/large/inv_shirt_guildtabard_01.jpg" alt="inv_shirt_guildtabard_01">
                      <span class="tooltip rounded shadow-lg p-1 bg-slate-700 text-[#ffffff] -mt-8">Personal Tabard</span>
                 </div>
-                <div class="has-tooltip flex flex-col items-center">
+                <div class="has-tooltip flex flex-row items-center">
                     <img style="border-color: {itemRarityColor(1)};" class="max-w-11 mb-2 hover:cursor-pointer border" src="https://wow.zamimg.com/images/wow/icons/large/inv_shirt_white_01.jpg" alt="inv_shirt_white_01">
                      <span class="tooltip rounded shadow-lg p-1 bg-slate-700 text-[#ffffff] -mt-8">Common White Shirt</span>
                 </div>
-                <div class="has-tooltip flex flex-col items-center">
+                <div class="has-tooltip flex flex-row items-center">
                     <a target="_blank" href="https://www.wowhead.com/item={wrists.item_id}/">
                         <img style="border-color: {itemRarityColor(wrists.item_quality)};" class="max-w-11 mb-2 hover:cursor-pointer border" src="https://wow.zamimg.com/images/wow/icons/large/{wrists.icon}.jpg" alt="{wrists.name}">
                     </a>
@@ -149,11 +152,11 @@ onMount(async () => {
             <img 
                 src={data.character.characterMedia ? data.character.characterMedia[2].link : '/default-image.png'} 
                 alt="Character Render" 
-                class="size-1/3"
+                class=" sm:order-last lg:order-none md:max-w-2xl lg:max-w-3xl lg:max-h-max object-cover mx-0"
             />
-            <div class="flex flex-col">
+            <div class="flex lg:flex-col flex-row sm:mx-auto lg:mx-0 lg:order-none order-2 md:gap-x-2">
                 {#each [hands, waist, legs, feet, ring1, ring2, trinket1, trinket2] as item}
-                <div class="has-tooltip flex flex-col items-center">
+                <div class="has-tooltip flex flex-row items-center">
                     <a target="_blank" href="https://www.wowhead.com/item={item.item_id}/">
                         <img style="border-color: {itemRarityColor(item.item_quality)};" class="max-w-11 mb-2 hover:cursor-pointer border" src="https://wow.zamimg.com/images/wow/icons/large/{item.icon}.jpg" alt="{item.name}">
                     </a>
@@ -177,7 +180,8 @@ onMount(async () => {
                 </div>
             {/each}
             </div>
-            <div class="ml-24">
+            <div class="lg:ml-24 lg:order-none order-last">
+                <button onclick={() => updateCharacter()} style="color:{data.character.classColor}" class="btn btn-outline mb-2">Update Character</button>
                 <p class="text-2xl">Item Level: <span style="color:{hasEpicMilestone === true ? '#a335ee' : '#0070dd'}">{Math.round(data.character.raiderIOCharacterData.gear.item_level_equipped)}</span></p>
                 <p class="text-2xl">M+ Score: <span style="color:{data.character.raiderIOCharacterData.mythic_plus_scores_by_season[0].segments.all.color}">{data.character.raiderIOCharacterData.mythic_plus_scores_by_season[0].scores.all}</span></p>
                 <p class="text-2xl">Nerub-ar Palace Progress:</p>
@@ -212,7 +216,7 @@ onMount(async () => {
                 </ul>
                 <div class="flex">
                     <h1 class="text-3xl mt-10">Most recent M+ runs:</h1>
-                    <select class="bg-slate-600 h-fit mt-10 ml-1 input input-primary" bind:value={mythicRunAmount}>
+                    <select style="border-color:{data.character.classColor}; outline-color:{data.character.classColor}; color: {data.character.classColor}" class="bg-slate-800 h-fit mt-10 ml-1 input input-primary" bind:value={mythicRunAmount}>
                         <option value="3" selected>Top 3</option>
                         <option value="5">Top 5</option>
                         <option value="10">Top 10</option>
@@ -220,7 +224,7 @@ onMount(async () => {
                 </div>
                 {#each topRuns() as run}
                     <a href="{run.url}" target="_blank">
-                        <div style="--classColor: {data.character.classColor}; border-color: {data.character.classColor};" class="border my-1 rounded-md px-1 hover:bg-[var(--classColor)] hover:text-black transition-colors ease-in-out">
+                        <div style="--classColor: {data.character.classColor}; border-color: {data.character.classColor};" class="border my-1 rounded-lg px-1 hover:bg-[var(--classColor)] hover:text-black transition-colors ease-in-out">
                             <h2 class="text-2xl">{'+'.repeat(run.num_keystone_upgrades)}{run.mythic_level} {run.dungeon}</h2>
                             <div class="flex gap-x-3 justify-center">
                                 {#each run.affixes as affix}                            
