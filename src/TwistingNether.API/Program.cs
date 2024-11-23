@@ -1,3 +1,4 @@
+using LazyCache;
 using Microsoft.EntityFrameworkCore;
 using Pathoschild.Http.Client;
 using TwistingNether.Core;
@@ -20,8 +21,9 @@ namespace TwistingNether.API
             builder.Services.AddEndpointsApiExplorer(); 
             builder.Services.AddSwaggerGen();
 
-
+            builder.Services.AddScoped<IAppCache, CachingService>();
             builder.Services.AddScoped<Common>();
+            builder.Services.AddScoped<IGeneralService, GeneralService>();
             builder.Services.AddScoped<IKeystoneService, KeystoneService>();
             builder.Services.AddScoped<ICharacterService, CharacterService>();
             builder.Services.AddSingleton<FluentClient>();

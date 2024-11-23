@@ -86,14 +86,25 @@ onMount(async () => {
             <h1 class="text-2xl lg:text-4xl font-semibold">
                 {data.character.raiderIOCharacterData.name}-{data.character.raiderIOCharacterData.realm} <a target="_blank" class="hover:text-purple-700 transition-colors ease-in-out duration-300" href="https://worldofwarcraft.blizzard.com/en-us/guild/{data.character.raiderIOCharacterData.region}/{data.character.raiderIOCharacterData.guild.realm.replace('\'', "")}/{data.character.raiderIOCharacterData.guild.name.replace(' ', '-')}/">&lt;{data.character.raiderIOCharacterData.guild.name}&gt;</a>
             </h1>
-            <div class="mt-2">
-                <div style="color: {data.character.classColor}; border-color: {data.character.classColor};" class="text-center text-xl badge p-3">{data.character.raiderIOCharacterData.race}</div>
-                <div style="color: {data.character.classColor}; border-color: {data.character.classColor};" class="text-center text-xl badge p-3">{data.character.raiderIOCharacterData.active_spec_name} {data.character.raiderIOCharacterData.char_class}</div> 
+            <div class="mt-2 flex gap-x-5">
+                <div style="color: {data.character.classColor}; border-color: {data.character.classColor};" class="text-center text-xl badge p-4">{data.character.raiderIOCharacterData.race}</div>
+                <div style="color: {data.character.classColor}; border-color: {data.character.classColor};" class="text-center text-xl badge p-4">{data.character.raiderIOCharacterData.active_spec_name} {data.character.raiderIOCharacterData.char_class}</div> 
+                <a aria-label="raider.io link" href="https://raider.io/characters/{data.character.raiderIOCharacterData.region}/{data.character.raiderIOCharacterData.realm}/{data.character.raiderIOCharacterData.name}" target="_blank">
+                    <svg width="45" height="40">
+                        <image xlink:href="https://cdn.raiderio.net/images/brand/Icon_2ColorWhite.svg" width="45" height="40"/>    
+                   </svg>
+                </a>
+                <a href="https://www.warcraftlogs.com/character/{data.character.raiderIOCharacterData.region}/{data.character.raiderIOCharacterData.realm}/{data.character.raiderIOCharacterData.name}" target="_blank">
+                    <img src="https://assets.rpglogs.com/cms/WCL_Icon_57fc009f4e.png" class="w-9 h-9" alt="warcraft logs logo"/>
+                </a>
+                <a href="https://worldofwarcraft.blizzard.com/en-gb/character/{data.character.raiderIOCharacterData.region}/{data.character.raiderIOCharacterData.realm}/{data.character.raiderIOCharacterData.name}" target="_blank">
+                    <img src="https://logos-download.com/wp-content/uploads/2016/02/WOW_logo.png" class="w-9 h-9" alt="world of warcraft logo"/>
+                </a>
             </div>
         </header>
         
-        <div class="lg:flex mb-8 items-start md:mx-auto lg:mx-0">           
-            <div class="flex lg:flex-col flex-row sm:mx-auto lg:mx-0 lg:order-none order-1 md:gap-x-2">
+        <div class="md:flex mb-8 items-start md:mx-auto lg:mx-0 flex-wrap lg:flex-none">           
+            <div class="flex lg:flex-col flex-row sm:mx-auto lg:mx-0 md:order-none order-1 gap-x-2">
                 {#each [head, neck, shoulders, back, chest] as item}
                 <div class="has-tooltip flex items-center">
                     <a target="_blank" href="https://www.wowhead.com/item={item.item_id}/">
@@ -152,9 +163,9 @@ onMount(async () => {
             <img 
                 src={data.character.characterMedia ? data.character.characterMedia[2].link : '/default-image.png'} 
                 alt="Character Render" 
-                class=" sm:order-last lg:order-none md:max-w-2xl lg:max-w-3xl lg:max-h-max object-cover mx-0"
+                class=" sm:order-last md:order-none md:max-w-2xl lg:max-w-3xl lg:max-h-max object-cover mx-0"
             />
-            <div class="flex lg:flex-col flex-row sm:mx-auto lg:mx-0 lg:order-none order-2 md:gap-x-2">
+            <div class="flex lg:flex-col flex-row sm:mx-auto lg:mx-0 md:order-none gap-x-2">
                 {#each [hands, waist, legs, feet, ring1, ring2, trinket1, trinket2] as item}
                 <div class="has-tooltip flex flex-row items-center">
                     <a target="_blank" href="https://www.wowhead.com/item={item.item_id}/">
@@ -180,7 +191,7 @@ onMount(async () => {
                 </div>
             {/each}
             </div>
-            <div class="lg:ml-24 lg:order-none order-last">
+            <div class="lg:ml-24 lg:order-1 order-last">
                 <button onclick={() => updateCharacter()} style="color:{data.character.classColor}" class="btn btn-outline mb-2">Update Character</button>
                 <p class="text-2xl">Item Level: <span style="color:{hasEpicMilestone === true ? '#a335ee' : '#0070dd'}">{Math.round(data.character.raiderIOCharacterData.gear.item_level_equipped)}</span></p>
                 <p class="text-2xl">M+ Score: <span style="color:{data.character.raiderIOCharacterData.mythic_plus_scores_by_season[0].segments.all.color}">{data.character.raiderIOCharacterData.mythic_plus_scores_by_season[0].scores.all}</span></p>

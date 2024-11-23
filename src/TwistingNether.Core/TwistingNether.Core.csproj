@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.71" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0" />
     <PackageReference Include="Pathoschild.Http.FluentClient" Version="4.4.1" />
   </ItemGroup>

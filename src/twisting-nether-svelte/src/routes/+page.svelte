@@ -1,23 +1,34 @@
 <script lang="ts">
 	import { browser } from "$app/environment";
 	import { goto } from "$app/navigation";
+	import { lazyLoad } from "$lib/lazyLoad";
     import { realms } from "$lib/realms";
 	import type { Character } from "$lib/types";
-	import { writable } from 'svelte/store';
 import { ClassColors } from "$lib/types";
+	import { onMount } from "svelte";
 	let characterName = "";
 	let characterRealm = "";
 	let characterRegion = "default";
 	let showError = false;
 	let errorMessage = "Character not found";
 	let characterFound = false;
-	let recentCharacters: Array<Character> = []
+	let recentCharacters: Array<Character> = [];
+	let newsPosts: Array<any> = [];
 	// Recently searched characters (load from localStorage)
 	if (browser) {
 		recentCharacters = JSON.parse(localStorage.getItem("recentCharacters") || "[]");
 	}
-	
 
+	onMount(async () => {
+		const news = await fetch('https://localhost:7176/api/General/GetNews?limit=10');
+
+		if (!news.ok) {
+			errorMessage = 'Couldn\'t fetch news.';
+			showError = true;
+			return
+		}
+		newsPosts = await news.json();
+	})
 	let invalidFields = {
 		characterName: false,
 		characterRealm: false,
@@ -62,7 +73,7 @@ import { ClassColors } from "$lib/types";
 				showError = true;
 			}
 		} catch (error: any) {
-			errorMessage = error.message || "An unexpected error occurred.";
+			errorMessage = "An unexpected error occurred.\nPlease try again later";
 			showError = true;
 		}
 	}
@@ -74,7 +85,6 @@ import { ClassColors } from "$lib/types";
 	function dismissError() {
 		showError = false;
 	}
-
 	function updateRecentCharacters(character: Character) {
 		// Check for duplicates
 		recentCharacters = recentCharacters.filter(
@@ -192,6 +202,20 @@ import { ClassColors } from "$lib/types";
 		</ul>
 	</div>
 	{/if}
+</div>
+<div>
+	<h1 class="text-center my-10 text-2xl bg-slate-800 w-fit p-2 rounded-xl mx-auto">RECENT NEWS</h1>
+	<div class="grid md:grid-cols-2 lg:grid-cols-3 md:grid-flow-rows gap-y-4 lg:gap-x-3 ml-2">		
+		{#each newsPosts as post}
+			<div class="glass w-96 md:w-80 xl:w-96 2xl:w-5/6 h-full mx-auto lg:mx-0 rounded-box">
+				<a href="{post.link}" target="_blank">
+				<img loading="lazy" src="{post.image}" class="w-fit" alt="{post.title}">
+				<h1 class="text-xl p-2 truncate">{post.title}</h1>
+				<p class="p-2 line-clamp-2 leading-7 overflow-hidden">{post.description}</p>
+				</a>
+			</div>
+		{/each}
+	</div>
 </div>
 <style>
 	.input-invalid {
