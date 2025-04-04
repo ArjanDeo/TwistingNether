@@ -70,9 +70,10 @@ const uniqueSortedAffixIds = [
   ].sort((a, b) => a - b);
 async function getAffixMedia() {
     for (let i: number = 0; i < uniqueSortedAffixIds.length; i++) {
-        let uri = 'https:/localhost:7176'
+        
+        let uri = 'https://twistingnether-atcpfye3hbhjd3az.westus-01.azurewebsites.net'
         if (dev) {
-            uri = 'https://twistingnether-atcpfye3hbhjd3az.westus-01.azurewebsites.net'
+            uri = 'https:/localhost:7176'
         }
     let response = await fetch(`${uri}/api/keystone/get-affix-media?id=${uniqueSortedAffixIds[i]}`)
     affixList.push(await response.json());
