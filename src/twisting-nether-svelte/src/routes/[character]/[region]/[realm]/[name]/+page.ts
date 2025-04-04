@@ -4,7 +4,7 @@ import type { PageLoad } from './$types';
 import type { CharacterData } from '$lib/types';
 
 export const load = (async ({fetch, params}) => {
-    let charDataEndpoint = "https://twistingnether-atcpfye3hbhjd3az.westus-01.azurewebsites.net/api/general/character/getcharacter"
+    let charDataEndpoint = "https://twistingnether-atcpfye3hbhjd3az.westus-01.azurewebsites.net/api/character/getcharacter"
     if (dev) {
         console.log('Dev Environment Active')
         charDataEndpoint = "/api/character"
