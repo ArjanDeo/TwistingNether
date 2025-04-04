@@ -22,9 +22,9 @@
     let trinket2 = data.character.raiderIOCharacterData.gear.items.trinket2;
     let mainhand = data.character.raiderIOCharacterData.gear.items.mainhand;
     let offhand = data.character.raiderIOCharacterData.gear.items.offhand;
-    let affixList: Affix[] = [];
-    let loading: boolean = true;
-    let mythicRunAmount = 3;
+    let affixList: Affix[] = $state([]);
+    let loading: boolean = $state(true);
+    let mythicRunAmount = $state(3);
     function itemRarityColor(itemQuality: number): string {
     switch (itemQuality) {
         case ItemQuality.Common:
