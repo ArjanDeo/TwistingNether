@@ -231,8 +231,8 @@ onMount(async () => {
                     {:else}
                     <li class="text-xl text-[#1873da] flex">
                         <span>0/{data.character.raiderIOCharacterData.raid_progression.liberationofundermine.total_bosses}H</span>
-                        {data.character.raiderIOCharacterData.raid_achievement_curve[0].aotc}
                         {#if data.character.raiderIOCharacterData.raid_achievement_curve[0].aotc != undefined}
+                        {data.character.raiderIOCharacterData.raid_achievement_curve[0].aotc}
                         <span class="badge">AOTC</span>
                         {/if}
                     </li>
