@@ -92,20 +92,6 @@ onMount(async () => {
     loading = false;
 	});
 
-
-	function $state(arg0: never[]): Affix[] {
-		throw new Error('Function not implemented.');
-	}
-
-
-	function $props(): $$ComponentProps {
-		throw new Error('Function not implemented.');
-	}
-
-
-	function $state(arg0: never[]): Affix[] {
-		throw new Error('Function not implemented.');
-	}
 </script>
 <svelte:head>
 	<title>{data.character.raiderIOCharacterData.name} - {data.character.raiderIOCharacterData.realm}</title>
