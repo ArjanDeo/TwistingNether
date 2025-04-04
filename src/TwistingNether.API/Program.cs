@@ -30,8 +30,8 @@ namespace TwistingNether.API
             Settings.ClientId = builder.Configuration.GetSection("BattleNet").GetSection("ClientId").Value;
             Settings.ClientSecret = builder.Configuration.GetSection("BattleNet").GetSection("ClientSecret").Value;
 
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
+            //builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            //options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
 
             builder.Services.AddCors(options =>
             {
@@ -45,20 +45,21 @@ namespace TwistingNether.API
                     builder => builder
                     .AllowAnyMethod()
                     .AllowCredentials()
-                    .WithOrigins("https://whatchores.furyshiftz.com")
+                    .WithOrigins("https://whatchores.furyshiftz.com","https://twistingnether.furyshiftz.com")
                     .AllowAnyHeader());
             });
             builder.Services.AddOptions();
             var app = builder.Build();
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.DefaultModelsExpandDepth(-1);
+            });
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 //app.MapOpenApi();
-                app.UseSwagger();
-                app.UseSwaggerUI(options =>
-                {
-                    options.DefaultModelsExpandDepth(-1);
-                });
+                
 
                 app.UseCors("DevPolicy");
             }
@@ -66,7 +67,7 @@ namespace TwistingNether.API
             {
                 app.UseCors("ProdPolicy");
             }
-
+            
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
