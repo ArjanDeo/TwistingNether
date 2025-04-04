@@ -13,7 +13,7 @@ namespace TwistingNether.API.Controllers
         private readonly ICharacterService _characterService = characterService;
         private readonly IAppCache _appCache = appCache;
 
-        [HttpGet]
+        [HttpGet("GetCharacter")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
