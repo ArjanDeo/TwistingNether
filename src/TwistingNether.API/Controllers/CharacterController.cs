@@ -42,6 +42,16 @@ namespace TwistingNether.API.Controllers
             return character != null ? Ok(character) : NotFound("Character not found.");
 
         }
+        [HttpGet("completedQuests")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetCharacterCompletedQuests(string name, string realm, string region)
+        {
+            var quests = await _characterService.GetCharacterCompletedQuests(name, realm, region);
+            return quests != null ? Ok(quests) : NotFound("Character or quests not found.");
+        }
 
     }
 }

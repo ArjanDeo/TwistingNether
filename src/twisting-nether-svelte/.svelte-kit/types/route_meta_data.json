@@ -1,6 +1,7 @@
 {
 	"/": [],
 	"/about": [],
+	"/io-calculator": [],
 	"/[character]/[region]/[realm]/[name]": [
 		"src/routes/[character]/[region]/[realm]/[name]/+page.ts"
 	]

@@ -17,35 +17,29 @@ namespace TwistingNether.Core.Services
             HtmlDocument doc = new();
             limit = limit == null ? 5 : limit; // If no limit was given set it to 5.
 
-            var newsPage = await _client.GetAsync("https://news.blizzard.com/en-gb/world-of-warcraft").AsString();
+            var newsPage = await _client.GetAsync("https://worldofwarcraft.blizzard.com/en-gb/news").AsString();
 
             doc.LoadHtml(newsPage);
 
-            var ol = doc.DocumentNode.SelectSingleNode("//ol[@class='ArticleList']");
+            var div = doc.DocumentNode.SelectSingleNode("//div[@class='List List--vertical List--separatorAll List--full']");
 
-            HtmlNodeCollection liNodes = ol.SelectNodes(".//li");
+            HtmlNodeCollection divNodes = div.SelectNodes(".//div");
             List<WowNewsModel> newsPosts = [];
 
-            if (liNodes is not null)
+            if (divNodes is not null)
             {
                 for (int node = 0; node < limit; node++)
                 {
                     WowNewsModel news = new();
                     // string title = node.SelectSingleNode(".//h2/a")?.InnerText.Trim();                    
-                    string backgroundImageStyle = liNodes[node].SelectSingleNode(".//div[@class='ArticleListItem-image']")?.Attributes["style"]?.Value;
-                    news.Image = backgroundImageStyle;
-                    int startIndex = news.Image.IndexOf("url(") + 4;
-                    int endIndex = news.Image.LastIndexOf(")");
-                    string extractedUrl = news.Image[startIndex..endIndex];
-                    string link = liNodes[node].SelectSingleNode(".//h2/a")?.Attributes["href"]?.Value;
-
-                    link = link.Replace("world-of-warcraft", "news");
+                    string backgroundImageUrl = divNodes[node].SelectSingleNode(".//div[@class='NewsBlog-image']")?.Attributes["data-src"]?.Value;
+                     string link = divNodes[node].SelectSingleNode(".//a[@class='Link NewsBlog-link']")?.Attributes["href"]?.Value;
                     link = "https://worldofwarcraft.blizzard.com" + link;
 
-                    news.Image = "https:" + extractedUrl;
-                    news.Title = liNodes[node].SelectSingleNode(".//h2/a")?.InnerText.Trim();
+                    news.Image = "https:" + backgroundImageUrl;
+                    news.Title = divNodes[node].SelectSingleNode(".//div[@class='NewsBlog-title']")?.InnerText.Trim();
                     news.Link = link;
-                    news.Description = liNodes[node].SelectSingleNode(".//div[@class='ArticleListItem-description']")?.InnerText.Trim();
+                    news.Description = divNodes[node].SelectSingleNode(".//div[@class='NewsBlog-desc color-beige-medium font-size-xSmall']")?.InnerText.Trim();
                     newsPosts.Add(news);
                 }
                 return newsPosts;

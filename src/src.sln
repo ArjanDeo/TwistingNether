@@ -1,0 +1,42 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwistingNether.API", "TwistingNether.API\TwistingNether.API.csproj", "{711F5F6D-0EFF-DEF3-429A-B9AE84FA1DC4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwistingNether.Core", "TwistingNether.Core\TwistingNether.Core.csproj", "{A8DBE4D0-9AA8-15E6-AD7A-888491470973}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwistingNether.DataAccess", "TwistingNether.DataAccess\TwistingNether.DataAccess.csproj", "{71D5469A-CD37-1110-D41C-D9B3D2D5F2BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwistingNether.Models", "TwistingNether.Models\TwistingNether.Models.csproj", "{BAF9D142-E0B8-94B1-8C96-C8AFE9779E45}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{711F5F6D-0EFF-DEF3-429A-B9AE84FA1DC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{711F5F6D-0EFF-DEF3-429A-B9AE84FA1DC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{711F5F6D-0EFF-DEF3-429A-B9AE84FA1DC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{711F5F6D-0EFF-DEF3-429A-B9AE84FA1DC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8DBE4D0-9AA8-15E6-AD7A-888491470973}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8DBE4D0-9AA8-15E6-AD7A-888491470973}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8DBE4D0-9AA8-15E6-AD7A-888491470973}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8DBE4D0-9AA8-15E6-AD7A-888491470973}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71D5469A-CD37-1110-D41C-D9B3D2D5F2BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71D5469A-CD37-1110-D41C-D9B3D2D5F2BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71D5469A-CD37-1110-D41C-D9B3D2D5F2BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71D5469A-CD37-1110-D41C-D9B3D2D5F2BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAF9D142-E0B8-94B1-8C96-C8AFE9779E45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAF9D142-E0B8-94B1-8C96-C8AFE9779E45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAF9D142-E0B8-94B1-8C96-C8AFE9779E45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAF9D142-E0B8-94B1-8C96-C8AFE9779E45}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {87FB0484-1199-4F24-8974-EF0BF56344B8}
+	EndGlobalSection
+EndGlobal

@@ -1,5 +1,6 @@
 ﻿using Pathoschild.Http.Client;
 using TwistingNether.BattleNet.WoW.Character;
+using TwistingNether.DataAccess.BattleNet.WoW.Character;
 using TwistingNether.DataAccess.Configuration;
 using TwistingNether.DataAccess.RaiderIO;
 using TwistingNether.DataAccess.TwistingNether.Character;
@@ -22,7 +23,7 @@ namespace TwistingNether.Core.Services
                              .WithArgument("region", region)
                              .WithArgument("name", name)
                              .WithArgument("realm", realm)
-                             .WithArgument("fields", "raid_progression,mythic_plus_weekly_highest_level_runs,mythic_plus_scores_by_season:current,guild,gear")
+                             .WithArgument("fields", "raid_progression,mythic_plus_weekly_highest_level_runs,mythic_plus_scores_by_season:current,guild,gear,mythic_plus_highest_level_runs,mythic_plus_best_runs,raid_achievement_curve:nerubar-palace,raid_achievement_curve:liberation-of-undermine")
                              .As<RaiderIOCharacterDataModel>();
 
             bool tokenSuccessful = await _common.GetNewBattleNetAccessToken();
@@ -55,6 +56,25 @@ namespace TwistingNether.Core.Services
                 CharacterMedia = characterMediaList
             };
         }
+
+        public async Task<List<Quest>> GetCharacterCompletedQuests(string name, string realm, string region)
+        {
+            await _common.GetNewBattleNetAccessToken();
+            WoWCharacterCompletedQuestsModel res = await _client.GetAsync($"https://{region}.api.blizzard.com/profile/wow/character/{realm}/{name}/quests/completed")
+                .WithArguments(new Dictionary<string, string>()
+                    {
+                        { "namespace", "profile-us" },
+                        {"locale", "en_US" }
+                    })
+                .WithBearerAuthentication(AppConstants.BattleNetAccessToken.access_token)
+                .As<WoWCharacterCompletedQuestsModel>();
+            int[] undermineQuestIds = [86775, 83151, 83096, 83176,];
+
+            List<Quest> undermineWeeklyQuests = res.quests.Where(q => undermineQuestIds.Contains(q.id)).ToList();
+
+            return undermineWeeklyQuests;
+        }
+
         public async Task<object?> PingCharacter(string name, string realm, string region)
         {
             try

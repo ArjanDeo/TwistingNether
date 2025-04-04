@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TwistingNether.DataAccess.BattleNet.WoW.Character;
 using TwistingNether.DataAccess.TwistingNether.Character;
 
 namespace TwistingNether.Core.Services
@@ -11,5 +7,6 @@ namespace TwistingNether.Core.Services
     {
         Task<CharacterModel> GetCharacter(string name, string realm, string region);
         Task<object?> PingCharacter (string name, string realm, string region);
+        Task<List<Quest>> GetCharacterCompletedQuests(string name, string realm, string region);
     }
 }

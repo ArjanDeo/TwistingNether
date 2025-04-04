@@ -4,7 +4,7 @@
     let { data }: { data: PageData } = $props();
 	import { ItemQuality, type Affix } from '$lib/types';
 	import { onMount } from 'svelte';
-	import { run } from 'svelte/legacy';
+	import { dev } from '$app/environment';
 
     let head = data.character.raiderIOCharacterData.gear.items.head;
     let neck = data.character.raiderIOCharacterData.gear.items.neck;
@@ -44,7 +44,19 @@
         default:
             return '#ffffff'; // Default color in case no match
     }
+    
 }
+function msToTime(ms: number): string {
+        const totalSeconds = Math.floor(ms / 1000); // Convert milliseconds to seconds
+        const minutes = Math.floor(totalSeconds / 60); // Get the whole minutes
+        const seconds = totalSeconds % 60; // Get the remaining seconds
+
+        // Format with leading zeroes if needed
+        const formattedMinutes = String(minutes).padStart(2, '0');
+        const formattedSeconds = String(seconds).padStart(2, '0');
+
+        return `${formattedMinutes}:${formattedSeconds}`;
+    }
 const hasEpicMilestone = [
 head, neck, shoulders, back, chest, wrists, hands, waist, legs, feet, 
 ring1, ring2, trinket1, trinket2, mainhand, offhand
@@ -58,7 +70,11 @@ const uniqueSortedAffixIds = [
   ].sort((a, b) => a - b);
 async function getAffixMedia() {
     for (let i: number = 0; i < uniqueSortedAffixIds.length; i++) {
-    let response = await fetch(`https://localhost:7176/api/keystone/get-affix-media?id=${uniqueSortedAffixIds[i]}`)
+        let uri = 'https:/localhost:7176'
+        if (dev) {
+            uri = 'https://twistingnetherapi.azurewebsites.net'
+        }
+    let response = await fetch(`${uri}/api/keystone/get-affix-media?id=${uniqueSortedAffixIds[i]}`)
     affixList.push(await response.json());
     console.log(affixList)
   }
@@ -86,19 +102,19 @@ onMount(async () => {
             <h1 class="text-2xl lg:text-4xl font-semibold">
                 {data.character.raiderIOCharacterData.name}-{data.character.raiderIOCharacterData.realm} <a target="_blank" class="hover:text-purple-700 transition-colors ease-in-out duration-300" href="https://worldofwarcraft.blizzard.com/en-us/guild/{data.character.raiderIOCharacterData.region}/{data.character.raiderIOCharacterData.guild.realm.replace('\'', "")}/{data.character.raiderIOCharacterData.guild.name.replace(' ', '-')}/">&lt;{data.character.raiderIOCharacterData.guild.name}&gt;</a>
             </h1>
-            <div class="mt-2 flex gap-x-5">
-                <div style="color: {data.character.classColor}; border-color: {data.character.classColor};" class="text-center text-xl badge p-4">{data.character.raiderIOCharacterData.race}</div>
-                <div style="color: {data.character.classColor}; border-color: {data.character.classColor};" class="text-center text-xl badge p-4">{data.character.raiderIOCharacterData.active_spec_name} {data.character.raiderIOCharacterData.char_class}</div> 
+            <div class="mt-2 flex md:flex-row gap-x-5 gap-y-2 md:gap-y-0">
+                <div style="color: {data.character.classColor}; border-color: {data.character.classColor};" class="text-center md:text-xl badge p-4">{data.character.raiderIOCharacterData.race}</div>
+                <div style="color: {data.character.classColor}; border-color: {data.character.classColor};" class="text-center md:text-xl badge p-4">{data.character.raiderIOCharacterData.active_spec_name} {data.character.raiderIOCharacterData.char_class}</div> 
                 <a aria-label="raider.io link" href="https://raider.io/characters/{data.character.raiderIOCharacterData.region}/{data.character.raiderIOCharacterData.realm}/{data.character.raiderIOCharacterData.name}" target="_blank">
                     <svg width="45" height="40">
-                        <image xlink:href="https://cdn.raiderio.net/images/brand/Icon_2ColorWhite.svg" width="45" height="40"/>    
+                        <image xlink:href="https://cdn.raiderio.net/images/brand/Icon_2ColorWhite.svg" width="36" height="36"/>    
                    </svg>
                 </a>
-                <a href="https://www.warcraftlogs.com/character/{data.character.raiderIOCharacterData.region}/{data.character.raiderIOCharacterData.realm}/{data.character.raiderIOCharacterData.name}" target="_blank">
-                    <img src="https://assets.rpglogs.com/cms/WCL_Icon_57fc009f4e.png" class="w-9 h-9" alt="warcraft logs logo"/>
+                <a class="ml-1" href="https://www.warcraftlogs.com/character/{data.character.raiderIOCharacterData.region}/{data.character.raiderIOCharacterData.realm}/{data.character.raiderIOCharacterData.name}" target="_blank">
+                    <img src="https://assets.rpglogs.com/cms/WCL_Icon_57fc009f4e.png" class="w-10" alt="warcraft logs logo"/>
                 </a>
-                <a href="https://worldofwarcraft.blizzard.com/en-gb/character/{data.character.raiderIOCharacterData.region}/{data.character.raiderIOCharacterData.realm}/{data.character.raiderIOCharacterData.name}" target="_blank">
-                    <img src="https://logos-download.com/wp-content/uploads/2016/02/WOW_logo.png" class="w-9 h-9" alt="world of warcraft logo"/>
+                <a class="ml-1" href="https://worldofwarcraft.blizzard.com/en-gb/character/{data.character.raiderIOCharacterData.region}/{data.character.raiderIOCharacterData.realm}/{data.character.raiderIOCharacterData.name}" target="_blank">
+                    <img src="https://logos-download.com/wp-content/uploads/2016/02/WOW_logo.png" class="w-10" alt="world of warcraft logo"/>
                 </a>
             </div>
         </header>
@@ -191,37 +207,41 @@ onMount(async () => {
                 </div>
             {/each}
             </div>
-            <div class="lg:ml-24 lg:order-1 order-last">
+            <div class="lg:ml-24 lg:order-1 order-last">                
                 <button onclick={() => updateCharacter()} style="color:{data.character.classColor}" class="btn btn-outline mb-2">Update Character</button>
                 <p class="text-2xl">Item Level: <span style="color:{hasEpicMilestone === true ? '#a335ee' : '#0070dd'}">{Math.round(data.character.raiderIOCharacterData.gear.item_level_equipped)}</span></p>
                 <p class="text-2xl">M+ Score: <span style="color:{data.character.raiderIOCharacterData.mythic_plus_scores_by_season[0].segments.all.color}">{data.character.raiderIOCharacterData.mythic_plus_scores_by_season[0].scores.all}</span></p>
-                <p class="text-2xl">Nerub-ar Palace Progress:</p>
+                <p class="text-2xl">Liberation of Undermine Progress:</p>
                 <ul>
-                    {#if data.character.raiderIOCharacterData.raid_progression.nerubarpalace.normal_bosses_killed > 0}
+                    {#if data.character.raiderIOCharacterData.raid_progression.liberationofundermine.normal_bosses_killed > 0}
                     <li class="text-xl text-[#1eff00]">
-                        {data.character.raiderIOCharacterData.raid_progression.nerubarpalace.normal_bosses_killed}/{data.character.raiderIOCharacterData.raid_progression.nerubarpalace.total_bosses}N
+                        {data.character.raiderIOCharacterData.raid_progression.liberationofundermine.normal_bosses_killed}/{data.character.raiderIOCharacterData.raid_progression.liberationofundermine.total_bosses}N
                     </li>
                     {:else}
                     <li class="text-xl text-[#1eff00]">
-                        0/{data.character.raiderIOCharacterData.raid_progression.nerubarpalace.total_bosses}N    
+                        0/{data.character.raiderIOCharacterData.raid_progression.liberationofundermine.total_bosses}N    
                     </li>
                     {/if}
-                    {#if data.character.raiderIOCharacterData.raid_progression.nerubarpalace.heroic_bosses_killed > 0}
+                    {#if data.character.raiderIOCharacterData.raid_progression.liberationofundermine.heroic_bosses_killed > 0}
                     <li class="text-xl text-[#1873da]">
-                        {data.character.raiderIOCharacterData.raid_progression.nerubarpalace.heroic_bosses_killed}/{data.character.raiderIOCharacterData.raid_progression.nerubarpalace.total_bosses}H
+                        {data.character.raiderIOCharacterData.raid_progression.liberationofundermine.heroic_bosses_killed}/{data.character.raiderIOCharacterData.raid_progression.liberationofundermine.total_bosses}H
                     </li>
                     {:else}
-                    <li class="text-xl text-[#1873da]">
-                        0/{data.character.raiderIOCharacterData.raid_progression.nerubarpalace.total_bosses}H
+                    <li class="text-xl text-[#1873da] flex">
+                        <span>0/{data.character.raiderIOCharacterData.raid_progression.liberationofundermine.total_bosses}H</span>
+                        {data.character.raiderIOCharacterData.raid_achievement_curve[0].aotc}
+                        {#if data.character.raiderIOCharacterData.raid_achievement_curve[0].aotc != undefined}
+                        <span class="badge">AOTC</span>
+                        {/if}
                     </li>
                     {/if}
-                    {#if data.character.raiderIOCharacterData.raid_progression.nerubarpalace.mythic_bosses_killed > 0}
+                    {#if data.character.raiderIOCharacterData.raid_progression.liberationofundermine.mythic_bosses_killed > 0}
                     <li class="text-xl text-[#a837e8]">
-                        {data.character.raiderIOCharacterData.raid_progression.nerubarpalace.mythic_bosses_killed}/{data.character.raiderIOCharacterData.raid_progression.nerubarpalace.total_bosses}M
+                        {data.character.raiderIOCharacterData.raid_progression.liberationofundermine.mythic_bosses_killed}/{data.character.raiderIOCharacterData.raid_progression.liberationofundermine.total_bosses}M
                     </li>
                     {:else}
                     <li class="text-xl text-[#a837e8]">
-                        0/{data.character.raiderIOCharacterData.raid_progression.nerubarpalace.total_bosses}M
+                        0/{data.character.raiderIOCharacterData.raid_progression.liberationofundermine.total_bosses}M
                     </li>
                     {/if}
                 </ul>
@@ -245,9 +265,26 @@ onMount(async () => {
                             </div>
                         </div>
                     </a>
-                {/each}
+                {/each}                
             </div>
         </div>
+        <h1 class="text-4xl mb-4">Top Mythic+ Runs:</h1>
+        <table style="border-color: {data.character.classColor};" class="border-4 rounded-md glass table w-fit">
+            <tbody>
+                <tr>
+                    <th>Dungeon</th>
+                    <th>Time Taken</th>
+                    <th>Date</th>
+                </tr>                        
+                {#each data.character.raiderIOCharacterData.mythic_plus_best_runs as run}
+                <tr style="background-image: url({run.background_image_url});"  class="mx-auto text-center mt-2 text-xl">
+                    <td class="flex backdrop-blur-sm"><img class="max-w-10 my-1 mr-2 rounded-sm" alt="{run.dungeon}" src="{run.icon_url}"/><span class="{run.num_keystone_upgrades === 0 ? 'text-gray-600' : ''}"> {'+'.repeat(run.num_keystone_upgrades)}{run.mythic_level} {run.dungeon}</span></td>
+                    <td class="backdrop-blur-sm">{msToTime(run.clear_time_ms)}</td>
+                    <td class="backdrop-blur-sm">{new Date(run.completed_at).toLocaleDateString()}</td>
+                </tr>
+                {/each}
+            </tbody>
+        </table>
     </div>
     {:else if loading}
         <span class="loading loading-spinner text-success mx-auto block justify-center scale-150 self-center my-auto"></span>

@@ -2,14 +2,6 @@
 
 namespace TwistingNether.DataAccess.RaiderIO
 {
-    //public class AberrusTheShadowedCrucible
-    //{
-    //    public string summary { get; set; }
-    //    public int total_bosses { get; set; }
-    //    public int normal_bosses_killed { get; set; }
-    //    public int heroic_bosses_killed { get; set; }
-    //    public int mythic_bosses_killed { get; set; }
-    //}
 
     public class Affix
     {
@@ -19,15 +11,6 @@ namespace TwistingNether.DataAccess.RaiderIO
         public string icon { get; set; }
         public string wowhead_url { get; set; }
     }
-
-    //public class AmirdrassilTheDreamsHope
-    //{
-    //    public string summary { get; set; }
-    //    public int total_bosses { get; set; }
-    //    public int normal_bosses_killed { get; set; }
-    //    public int heroic_bosses_killed { get; set; }
-    //    public int mythic_bosses_killed { get; set; }
-    //}
 
     public class AzeritePower
     {
@@ -45,9 +28,7 @@ namespace TwistingNether.DataAccess.RaiderIO
         public int item_quality { get; set; }
         public bool is_legendary { get; set; }
         public bool is_azerite_armor { get; set; }
-        //         public List<object> azerite_powers { get; set; }
         public Corruption corruption { get; set; }
-        //         public List<object> azerite_powers { get; set; }
         public List<int> gems { get; set; }
         public List<int> bonuses { get; set; }
     }
@@ -63,7 +44,6 @@ namespace TwistingNether.DataAccess.RaiderIO
         public bool is_azerite_armor { get; set; }
         public List<AzeritePower> azerite_powers { get; set; }
         public Corruption corruption { get; set; }
-        //         public List<object> azerite_powers { get; set; }
         public string tier { get; set; }
         public List<int> gems { get; set; }
         public List<int> bonuses { get; set; }
@@ -75,7 +55,6 @@ namespace TwistingNether.DataAccess.RaiderIO
         public int resisted { get; set; }
         public int total { get; set; }
         public int cloakRank { get; set; }
-        //  public List<object> spells { get; set; }
     }
 
     public class Feet
@@ -87,9 +66,7 @@ namespace TwistingNether.DataAccess.RaiderIO
         public int item_quality { get; set; }
         public bool is_legendary { get; set; }
         public bool is_azerite_armor { get; set; }
-        //         public List<object> azerite_powers { get; set; }
         public Corruption corruption { get; set; }
-        //         public List<object> azerite_powers { get; set; }
         public List<int> gems { get; set; }
         public List<int> bonuses { get; set; }
     }
@@ -103,9 +80,7 @@ namespace TwistingNether.DataAccess.RaiderIO
         public int item_quality { get; set; }
         public bool is_legendary { get; set; }
         public bool is_azerite_armor { get; set; }
-        //         public List<object> azerite_powers { get; set; }
         public Corruption corruption { get; set; }
-        //         public List<object> azerite_powers { get; set; }
         public List<int> gems { get; set; }
         public List<int> bonuses { get; set; }
     }
@@ -119,9 +94,7 @@ namespace TwistingNether.DataAccess.RaiderIO
         public int item_quality { get; set; }
         public bool is_legendary { get; set; }
         public bool is_azerite_armor { get; set; }
-        //         public List<object> azerite_powers { get; set; }
         public Corruption corruption { get; set; }
-        //         public List<object> azerite_powers { get; set; }
         public List<int> gems { get; set; }
         public List<int> bonuses { get; set; }
     }
@@ -150,9 +123,7 @@ namespace TwistingNether.DataAccess.RaiderIO
         public int item_quality { get; set; }
         public bool is_legendary { get; set; }
         public bool is_azerite_armor { get; set; }
-        //         public List<object> azerite_powers { get; set; }
         public Corruption corruption { get; set; }
-        //         public List<object> azerite_powers { get; set; }
         public string tier { get; set; }
         public List<int> gems { get; set; }
         public List<int> bonuses { get; set; }
@@ -226,7 +197,24 @@ namespace TwistingNether.DataAccess.RaiderIO
         public List<int> gems { get; set; }
         public List<int> bonuses { get; set; }
     }
-
+    public class MythicPlusBestRun
+    {
+        public string dungeon { get; set; }
+        public string short_name { get; set; }
+        public int mythic_level { get; set; }
+        public DateTime completed_at { get; set; }
+        public int clear_time_ms { get; set; }
+        public int par_time_ms { get; set; }
+        public int num_keystone_upgrades { get; set; }
+        public int map_challenge_mode_id { get; set; }
+        public int zone_id { get; set; }
+        public int zone_expansion_id { get; set; }
+        public string icon_url { get; set; }
+        public string background_image_url { get; set; }
+        public double score { get; set; }
+        public List<Affix> affixes { get; set; }
+        public string url { get; set; }
+    }
     public class MythicPlusWeeklyHighestLevelRun
     {
         public string dungeon { get; set; }
@@ -249,6 +237,19 @@ namespace TwistingNether.DataAccess.RaiderIO
         public int normal_bosses_killed { get; set; }
         public int heroic_bosses_killed { get; set; }
         public int mythic_bosses_killed { get; set; }
+    }
+    public class LiberationOfUndermine
+    {
+        public string summary { get; set; }
+        public int total_bosses { get; set; }
+        public int normal_bosses_killed { get; set; }
+        public int heroic_bosses_killed { get; set; }
+        public int mythic_bosses_killed { get; set; }
+    }
+    public class RaidAchievementCurve
+    {
+        public string raid { get; set; }
+        public DateTime aotc { get; set; }
     }
     public class Neck
     {
@@ -291,6 +292,10 @@ namespace TwistingNether.DataAccess.RaiderIO
         //  public AmirdrassilTheDreamsHope amirdrassilthedreamshope { get; set; }
         //  [JsonProperty("vault-of-the-incarnates")]
         //  public VaultOfTheIncarnates vaultoftheincarnates { get; set; }
+        [JsonProperty("liberation-of-undermine")]
+        public LiberationOfUndermine liberationofundermine { get; set; }
+
+
     }
     public class All
     {
@@ -336,10 +341,14 @@ namespace TwistingNether.DataAccess.RaiderIO
         public string profile_url { get; set; }
         public string profile_banner { get; set; }
         public List<MythicPlusWeeklyHighestLevelRun> mythic_plus_weekly_highest_level_runs { get; set; }
+        public List<MythicPlusBestRun> mythic_plus_best_runs { get; set; }
+
         public List<MythicPlusScoresBySeason> mythic_plus_scores_by_season { get; set; }
 
         public Gear gear { get; set; }
         public RaidProgression raid_progression { get; set; }
+        public List<RaidAchievementCurve> raid_achievement_curve { get; set; }
+
         public Guild guild { get; set; }
     }
     public class Scores

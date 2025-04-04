@@ -16,6 +16,7 @@ export type CharacterData = {
       profile_url: string
       profile_banner: string
       mythic_plus_weekly_highest_level_runs: Array<Run>
+      mythic_plus_best_runs: Array<Run>
       mythic_plus_scores_by_season: Array<{
         season: string
         scores: {
@@ -441,10 +442,21 @@ export type CharacterData = {
           normal_bosses_killed: number
           heroic_bosses_killed: number
           mythic_bosses_killed: number
+        },
+        liberationofundermine: {
+          summary: string
+          total_bosses: number
+          normal_bosses_killed: number
+          heroic_bosses_killed: number
+          mythic_bosses_killed: number
         }
        // amirdrassilthedreamshope: unknown
        // vaultoftheincarnates: unknown
       }
+      raid_achievement_curve: Array<{
+        raid: string
+        aotc: string
+      }>
       guild: {
         name: string
         realm: string
@@ -476,21 +488,28 @@ export type CharacterData = {
     icon: string
   }
   export type Run =  {
-    dungeon: string;
-    short_name: string;
-    mythic_level: number;
-    completed_at: Date;
-    clear_time_ms: number;
-    par_time_ms: number;
-    num_keystone_upgrades: number;
-    map_challenge_mode_id: number;
-    zone_id: number;
-    score: number;
-    affixes: {
-        id: number;
-        name: string;
-    }[];
-    url: string;
+    dungeon: string
+    short_name: string
+    mythic_level: number
+    completed_at: string
+    clear_time_ms: number
+    par_time_ms: number
+    num_keystone_upgrades: number
+    map_challenge_mode_id: number
+    zone_id: number
+    zone_expansion_id: number
+    icon_url: string
+    background_image_url: string
+    score: number
+    affixes: Array<{
+      id: number
+      name: string
+      description: string
+      icon: string
+      icon_url: string
+      wowhead_url: string
+    }>
+    url: string
   }
   export type Character = {
     name: string;
