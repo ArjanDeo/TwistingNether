@@ -72,7 +72,7 @@ async function getAffixMedia() {
     for (let i: number = 0; i < uniqueSortedAffixIds.length; i++) {
         let uri = 'https:/localhost:7176'
         if (dev) {
-            uri = 'https://twistingnetherapi.azurewebsites.net'
+            uri = 'https://twistingnether-atcpfye3hbhjd3az.westus-01.azurewebsites.net'
         }
     let response = await fetch(`${uri}/api/keystone/get-affix-media?id=${uniqueSortedAffixIds[i]}`)
     affixList.push(await response.json());
@@ -91,6 +91,21 @@ onMount(async () => {
     for (let i = 0; i < mythicRunAmount; i++)
     loading = false;
 	});
+
+
+	function $state(arg0: never[]): Affix[] {
+		throw new Error('Function not implemented.');
+	}
+
+
+	function $props(): $$ComponentProps {
+		throw new Error('Function not implemented.');
+	}
+
+
+	function $state(arg0: never[]): Affix[] {
+		throw new Error('Function not implemented.');
+	}
 </script>
 <svelte:head>
 	<title>{data.character.raiderIOCharacterData.name} - {data.character.raiderIOCharacterData.realm}</title>
