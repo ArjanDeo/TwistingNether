@@ -71,7 +71,7 @@ const uniqueSortedAffixIds = [
 async function getAffixMedia() {
     for (let i: number = 0; i < uniqueSortedAffixIds.length; i++) {
         
-        let uri = 'https://thetwistingnetherapi.furyshiftz.com'
+        let uri = 'https://twistingnetherapi.furyshiftz.com'
         if (dev) {
             uri = 'https:/localhost:7176'
         }
