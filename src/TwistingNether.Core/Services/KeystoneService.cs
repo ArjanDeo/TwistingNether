@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TwistingNether.DataAccess.BattleNet.WoW.Keystone.Affixes.Media;
 using TwistingNether.DataAccess.Configuration;
+using TwistingNether.DataAccess.RaiderIO.MythicKeystone;
 using TwistingNether.DataAccess.TwistingNether.Exceptions;
 
 namespace TwistingNether.Core.Services
@@ -35,6 +36,30 @@ namespace TwistingNether.Core.Services
                     icon = res.assets[0].value
                 };
             }
+
+        public async Task<object> MythicScoreCalculation(int targetScore, string region, string realm, string name)
+        {
+            var queryParameters = new Dictionary<string, string>
+            {
+                { "region", region },
+                {"realm", realm },
+                {"name", name},
+                {"fields", "mythic_plus_best_runs,mythic_plus_alternate_runs,mythic_plus_scores_by_season:current" }
+            };
+            RaiderIOCharacterMythicKeystoneModel response = await _client
+                .GetAsync($"https://raider.io/api/v1/characters/profile")
+                .WithArguments(queryParameters)
+                .As<RaiderIOCharacterMythicKeystoneModel>();
+
+            foreach(var run in response.mythic_plus_best_runs)
+            {                
+                double runTimePercentage = Math.Min((run.par_time_ms - run.clear_time_ms) / run.par_time_ms, 0.40) * 100;
+
+                double runRating = 0; 
+            }
+            return 0;
+
         }
+    }
 
     }

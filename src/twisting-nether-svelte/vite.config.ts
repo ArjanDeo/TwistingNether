@@ -6,7 +6,7 @@ export default defineConfig({
 	server: {
 		proxy: {
 			'/api': {
-				target: 'https://twistingnether-atcpfye3hbhjd3az.westus-01.azurewebsites.net',
+				target: 'https://thetwistingnether.furyshiftz.com',
 				changeOrigin: true,
 				secure: false
 			}

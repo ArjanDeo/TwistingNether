@@ -20,7 +20,7 @@ import { ClassColors } from "$lib/types";
 	}
 
 	onMount(async () => {
-		const news = await fetch('https://twistingnether-atcpfye3hbhjd3az.westus-01.azurewebsites.net/api/General/GetNews?limit=10');
+		const news = await fetch('https://thetwistingnether.furyshiftz.com/api/General/GetNews?limit=10');
 
 		if (!news.ok) {
 			errorMessage = 'Couldn\'t fetch news.';
@@ -50,7 +50,7 @@ import { ClassColors } from "$lib/types";
 
 		try {
 			const res = await fetch(
-				`https://twistingnether-atcpfye3hbhjd3az.westus-01.azurewebsites.net/api/character/ping?name=${characterName}&realm=${characterRealm}&region=${characterRegion}`
+				`https://thetwistingnether.furyshiftz.com/api/character/ping?name=${characterName}&realm=${characterRealm}&region=${characterRegion}`
 			);
 			const resData: Character = await res.json();
 			if (res.ok) {

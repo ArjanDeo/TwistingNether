@@ -17,7 +17,7 @@ namespace TwistingNether.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Produces("application/json")]
-        public async Task<ActionResult<List<WowNewsModel>>> GetNews (int? limit)
+        public async Task<ActionResult<List<WowNewsModel>>> GetNews(int? limit)
         {
             try
             {
