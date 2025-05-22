@@ -1,0 +1,1 @@
+export { default as component } from "../../../../src/routes/[character]/[region]/[realm]/[name]/components/characterPane/+page.svelte";

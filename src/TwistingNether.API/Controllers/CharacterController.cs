@@ -25,7 +25,7 @@ namespace TwistingNether.API.Controllers
                 {
                     return Ok(await _characterService.GetCharacter(name, realm, region));
                 }
-                catch (TokenRetrievalException ex)
+                catch (Exception ex)
                 {
                     return BadRequest($"{ex.Message}");
                 }

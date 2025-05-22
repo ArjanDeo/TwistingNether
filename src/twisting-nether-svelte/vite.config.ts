@@ -6,7 +6,12 @@ export default defineConfig({
 	server: {
 		proxy: {
 			'/api': {
-				target: 'https://twistingnetherapi.furyshiftz.com',
+				target: 'https://localhost:7176',
+				changeOrigin: true,
+				secure: false
+			},
+			'/devapi': {
+				target: 'https://localhost:7176',
 				changeOrigin: true,
 				secure: false
 			}

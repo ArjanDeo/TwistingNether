@@ -15,7 +15,6 @@ namespace TwistingNether.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer(); 
@@ -45,22 +44,18 @@ namespace TwistingNether.API
                     builder => builder
                     .AllowAnyMethod()
                     .AllowCredentials()
-                    .WithOrigins("https://whatchores.furyshiftz.com","https://twistingnether.furyshiftz.com")
+                    .WithOrigins("https://twistingnether.furyshiftz.com")
                     .AllowAnyHeader());
             });
             builder.Services.AddOptions();
             var app = builder.Build();
+
             app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                options.DefaultModelsExpandDepth(-1);
-            });
+            app.UseSwaggerUI(options => options.DefaultModelsExpandDepth(-1));
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                //app.MapOpenApi();
-                
-
                 app.UseCors("DevPolicy");
             }
             else
@@ -71,7 +66,6 @@ namespace TwistingNether.API
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
