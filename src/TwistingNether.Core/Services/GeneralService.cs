@@ -21,30 +21,63 @@ namespace TwistingNether.Core.Services
 
             doc.LoadHtml(newsPage);
 
-            var div = doc.DocumentNode.SelectSingleNode("//div[@class='List List--vertical List--separatorAll List--full']");
+            // Get main news post
+            var targetDiv = doc.DocumentNode.SelectSingleNode(
+    "//div[contains(@class, 'Grid') and " +
+           "contains(@class, 'SyncHeight') and " +
+           "contains(@class, 'gutter-small') and " +
+           "contains(@class, 'gutter-all') and " +
+           "contains(@class, 'gutter-negative')]"
+);
+            List<WowNewsModel> newsList = [];
 
-            HtmlNodeCollection divNodes = div.SelectNodes(".//div");
-            List<WowNewsModel> newsPosts = [];
-
-            if (divNodes is not null)
+            int count = 0;
+            for (int i = 0; count < limit; i++)
             {
-                for (int node = 0; node < limit; node++)
-                {
-                    WowNewsModel news = new();
-                    // string title = node.SelectSingleNode(".//h2/a")?.InnerText.Trim();                    
-                    string backgroundImageUrl = divNodes[node].SelectSingleNode(".//div[@class='NewsBlog-image']")?.Attributes["data-src"]?.Value;
-                     string link = divNodes[node].SelectSingleNode(".//a[@class='Link NewsBlog-link']")?.Attributes["href"]?.Value;
-                    link = "https://worldofwarcraft.blizzard.com" + link;
+                WowNewsModel newsModel = new();
+                HtmlNode post;
 
-                    news.Image = "https:" + backgroundImageUrl;
-                    news.Title = divNodes[node].SelectSingleNode(".//div[@class='NewsBlog-title']")?.InnerText.Trim();
-                    news.Link = link;
-                    news.Description = divNodes[node].SelectSingleNode(".//div[@class='NewsBlog-desc color-beige-medium font-size-xSmall']")?.InnerText.Trim();
-                    newsPosts.Add(news);
+                if (i < 5)
+                {
+                    if (i >= targetDiv.ChildNodes.Count) break;
+                    post = targetDiv.ChildNodes[i];
+
+                    if (!post.HasClass("ArticleTile")) continue;
+
+                    newsModel.Title = post.SelectSingleNode(".//div[@class='ArticleTile-title']").InnerText;
+                    newsModel.Link = post.SelectSingleNode(".//a[contains(@class, 'Link--external')]").GetAttributeValue("href", "");
+                    newsModel.Image = ExtractBackgroundImageUrl(post.SelectSingleNode(".//div[@class='Tile-bg']").GetAttributeValue("style", ""));
+                    newsModel.Description = post.SelectSingleNode(".//div[@class='ArticleTile-subtitle']").InnerText;
                 }
-                return newsPosts;
+                else
+                {
+                    var list = doc.DocumentNode.SelectSingleNode("//div[@class='List List--vertical List--separatorAll List--full']");
+                    if (list == null || (i - 5) >= list.ChildNodes.Count) break;
+
+                    post = list.ChildNodes[i - 5];
+                    if (!post.HasClass("List-item")) continue;
+
+                    newsModel.Title = post.SelectSingleNode(".//div[@class='NewsBlog-title']").InnerText;
+                    newsModel.Link = "https://worldofwarcraft.blizzard.com" + post.SelectSingleNode(".//a[@class='Link NewsBlog-link']").GetAttributeValue("href", "");
+                    newsModel.Image = "https://" + post.SelectSingleNode(".//img[@class='NewsBlog-image']").GetAttributeValue("data-src", "");
+                    newsModel.Description = post.SelectSingleNode(".//p[@class='NewsBlog-desc color-beige-medium font-size-xSmall']").InnerText;
+                }
+
+                newsList.Add(newsModel);
+                count++;
             }
-            return null;
+            return newsList;
         }
+        private static string ExtractBackgroundImageUrl(string input)
+            =>
+            "https://" + input
+            .Replace("background-image:url(&quot;//", "")
+            .Replace("background-image:url(&quot;https://", "")
+            .Replace(");", "")
+            .Replace("&quot;", "")
+            .Trim();
+
+        
+
     }
 }

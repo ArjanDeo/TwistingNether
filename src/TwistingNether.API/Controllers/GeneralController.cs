@@ -24,12 +24,12 @@ namespace TwistingNether.API.Controllers
                 var res = await _generalService.GetNews(limit);
 
                 return res == null ? NotFound("Couldn't find any news posts.") : Ok(res);
-            } catch (ApiException)
+            } catch (ApiException ex)
             {
-                return BadRequest("There was an issue trying to get news posts.");
-            } catch
+                return BadRequest($"There was an issue trying to get news posts. {await ex.Response.AsString()}");
+            } catch(Exception ex)
             {
-                return BadRequest("There was an issue processing the news posts.");
+                return BadRequest($"There was an issue processing the news posts. Error: {ex.Message}");
             }
         }
     }

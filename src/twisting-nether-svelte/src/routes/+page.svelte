@@ -23,7 +23,7 @@
 	onMount(async () => {
 		recentCharacters = JSON.parse(localStorage.getItem("recentCharacters") || "[]");
 		try {
-			const news = await fetch(`${API_BASE_URL}/General/GetNews?limit=10`);
+			const news = await fetch(`${API_BASE_URL}/General/GetNews?limit=6`);
 
 			if (!news.ok) {
 				showNewsErrorMessage = "Couldn't fetch news.";
@@ -247,7 +247,7 @@
 	<h1 class="text-center my-10 text-2xl bg-slate-800 w-fit p-2 rounded-xl mx-auto">RECENT NEWS</h1>
 	<div class="grid md:grid-cols-2 lg:grid-cols-3 md:grid-flow-rows gap-y-4 lg:gap-x-3 ml-2">		
 		{#each newsPosts as post}
-			<div class="glass w-96 md:w-80 xl:w-96 2xl:w-5/6 h-full mx-auto lg:mx-0 rounded-box">
+			<div class="glass md:w-52 2xl:w-5/6 h-full mx-auto lg:mx-0 rounded-box">
 				<a href="{post.link}" target="_blank">
 				<img loading="lazy" src="{post.image}" class="w-fit" alt="{post.title}">
 				<h1 class="text-xl p-2 truncate">{post.title}</h1>

@@ -8,7 +8,7 @@
 <svelte:head>
 	<title>The Twisting Nether</title>
 </svelte:head>
-<nav class="bg-slate-800 w-auto lg:w-1/3 mx-auto rounded-full p-3">
+<nav class="bg-slate-800 w-auto lg:w-1/3 mx-auto rounded-full p-3 sticky top-1 z-10">
 	<div class="flex flex-col lg:flex-row lg:gap-x-3">
 		<a href="/" class="flex">
 			<img class="max-w-20" src="../../../argus_500.png" alt="Argus Logo">
