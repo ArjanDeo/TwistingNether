@@ -44,10 +44,8 @@ declare module '$env/static/private' {
 	export const CUDA_PATH_V11_8: string;
 	export const DriverData: string;
 	export const EDITOR: string;
-	export const EFC_11204: string;
+	export const EFC_11376: string;
 	export const ENABLE_XAML_DIAGNOSTICS_SOURCE_INFO: string;
-	export const FPS_BROWSER_APP_PROFILE_STRING: string;
-	export const FPS_BROWSER_USER_PROFILE_STRING: string;
 	export const GIT_ASKPASS: string;
 	export const GIT_LFS_PATH: string;
 	export const HOME: string;
@@ -79,6 +77,8 @@ declare module '$env/static/private' {
 	export const npm_config_noproxy: string;
 	export const npm_config_npm_version: string;
 	export const npm_config_prefix: string;
+	export const npm_config_registry: string;
+	export const npm_config_strict_ssl: string;
 	export const npm_config_userconfig: string;
 	export const npm_config_user_agent: string;
 	export const npm_execpath: string;
@@ -178,10 +178,8 @@ declare module '$env/dynamic/private' {
 		CUDA_PATH_V11_8: string;
 		DriverData: string;
 		EDITOR: string;
-		EFC_11204: string;
+		EFC_11376: string;
 		ENABLE_XAML_DIAGNOSTICS_SOURCE_INFO: string;
-		FPS_BROWSER_APP_PROFILE_STRING: string;
-		FPS_BROWSER_USER_PROFILE_STRING: string;
 		GIT_ASKPASS: string;
 		GIT_LFS_PATH: string;
 		HOME: string;
@@ -213,6 +211,8 @@ declare module '$env/dynamic/private' {
 		npm_config_noproxy: string;
 		npm_config_npm_version: string;
 		npm_config_prefix: string;
+		npm_config_registry: string;
+		npm_config_strict_ssl: string;
 		npm_config_userconfig: string;
 		npm_config_user_agent: string;
 		npm_execpath: string;

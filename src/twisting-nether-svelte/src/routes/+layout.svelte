@@ -1,6 +1,6 @@
 <script lang="ts">
-	import '../app.css';
 	let { children } = $props();
+	import "../app.css";
 </script>
 <div>
 	<p class="invisible">the background image breaks if i dont put this text here</p>
@@ -31,7 +31,8 @@
 	</div>
 </main>
 
-<style>
+<style lang="postcss">
+	@reference "tailwindcss";
 	:global(body) {    
 	  background-image: url("/WoW_7.3_Shadows_of_Argus_05.png");
 	  background-repeat: no-repeat;

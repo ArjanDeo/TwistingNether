@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { dev } from "$app/environment";
+	import { API_BASE_URL } from "$lib/common";
 	import { ItemQuality, type Affix, type CharacterData } from "$lib/types";
 	import { onMount } from "svelte";
 
@@ -29,13 +30,9 @@
 async function getAffixMedia() {
     for (let i: number = 0; i < uniqueSortedAffixIds.length; i++) {
         
-        let uri = 'https://twistingnetherapi.furyshiftz.com'
-        if (dev) {
-            uri = 'https:/localhost:7176'
-        }
-    let response = await fetch(`${uri}/api/keystone/get-affix-media?id=${uniqueSortedAffixIds[i]}`)
+       
+    let response = await fetch(`${API_BASE_URL}/keystone/getAffixMedia?id=${uniqueSortedAffixIds[i]}`)
     affixList.push(await response.json());
-    console.log(affixList)
   }
 }
 const uniqueSortedAffixIds = [
@@ -57,9 +54,28 @@ ring1, ring2, trinket1, trinket2, mainhand, offhand
 ].every(item => item && item.item_quality >= ItemQuality.Epic);
     let affixList: Affix[] = $state([]);
     let mythicRunAmount = $state(3);    
-    function updateCharacter() {
-    alert('This function has not been implemented yet.')
-}
+    async function updateCharacter() {
+
+       let updatedCharacter = await fetch(`${API_BASE_URL}/character/updatecharacter`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                region: character.raiderIOCharacterData.region,
+                realm: character.raiderIOCharacterData.realm,
+                name: character.raiderIOCharacterData.name
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!updatedCharacter.ok) {
+           alert('Failed to update character: ' + updatedCharacter.statusText + '\n' + await updatedCharacter.text());
+        } else {
+            alert('Character updated successfully! Please refresh the page to see the changes.\nNote: If there are no changes, try updating the character on the Raider.IO website first.');
+            if (dev) {
+                console.log('Character updated successfully! (dev log):', await updatedCharacter.json());
+            }
+        }
+    }
 </script>
 
 <div class="lg:ml-24 lg:order-1 order-last lg:mt-28">                

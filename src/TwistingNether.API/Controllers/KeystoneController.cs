@@ -8,14 +8,14 @@ using TwistingNether.DataAccess.TwistingNether.Character;
 
 namespace TwistingNether.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/keystone")]
     [ApiController]
     public class KeystoneController(IKeystoneService keystoneService, IAppCache appCache) : ControllerBase
     {
         private readonly IKeystoneService _keystoneService = keystoneService;
         private readonly IAppCache _appCache = appCache;
 
-        [HttpGet("get-affix-media")]
+        [HttpGet("getAffixMedia")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

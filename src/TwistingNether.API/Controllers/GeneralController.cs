@@ -6,13 +6,13 @@ using TwistingNether.DataAccess.BattleNet.WoW.News;
 
 namespace TwistingNether.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/general")]
     [ApiController]
     public class GeneralController(IGeneralService generalService) : ControllerBase
     {
         private readonly IGeneralService _generalService = generalService;
 
-        [HttpGet("GetNews")]
+        [HttpGet("getNews")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

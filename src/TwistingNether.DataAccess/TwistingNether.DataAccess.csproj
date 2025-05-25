@@ -13,4 +13,8 @@
     <PackageReference Include="newtonsoft.json" Version="13.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TwistingNether\Attributes\" />
+  </ItemGroup>
+
 </Project>

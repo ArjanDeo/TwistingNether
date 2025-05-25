@@ -57,7 +57,7 @@
 
 		try {
 			const res = await fetch(
-				`${API_BASE_URL}/character/ping?name=${characterName}&realm=${characterRealm}&region=${characterRegion}`
+				`${API_BASE_URL}/character/pingcharacter?name=${characterName}&realm=${characterRealm}&region=${characterRegion}`
 			);
 
 			if (!res.ok) {

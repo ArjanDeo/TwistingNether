@@ -12,17 +12,17 @@ namespace TwistingNether.Core.Services
     {
         private readonly Common _common = common;
         private readonly FluentClient _client = client;
-        public async Task<CharacterModel> GetCharacter(string name, string realm, string region)
+        public async Task<CharacterModel> GetCharacter(CharacterRequestModel character)
         {
-            name = name.ToLower();
-            realm = realm.ToLower();
-            region = region.ToLower();
-            realm = realm.Replace(" ", "-").Replace("\'", "");
+            character.Name = character.Name.ToLower();
+            character.Realm = character.Realm.ToLower();
+            character.Region = character.Region.ToLower();
+            character.Realm = character.Realm.Replace(" ", "-").Replace("\'", "");
             RaiderIOCharacterDataModel raiderIOCharacterData = await _client
                              .GetAsync("https://raider.io/api/v1/characters/profile")
-                             .WithArgument("region", region)
-                             .WithArgument("name", name)
-                             .WithArgument("realm", realm)
+                             .WithArgument("region", character.Region)
+                             .WithArgument("name", character.Name)
+                             .WithArgument("realm", character.Realm)
                              .WithArgument("fields", "raid_progression,mythic_plus_weekly_highest_level_runs,mythic_plus_scores_by_season:current,guild,gear,mythic_plus_highest_level_runs,mythic_plus_best_runs,raid_achievement_curve:nerubar-palace,raid_achievement_curve:liberation-of-undermine")
                              .As<RaiderIOCharacterDataModel>();
 
@@ -34,7 +34,7 @@ namespace TwistingNether.Core.Services
             }
 
             WoWCharacterMediaModel data = await _client
-             .GetAsync($"https://{region}.api.blizzard.com/profile/wow/character/{realm}/{name}/character-media?namespace=profile-us&locale=en_US&:region=us")
+             .GetAsync($"https://{character.Region}.api.blizzard.com/profile/wow/character/{character.Realm}/{character.Name}/character-media?namespace=profile-us&locale=en_US&:region=us")
              .WithBearerAuthentication(AppConstants.BattleNetAccessToken.access_token)
              .As<WoWCharacterMediaModel>();
 
@@ -57,10 +57,10 @@ namespace TwistingNether.Core.Services
             };
         }
 
-        public async Task<List<Quest>> GetCharacterCompletedQuests(string name, string realm, string region)
+        public async Task<List<Quest>> GetCharacterCompletedQuests(CharacterRequestModel character)
         {
             await _common.GetNewBattleNetAccessToken();
-            WoWCharacterCompletedQuestsModel res = await _client.GetAsync($"https://{region}.api.blizzard.com/profile/wow/character/{realm}/{name}/quests/completed")
+            WoWCharacterCompletedQuestsModel res = await _client.GetAsync($"https://{character.Region}.api.blizzard.com/profile/wow/character/{character.Realm}/{character.Name}/quests/completed")
                 .WithArguments(new Dictionary<string, string>()
                     {
                         { "namespace", "profile-us" },
@@ -75,15 +75,15 @@ namespace TwistingNether.Core.Services
             return undermineWeeklyQuests;
         }
 
-        public async Task<object?> PingCharacter(string name, string realm, string region)
+        public async Task<object?> PingCharacter(CharacterRequestModel character)
         {
             try
             {
                 RaiderIOCharacterDataModel data = await _client
                       .GetAsync("https://raider.io/api/v1/characters/profile")
-                      .WithArgument("region", "us")
-                      .WithArgument("name", name)
-                      .WithArgument("realm", realm.Replace(" ", "-"))
+                      .WithArgument("region", character.Region)
+                      .WithArgument("name", character.Name)
+                      .WithArgument("realm", character.Realm.Replace(" ", "-"))
                       .As<RaiderIOCharacterDataModel>();
 
 
