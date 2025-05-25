@@ -1,7 +1,6 @@
 <script lang="ts">
     import * as Form from "$lib/components/ui/form"
     import { Input } from "$lib/components/ui/input";
-    import { Toaster } from "$lib/components/ui/sonner";
 	import * as Popover from "$lib/components/ui/popover";
 	import * as Command from "$lib/components/ui/command";
     import * as Select from "$lib/components/ui/select/";
@@ -17,7 +16,6 @@
     import Fa from 'svelte-fa'
     import { toast } from 'svelte-sonner'
     import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-	import Button from "$lib/components/ui/button/button.svelte";
     let { data }: { data: { form: SuperValidated<Infer<FormSchema>> } } =
         $props();
 
@@ -45,6 +43,8 @@
         }
     }
  })
+
+ let loading = false;
 </script>
 {#if dev}
 <div class="mb-2">
@@ -124,6 +124,5 @@
                 <Form.FieldErrors />
         </Form.Field>
     </div>    
-    <Form.Button class="hover:cursor-pointer">Search</Form.Button>{#if $allErrors.length}
-{/if}
+    <Form.Button class="hover:cursor-pointer">Search</Form.Button>
 </form>

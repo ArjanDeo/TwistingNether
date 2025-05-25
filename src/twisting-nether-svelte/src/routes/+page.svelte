@@ -154,7 +154,7 @@
 	</svg>
 	<span>{errorMessage}</span>
 	<div>
-		<button class="btn btn-sm" on:click={() => showError = false}>Ok</button>
+		<button class="btn btn-sm" onclick={() => showError = false}>Ok</button>
 	</div>
 </div>
 {/if}
@@ -180,7 +180,7 @@
 	</svg>
 	<span>{showNewsErrorMessage}</span>
 	<div>
-		<button class="btn btn-sm" on:click={() => showNewsError = false}>Ok</button>
+		<button class="btn btn-sm" onclick={() => showNewsError = false}>Ok</button>
 	</div>
 </div>
 {/if}

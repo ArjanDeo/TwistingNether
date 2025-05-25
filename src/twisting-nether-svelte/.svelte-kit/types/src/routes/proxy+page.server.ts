@@ -20,11 +20,11 @@ export const actions = {
         form,
       });
     }
-    const pingCharacter = await event.fetch(`${API_BASE_URL}/character/pingcharacter?name=${form.data.name}&realm=${form.data.realm}&region=${form.data.region}`);
+    const pingCharacter = await event.fetch(`${API_BASE_URL}/character/pingcharacter?name=${form.data.name.toLowerCase()}&realm=${form.data.realm.toLowerCase()}&region=${form.data.region.toLowerCase()}`);
     if (!pingCharacter.ok) {
       return setError(form, 'Character not found.')
     } else {
-    throw redirect(303, `/character/${form.data.region}/${form.data.realm}/${form.data.name}`)
+    throw redirect(303, `/character/${form.data.region.toLowerCase()}/${form.data.realm.toLowerCase()}/${form.data.name.toLowerCase()}`)
     }
   },
 };;null as any as PageServerLoad;;null as any as Actions;
