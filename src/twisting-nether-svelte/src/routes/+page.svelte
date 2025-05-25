@@ -1,29 +1,30 @@
 <script lang="ts">
-	import { browser } from "$app/environment";
 	import { goto } from "$app/navigation";
 	import { API_BASE_URL } from "$lib/common";
 	import { realms } from "$lib/realms";
 	import type { Character } from "$lib/types";
-	import { ClassColors } from "$lib/types";
 	import { onMount } from "svelte";
+	import CharacterForm from "./character-form.svelte";
+	import type { PageServerData } from "./$types";
+	import * as Carousel from "$lib/components/ui/carousel";
 
 	let characterName = "";
 	let characterRealm = "";
 	let characterRegion = "default";
 
-	let showError = false;
-	let showNewsError = false;
-	let showNewsErrorMessage = "";
-	let errorMessage = "Character not found";
-	let characterFound = false;
+	let showError = $state(false);
+	let showNewsError = $state(false);
+	let showNewsErrorMessage = $state("");
+	let errorMessage = $state("Character not found");
+	let characterFound = $state(false);
 
-	let recentCharacters: Array<Character> = [];
-	let newsPosts: Array<any> = [];
-
+	let recentCharacters: Array<Character> = $state([]);
+	let newsPosts: Array<any> = $state([]);
+	let { data }: {data: PageServerData} = $props();
 	onMount(async () => {
 		recentCharacters = JSON.parse(localStorage.getItem("recentCharacters") || "[]");
 		try {
-			const news = await fetch(`${API_BASE_URL}/General/GetNews?limit=6`);
+			const news = await fetch(`${API_BASE_URL}/General/GetNews?limit=15`);
 
 			if (!news.ok) {
 				showNewsErrorMessage = "Couldn't fetch news.";
@@ -157,70 +158,11 @@
 	</div>
 </div>
 {/if}
-<div class="flex flex-col md:flex-row justify-center items-start gap-4 mt-10">
-	<div class="card glass w-fit p-10 mx-auto md:mx-0">
-		<div class="card-body">
-			<form on:submit|preventDefault={getCharacter} class="flex flex-col gap-4">
-				<input
-					bind:value={characterName}
-					class="input input-primary"
-					placeholder="Character Name"
-					type="text"
-					class:input-invalid={invalidFields.characterName}
-					on:submit={() => validateField("characterName", characterName)}				
-				/>
-				<input
-					bind:value={characterRealm}
-					class="input input-primary"
-					placeholder="Character Realm"
-					type="text"
-					list="realms"
-					class:input-invalid={invalidFields.characterRealm}
-					on:submit={() => validateField("characterRealm", characterRealm)}				
-				/>
-				<datalist id="realms">
-					{#each realms
-						.sort((a, b) => a.realmName.localeCompare(b.realmName))
-						as realm (realm.realmName)}
-						<option value="{realm.realmName}">{realm.realmName}</option>
-					{/each}
-				</datalist>
-				<select
-					bind:value={characterRegion}
-					class="input input-primary {characterRegion === "default" ? "text-gray-500" : ""}"
-					placeholder="Character Region"
-					class:input-invalid={invalidFields.characterRegion}
-					on:blur={() => validateField("characterRegion", characterRegion)}>
-					<option value="default" disabled selected>Character Region</option>
-					<option value="US">US</option>
-					<option value="EU">EU</option>
-					<option value="KR">KR</option>
-				</select>
-				<div class="flex justify-center mt-4">
-					<input class="btn btn-primary" type="submit" value="Submit" />
-				</div>
-			</form>
-		</div>
-	</div>
-
-	{#if recentCharacters.length > 0}
-	<div class="recent-characters card glass w-fit p-4 mx-auto md:mx-0">
-		<h3 class="font-bold text-lg mb-2">Recently Searched</h3>
-		<ul class="list-none">
-			{#each recentCharacters as character}
-			<li class="mb-2">
-				<button
-				    style="color: {ClassColors[character.class]};"
-					class="btn btn-outline btn-sm w-full hover:scale-110 transition-transform ease-in-out duration-500"
-					on:click={() => loadCharacter(character)}
-				>
-					{character.name} - {character.realm} ({character.region.toUpperCase()})
-				</button>
-			</li>
-			{/each}
-		</ul>
-	</div>
-	{/if}
+<div class="bg-primary-foreground p-2 w-fit mx-auto rounded-md">
+	<h1 class="mx-auto text-3xl text-green-500">Twisting Nether IO Calculation</h1>
+</div>
+<div class="w-fit mx-auto bg-primary-foreground p-4 rounded-md my-4">
+	<CharacterForm {data} />
 </div>
 {#if showNewsError}
 <div role="alert" class="alert alert-error max-w-96 mx-auto mb-2 my-10">
@@ -243,45 +185,24 @@
 </div>
 {/if}
 {#if newsPosts.length > 0 && !showNewsError}
-<div>
-	<h1 class="text-center my-10 text-2xl bg-slate-800 w-fit p-2 rounded-xl mx-auto">RECENT NEWS</h1>
-	<div class="grid md:grid-cols-2 lg:grid-cols-3 md:grid-flow-rows gap-y-4 lg:gap-x-3 ml-2">		
-		{#each newsPosts as post}
-			<div class="glass md:w-52 2xl:w-5/6 h-full mx-auto lg:mx-0 rounded-box">
-				<a href="{post.link}" target="_blank">
-				<img loading="lazy" src="{post.image}" class="w-fit" alt="{post.title}">
-				<h1 class="text-xl p-2 truncate">{post.title}</h1>
-				<p class="p-2 line-clamp-2 leading-7 overflow-hidden">{post.description}</p>
-				</a>
-			</div>
-		{/each}
-	</div>
+<div class="w-full">
+	<h1 class="text-center my-10 text-2xl bg-primary-foreground w-fit p-2 rounded-xl mx-auto">RECENT NEWS</h1>
+	<Carousel.Root class="w-full mx-auto">
+		<Carousel.Content class="flex gap-4 -ml-0">
+			{#each newsPosts as post}
+			<Carousel.Item class="basis-[300px] p-0 m-0">
+				<div class="w-full bg-primary-foreground h-full rounded-md">
+					<a href="{post.link}" target="_blank">
+						<img loading="lazy" src="{post.image}" class="w-full" alt="{post.title}">
+						<h1 class="text-xl p-2 truncate">{post.title}</h1>
+						<p class="p-2 line-clamp-2 leading-7 overflow-hidden">{post.description}</p>
+					</a>
+				</div>
+			</Carousel.Item>
+			{/each}
+		</Carousel.Content>
+		<Carousel.Previous />
+		<Carousel.Next />
+	</Carousel.Root>
 </div>
 {/if}
-<style>
-	.input-invalid {
-		border-color: red;
-		animation: shake 0.5s ease;
-	}
-
-	@keyframes shake {
-		0%, 100% {
-			transform: translateX(0);
-		}
-		25% {
-			transform: translateX(-5px);
-		}
-		50% {
-			transform: translateX(5px);
-		}
-		75% {
-			transform: translateX(-5px);
-		}
-	}
-	.recent-characters {
-		padding-top: 1rem;
-	}
-	.recent-characters button {
-		text-align: left;
-	}
-</style>

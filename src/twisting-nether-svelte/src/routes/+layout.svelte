@@ -1,15 +1,25 @@
 <script lang="ts">
-	let { children } = $props();
-	import "../app.css";
+import "../app.css";
+import { ModeWatcher, toggleMode } from "mode-watcher";
+import SunIcon from "@lucide/svelte/icons/sun";
+import MoonIcon from "@lucide/svelte/icons/moon";
+	import { Button } from "$lib/components/ui/button";
+	import { Toaster } from "$lib/components/ui/sonner";
+
+let { children } = $props();
 </script>
+<ModeWatcher />
+<Toaster />
+
+<!-- im pretty sure I dont need this anymore but just commenting out to be safe
 <div>
 	<p class="invisible">the background image breaks if i dont put this text here</p>
-</div>
+</div>-->
 <svelte:head>
 	<title>The Twisting Nether</title>
 </svelte:head>
-<nav class="bg-slate-800 w-auto lg:w-1/3 mx-auto rounded-full p-3 sticky top-1 z-10">
-	<div class="flex flex-col lg:flex-row lg:gap-x-3">
+<nav class="bg-primary-foreground w-auto sticky top-0 z-10 p-2">
+	<div class="flex flex-row lg:gap-x-3">
 		<a href="/" class="flex">
 			<img class="max-w-20" src="../../../argus_500.png" alt="Argus Logo">
 			<span class="place-self-center text-2xl bg-clip-text text-transparent inline-block bg-gradient-to-r from-green-600 to-green-900">
@@ -20,6 +30,17 @@
 			<a class="text-center my-auto hover:text-green-700 transition-colors ease-in-out" href="/">Home</a>
 			<a class="text-center my-auto hover:text-green-700 transition-colors ease-in-out" href="/about">About</a>
 			<a class="text-center my-auto hover:text-green-700 transition-colors ease-in-out" href="/io-calculator">IO Calculator</a>
+		</div>
+		<div class="my-auto">
+			<Button onclick={toggleMode} variant="outline" size="icon" class="cursor-pointer">
+				<SunIcon
+				class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
+				/>
+				<MoonIcon
+				class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+				/>
+				<span class="sr-only">Toggle theme</span>
+			</Button>
 		</div>
 		
 	</div>

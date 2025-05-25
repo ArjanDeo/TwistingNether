@@ -1,5 +1,7 @@
 {
-	"/": [],
+	"/": [
+		"src/routes/+page.server.ts"
+	],
 	"/about": [],
 	"/io-calculator": [],
 	"/[character]/[region]/[realm]/[name]": [
