@@ -19,22 +19,14 @@ namespace TwistingNether.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<CharacterModel>> GetCharacter([FromQuery] CharacterRequestModel character)
         {
-            character.Name = character.Name.ToLower();
-            character.Realm = character.Realm.ToLower();
-            character.Region = character.Region.ToLower();
-
-            return await _appCache.GetOrAddAsync<ActionResult<CharacterModel>>($"GetCharacter_{character.Name}_{character.Realm}_{character.Region}", async () =>
+            try
             {
-                try
-                {
-                    return Ok(await _characterService.GetCharacter(character));
-                }
-                catch (ApiException ex)
-                {
-                    return BadRequest($"Failed to get character: {await ex.Response.AsString()}");
-                }
-            });
-           
+                return Ok(await _characterService.GetCharacter(character));
+            }
+            catch (ApiException ex)
+            {
+                return BadRequest($"Failed to get character: {await ex.Response.AsString()}");
+            }
         }
 
         [HttpGet("pingCharacter")]

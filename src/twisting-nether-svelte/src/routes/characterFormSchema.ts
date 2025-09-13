@@ -1,7 +1,7 @@
 import { realms } from '$lib/realms';
 import { z } from 'zod';
 
-const realmSet = new Set(realms.map(r => r.realmName.toLowerCase()));
+const realmSet = new Set(realms.map(r => r.name.toLowerCase()));
 
 
 export const characterFormSchema = z.object({
