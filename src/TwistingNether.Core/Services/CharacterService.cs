@@ -2,6 +2,7 @@
 using Pathoschild.Http.Client;
 using TwistingNether.BattleNet.WoW.Character;
 using TwistingNether.DataAccess.BattleNet.WoW.Character;
+using TwistingNether.DataAccess.BattleNet.WoW.Media;
 using TwistingNether.DataAccess.Configuration;
 using TwistingNether.DataAccess.RaiderIO;
 using TwistingNether.DataAccess.TwistingNether.Character;
@@ -51,12 +52,27 @@ namespace TwistingNether.Core.Services
 
                 characterMediaList.Add(characterMediaModel);
             }
+            
+            WoWCharacterEquipmentModel characterGear = await _client
+            .GetAsync($"https://{character.Region}.api.blizzard.com/profile/wow/character/{character.Realm}/{character.Name}/equipment?namespace=profile-us&locale=en_US&:region=us")
+            .WithBearerAuthentication(AppConstants.BattleNetAccessToken.access_token)
+            .As<WoWCharacterEquipmentModel>();
+
+            for (int i = 0; i < characterGear.equipped_items.Count; i++)
+            {
+                var item = characterGear.equipped_items[i];
+                if (item.item != null)
+                    characterGear.equipped_items[i].item.iconUrl = await GetItemMedia(item.item.id.ToString());
+            }
+
             return new CharacterModel
             {
                 RaiderIOCharacterData = raiderIOCharacterData,
                 classColor = await _common.GetClassColor(raiderIOCharacterData.char_class),
                 CharacterMedia = characterMediaList,
-                RaidBossesKilledThisWeek = await GetCharacterRaids(character.Name, character.Realm, character.Region)
+                RaidBossesKilledThisWeek = await GetCharacterRaids(character.Name, character.Realm, character.Region),
+                CharacterEquipment = characterGear
+
             };
         }
         private async Task<List<RaidEncounter>> GetCharacterRaids(string name, string realm, string region)
@@ -130,6 +146,19 @@ namespace TwistingNether.Core.Services
                 lastTuesday = lastTuesday.AddDays(-1);
             }
             return lastTuesday;
+        }
+        private async Task<string> GetItemMedia(string id)
+        {
+            await _common.GetNewBattleNetAccessToken();
+            WowItemMediaModel res = await _client.GetAsync($"https://us.api.blizzard.com/data/wow/media/item/{id}")
+                .WithArguments(new Dictionary<string, string>()
+                    {
+                        { "namespace", "static-us" },
+                        {"locale", "en_US" }
+                    })
+                .WithBearerAuthentication(AppConstants.BattleNetAccessToken.access_token)
+                .As<WowItemMediaModel>();
+            return res.assets.FirstOrDefault(a => a.key == "icon")?.value ?? "";
         }
         public async Task<List<Quest>> GetCharacterCompletedQuests(CharacterRequestModel character)
         {

@@ -54,6 +54,13 @@ import zandalaritrollMale from '$lib/races/zandalaritroll-male.png';
 import zandalaritrollFemale from '$lib/races/zandalaritroll-female.png';
 import dracthyrMale from '$lib/races/dracthyr-male.png';
 import dracthyrFemale from '$lib/races/dracthyr-female.png';
+import shirtIcon from '$lib/icons/shirt.png';
+import tabardIcon from '$lib/icons/tabard.png';
+import mainhandIcon from '$lib/icons/mainhand.png';
+import offhandIcon from '$lib/icons/offhand.png';
+import tier1Icon from '$lib/icons/quality/tier1.png';
+import tier2Icon from '$lib/icons/quality/tier2.png';
+import tier3Icon from '$lib/icons/quality/tier3.png';
 
 export const raceIcons: Record<string, string> = {
   'bloodelf-male': bloodelfMale,
@@ -115,3 +122,14 @@ export const classIcons: Record<string, string> = {
   'Hunter': hunter,
   'Druid': druid
 };
+export const equipmentIcons: Record<string, string> = {
+  'Tabard': tabardIcon,
+  'Shirt': shirtIcon,
+  'Main Hand': mainhandIcon,
+  'Off Hand': offhandIcon
+}
+export const qualityIcons: Record<string, string> = {
+  'Tier 1': tier1Icon,
+  'Tier 2': tier2Icon,
+  'Tier 3': tier3Icon
+}

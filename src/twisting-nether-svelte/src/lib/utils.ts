@@ -13,7 +13,7 @@ export type WithoutChildren<T> = T extends { children?: any } ? Omit<T, "childre
 export type WithoutChildrenOrChild<T> = WithoutChildren<WithoutChild<T>>;
 export type WithElementRef<T, U extends HTMLElement = HTMLElement> = T & { ref?: U | null };
 
-export function itemQualityColor(quality: number): string {
+export function itemQualityColor(quality: string): string {
     switch (quality) {
         case ItemQuality.Common: return '#ffffff';
         case ItemQuality.Uncommon: return '#1eff00';
