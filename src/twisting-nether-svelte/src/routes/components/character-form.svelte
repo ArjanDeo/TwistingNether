@@ -45,6 +45,16 @@
  })
 
  let loading = false;
+
+let filteredRealms: () => { name: string, region: string}[] = $derived(() => {
+    if ($formData.region) {
+        return realms.filter(r => r.region.toLowerCase() === $formData.region.toLowerCase())
+    }
+    else 
+    {
+        return [];
+    }
+});
 </script>
 {#if dev}
 <div class="mb-2">
@@ -83,16 +93,16 @@
                 <Command.Empty>No language found.</Command.Empty>
                 <Command.List>
                     <Command.Group value="realms">
-                        {#each realms as realm (realm.realmName)}
+                        {#each filteredRealms() as realm (realm.name)}
                         <Command.Item
-                            value={realm.realmName}
+                            value={realm.name}
                             onSelect={() => {
-                            $formData.realm = realm.realmName;
+                            $formData.realm = realm.name;
                             closeAndFocusTrigger(triggerId);
                             }}
                             class="cursor-pointer"
                         >
-                            {realm.realmName}
+                            {realm.name}
                         </Command.Item>
                         {/each}
                     </Command.Group>
