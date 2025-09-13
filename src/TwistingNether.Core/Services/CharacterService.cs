@@ -1,10 +1,12 @@
-﻿using Pathoschild.Http.Client;
+﻿using Microsoft.EntityFrameworkCore;
+using Pathoschild.Http.Client;
 using TwistingNether.BattleNet.WoW.Character;
 using TwistingNether.DataAccess.BattleNet.WoW.Character;
 using TwistingNether.DataAccess.Configuration;
 using TwistingNether.DataAccess.RaiderIO;
 using TwistingNether.DataAccess.TwistingNether.Character;
 using TwistingNether.DataAccess.TwistingNether.Exceptions;
+using TwistingNether.DataAccess.TwistingNether.Raid;
 
 namespace TwistingNether.Core.Services
 {
@@ -53,10 +55,82 @@ namespace TwistingNether.Core.Services
             {
                 RaiderIOCharacterData = raiderIOCharacterData,
                 classColor = await _common.GetClassColor(raiderIOCharacterData.char_class),
-                CharacterMedia = characterMediaList
+                CharacterMedia = characterMediaList,
+                RaidBossesKilledThisWeek = await GetCharacterRaids(character.Name, character.Realm, character.Region)
             };
         }
+        private async Task<List<RaidEncounter>> GetCharacterRaids(string name, string realm, string region)
+        {
+            realm = realm.ToLower();
+            name = name.ToLower();
+            region = region.ToLower();
 
+            await _common.GetNewBattleNetAccessToken();
+
+            WoWCharacterRaidsModel data = await _client
+                .GetAsync($"https://{region}.api.blizzard.com/profile/wow/character/{realm}/{name}/encounters/raids?namespace=profile-us&locale=en_US")
+                .WithBearerAuthentication(AppConstants.BattleNetAccessToken.access_token)
+                .As<WoWCharacterRaidsModel>();
+
+            Dictionary<string, (DateTime Timestamp, string Difficulty)> lastKilledTimestamps = [];
+
+            var responseEncounters = data.expansions
+                .SelectMany(e => e.instances)
+                .SelectMany(i => i.modes);
+
+            List<string> validRaidBosses = ["Plexus Sentinel", "Loom'ithar", "Soulbinder Naazindhri", "Forgeweaver Araz", "The Soul Hunters", "Fractillus", "Nexus-King Salhadaar", "Dimensius"];
+
+            foreach (var encounter in responseEncounters)
+            {
+                string difficultyLevel = encounter.difficulty.name;
+                foreach (var boss in encounter.progress.encounters)
+                {
+                    string bossName = boss.encounter.name;
+                    long lastKillTimestamp = boss.last_kill_timestamp;
+
+                    if (validRaidBosses.Contains(bossName))
+                    {
+                        DateTime lastKillDateTime = DateTimeOffset.FromUnixTimeMilliseconds(lastKillTimestamp).UtcDateTime;
+
+                        if (lastKilledTimestamps.TryGetValue(bossName, out var existingEntry))
+                        {
+                            if (existingEntry.Timestamp < lastKillDateTime)
+                            {
+                                lastKilledTimestamps[bossName] = (lastKillDateTime, difficultyLevel);
+                            }
+                        }
+                        else
+                        {
+                            lastKilledTimestamps[bossName] = (lastKillDateTime, difficultyLevel);
+                        }
+                    }
+                }
+            }
+
+            List<RaidEncounter> clearedBossList = [];
+
+            foreach (var entry in lastKilledTimestamps)
+            {
+                if (entry.Value.Timestamp > GetLastReset())
+                {
+                    clearedBossList.Add(new RaidEncounter
+                    {
+                        Boss = entry.Key,
+                        Difficulty = entry.Value.Difficulty
+                    });
+                }
+            }
+            return clearedBossList;
+        }
+        private static DateTime GetLastReset()
+        {
+            DateTime lastTuesday = DateTime.Now.AddDays(-1);
+            while (lastTuesday.DayOfWeek != DayOfWeek.Tuesday)
+            {
+                lastTuesday = lastTuesday.AddDays(-1);
+            }
+            return lastTuesday;
+        }
         public async Task<List<Quest>> GetCharacterCompletedQuests(CharacterRequestModel character)
         {
             await _common.GetNewBattleNetAccessToken();

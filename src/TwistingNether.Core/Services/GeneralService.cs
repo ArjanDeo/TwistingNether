@@ -1,17 +1,18 @@
 ﻿using HtmlAgilityPack;
+using LazyCache;
 using Pathoschild.Http.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TwistingNether.DataAccess.BattleNet.WoW.Media;
 using TwistingNether.DataAccess.BattleNet.WoW.News;
+using TwistingNether.DataAccess.BattleNet.WoW.Token;
+using TwistingNether.DataAccess.Configuration;
 
 namespace TwistingNether.Core.Services
 {
-    public class GeneralService(FluentClient client) : IGeneralService
+    public class GeneralService(FluentClient client, IAppCache cache, Common common) : IGeneralService
     {
         private readonly FluentClient _client = client;
+        private readonly IAppCache _cache = cache;
+        private readonly Common _common = common;
         public async Task<List<WowNewsModel>?> GetNews(int? limit)
         {
             HtmlDocument doc = new();
@@ -76,8 +77,39 @@ namespace TwistingNether.Core.Services
             .Replace(");", "")
             .Replace("&quot;", "")
             .Trim();
+        public async Task<WowTokenModel> GetTokenPrice()
+        {
+            await _common.GetNewBattleNetAccessToken();
+            return await _cache.GetOrAddAsync("WowTokenPrice", async () =>
+            {
+                return await _client.GetAsync("https://us.api.blizzard.com/data/wow/token/index")
+                .WithArguments(new Dictionary<string, string>()
+                    {
+                        { "namespace", "dynamic-us" },
+                        {"locale", "en_US" }
+                    })
+                .WithBearerAuthentication(AppConstants.BattleNetAccessToken.access_token)
+                .As<WowTokenModel>();
+            }, TimeSpan.FromMinutes(20));
+            
 
-        
+        }
+        public async Task<WowItemMediaModel> GetItemMedia(string itemId)
+        {
+            await _common.GetNewBattleNetAccessToken();
+            return await _cache.GetOrAddAsync($"GetItemMedia_{itemId}", async () =>
+            {
+                return await _client.GetAsync($"https://us.api.blizzard.com/data/wow/media/item/{itemId}")
+                .WithArguments(new Dictionary<string, string>()
+                    {
+                        { "namespace", "static-us" },
+                        { "locale", "en_US" }
+                    })
+                .WithBearerAuthentication(AppConstants.BattleNetAccessToken.access_token)
+                .As<WowItemMediaModel>();
 
+            }, TimeSpan.FromMinutes(60));
+            
+        }
     }
 }

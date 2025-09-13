@@ -4,7 +4,7 @@
 	import * as Popover from "$lib/components/ui/popover";
 	import * as Command from "$lib/components/ui/command";
     import * as Select from "$lib/components/ui/select/";
-    import { characterFormSchema, type FormSchema } from "./characterFormSchema";
+    import { characterFormSchema, type FormSchema } from "../characterFormSchema";
     import SuperDebug, { type SuperValidated, type Infer, superForm } from "sveltekit-superforms";
     import { zodClient } from "sveltekit-superforms/adapters";
 	import { tick } from "svelte";

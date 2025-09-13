@@ -27,7 +27,6 @@
   <ItemGroup>
     <ProjectReference Include="..\TwistingNether.Core\TwistingNether.Core.csproj" />
     <ProjectReference Include="..\TwistingNether.DataAccess\TwistingNether.DataAccess.csproj" />
-    <ProjectReference Include="..\TwistingNether.Models\TwistingNether.Models.csproj" />
   </ItemGroup>
 
 </Project>

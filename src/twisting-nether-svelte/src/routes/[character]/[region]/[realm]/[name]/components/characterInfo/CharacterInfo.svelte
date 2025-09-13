@@ -9,6 +9,7 @@
 	import { Label } from "$lib/components/ui/label";
     import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 	import Fa from "svelte-fa";
+	import { Badge } from "$lib/components/ui/badge";
     let { character }: { character: CharacterData } = $props();
     
  let head = character.raiderIOCharacterData.gear.items.head;
@@ -81,43 +82,43 @@ ring1, ring2, trinket1, trinket2, mainhand, offhand
             }
         }
     }
+    const currentRaid = character.raiderIOCharacterData.raid_progression.manaforge_omega;
 </script>
 
 <div class="lg:ml-24 lg:order-1 order-last lg:mt-28">                
                 <Button onclick={() => updateCharacter()} style="color:{character.classColor}" variant="secondary" class="cursor-pointer">Update Character</Button>
                 <p class="text-2xl">Item Level: <span style="color:{hasEpicMilestone === true ? '#a335ee' : '#0070dd'}">{Math.round(character.raiderIOCharacterData.gear.item_level_equipped)}</span></p>
                 <p class="text-2xl">M+ Score: <span style="color:{character.raiderIOCharacterData.mythic_plus_scores_by_season[0].segments.all.color}">{character.raiderIOCharacterData.mythic_plus_scores_by_season[0].scores.all}</span></p>
-                <p class="text-2xl">Liberation of Undermine Progress:</p>
+                <p class="text-2xl">Manaforge: Omega Progress:</p>
                 <ul>
-                    {#if character.raiderIOCharacterData.raid_progression.liberationofundermine.normal_bosses_killed > 0}
+                    {#if currentRaid.normal_bosses_killed > 0}
                     <li class="text-xl text-[#1eff00]">
-                        {character.raiderIOCharacterData.raid_progression.liberationofundermine.normal_bosses_killed}/{character.raiderIOCharacterData.raid_progression.liberationofundermine.total_bosses}N
+                        {currentRaid.normal_bosses_killed}/{currentRaid.total_bosses}N
                     </li>
                     {:else}
                     <li class="text-xl text-[#1eff00]">
-                        0/{character.raiderIOCharacterData.raid_progression.liberationofundermine.total_bosses}N    
+                        0/{currentRaid.total_bosses}N    
                     </li>
                     {/if}
-                    {#if character.raiderIOCharacterData.raid_progression.liberationofundermine.heroic_bosses_killed > 0}
+                    {#if currentRaid.heroic_bosses_killed > 0}
                     <li class="text-xl text-[#1873da]">
-                        {character.raiderIOCharacterData.raid_progression.liberationofundermine.heroic_bosses_killed}/{character.raiderIOCharacterData.raid_progression.liberationofundermine.total_bosses}H
+                        {currentRaid.heroic_bosses_killed}/{currentRaid.total_bosses}H
                     </li>
                     {:else}
-                    <li class="text-xl text-[#1873da] flex">
-                        <span>0/{character.raiderIOCharacterData.raid_progression.liberationofundermine.total_bosses}H</span>
+                    <li class="text-xl text-[#1873da] flex gap-x-5">
+                        <span>0/{currentRaid.total_bosses}H</span>
                         {#if character.raiderIOCharacterData.raid_achievement_curve[0] != undefined && character.raiderIOCharacterData.raid_achievement_curve[0].aotc != undefined}
-                        {character.raiderIOCharacterData.raid_achievement_curve[0].aotc}
-                        <span class="badge">AOTC</span>
+                        <Badge class="border-[#1873da] outline p-2 bg-transparent text-[#1873da] text-xl max-h-7 min-w-5 rounded-full text-center">AOTC</Badge>
                         {/if}
                     </li>
                     {/if}
-                    {#if character.raiderIOCharacterData.raid_progression.liberationofundermine.mythic_bosses_killed > 0}
+                    {#if currentRaid.mythic_bosses_killed > 0}
                     <li class="text-xl text-[#a837e8]">
-                        {character.raiderIOCharacterData.raid_progression.liberationofundermine.mythic_bosses_killed}/{character.raiderIOCharacterData.raid_progression.liberationofundermine.total_bosses}M
+                        {currentRaid.mythic_bosses_killed}/{currentRaid.total_bosses}M
                     </li>
                     {:else}
                     <li class="text-xl text-[#a837e8]">
-                        0/{character.raiderIOCharacterData.raid_progression.liberationofundermine.total_bosses}M
+                        0/{currentRaid.total_bosses}M
                     </li>
                     {/if}
                 </ul>
@@ -153,7 +154,6 @@ ring1, ring2, trinket1, trinket2, mainhand, offhand
             <div class="flex gap-x-3 justify-center">
                 {#each run.affixes as affix}                            
                 <img class="max-w-10 my-1" alt="{affix.name}" src="{affixList.find((item) => item.id === affix.id)?.icon || "Unknown"}"/>
-                
                 {/each}
             </div>
         </div>

@@ -31,6 +31,8 @@ declare module '$env/static/private' {
 	export const ACSvcPort: string;
 	export const ALLUSERSPROFILE: string;
 	export const APPDATA: string;
+	export const BOOST_ROOT: string;
+	export const BUNDLED_DEBUGPY_PATH: string;
 	export const ChocolateyInstall: string;
 	export const ChocolateyLastPathUpdate: string;
 	export const CHROME_CRASHPAD_PIPE_NAME: string;
@@ -44,7 +46,7 @@ declare module '$env/static/private' {
 	export const CUDA_PATH_V11_8: string;
 	export const DriverData: string;
 	export const EDITOR: string;
-	export const EFC_11376: string;
+	export const EFC_8340: string;
 	export const ENABLE_XAML_DIAGNOSTICS_SOURCE_INFO: string;
 	export const GIT_ASKPASS: string;
 	export const GIT_LFS_PATH: string;
@@ -62,9 +64,7 @@ declare module '$env/static/private' {
 	export const MSMPI_BIN: string;
 	export const NODE: string;
 	export const NODE_ENV: string;
-	export const NODE_EXE: string;
 	export const NODE_TLS_REJECT_UNAUTHORIZED: string;
-	export const NPM_CLI_JS: string;
 	export const npm_command: string;
 	export const npm_config_cache: string;
 	export const npm_config_cafile: string;
@@ -88,13 +88,13 @@ declare module '$env/static/private' {
 	export const npm_package_json: string;
 	export const npm_package_name: string;
 	export const npm_package_version: string;
-	export const NPM_PREFIX_NPM_CLI_JS: string;
 	export const NUMBER_OF_PROCESSORS: string;
 	export const NVTOOLSEXT_PATH: string;
 	export const OculusBase: string;
 	export const OMP_WAIT_POLICY: string;
 	export const OneDrive: string;
 	export const OneDriveConsumer: string;
+	export const OPENSSL_ROOT_DIR: string;
 	export const ORIGINAL_XDG_CURRENT_DESKTOP: string;
 	export const OS: string;
 	export const Path: string;
@@ -109,6 +109,9 @@ declare module '$env/static/private' {
 	export const PROMPT: string;
 	export const PSModulePath: string;
 	export const PUBLIC: string;
+	export const PYDEVD_DISABLE_FILE_VALIDATION: string;
+	export const PYTHONSTARTUP: string;
+	export const PYTHON_BASIC_REPL: string;
 	export const RlsSvcPort: string;
 	export const SESSIONNAME: string;
 	export const SystemDrive: string;
@@ -123,11 +126,13 @@ declare module '$env/static/private' {
 	export const USERPROFILE: string;
 	export const VBOX_MSI_INSTALL_PATH: string;
 	export const VCPKG_ROOT: string;
+	export const VSCODE_DEBUGPY_ADAPTER_ENDPOINTS: string;
 	export const VSCODE_GIT_ASKPASS_EXTRA_ARGS: string;
 	export const VSCODE_GIT_ASKPASS_MAIN: string;
 	export const VSCODE_GIT_ASKPASS_NODE: string;
 	export const VSCODE_GIT_IPC_HANDLE: string;
 	export const VSCODE_INJECTION: string;
+	export const VSCODE_PYTHON_AUTOACTIVATE_GUARD: string;
 	export const windir: string;
 }
 
@@ -165,6 +170,8 @@ declare module '$env/dynamic/private' {
 		ACSvcPort: string;
 		ALLUSERSPROFILE: string;
 		APPDATA: string;
+		BOOST_ROOT: string;
+		BUNDLED_DEBUGPY_PATH: string;
 		ChocolateyInstall: string;
 		ChocolateyLastPathUpdate: string;
 		CHROME_CRASHPAD_PIPE_NAME: string;
@@ -178,7 +185,7 @@ declare module '$env/dynamic/private' {
 		CUDA_PATH_V11_8: string;
 		DriverData: string;
 		EDITOR: string;
-		EFC_11376: string;
+		EFC_8340: string;
 		ENABLE_XAML_DIAGNOSTICS_SOURCE_INFO: string;
 		GIT_ASKPASS: string;
 		GIT_LFS_PATH: string;
@@ -196,9 +203,7 @@ declare module '$env/dynamic/private' {
 		MSMPI_BIN: string;
 		NODE: string;
 		NODE_ENV: string;
-		NODE_EXE: string;
 		NODE_TLS_REJECT_UNAUTHORIZED: string;
-		NPM_CLI_JS: string;
 		npm_command: string;
 		npm_config_cache: string;
 		npm_config_cafile: string;
@@ -222,13 +227,13 @@ declare module '$env/dynamic/private' {
 		npm_package_json: string;
 		npm_package_name: string;
 		npm_package_version: string;
-		NPM_PREFIX_NPM_CLI_JS: string;
 		NUMBER_OF_PROCESSORS: string;
 		NVTOOLSEXT_PATH: string;
 		OculusBase: string;
 		OMP_WAIT_POLICY: string;
 		OneDrive: string;
 		OneDriveConsumer: string;
+		OPENSSL_ROOT_DIR: string;
 		ORIGINAL_XDG_CURRENT_DESKTOP: string;
 		OS: string;
 		Path: string;
@@ -243,6 +248,9 @@ declare module '$env/dynamic/private' {
 		PROMPT: string;
 		PSModulePath: string;
 		PUBLIC: string;
+		PYDEVD_DISABLE_FILE_VALIDATION: string;
+		PYTHONSTARTUP: string;
+		PYTHON_BASIC_REPL: string;
 		RlsSvcPort: string;
 		SESSIONNAME: string;
 		SystemDrive: string;
@@ -257,11 +265,13 @@ declare module '$env/dynamic/private' {
 		USERPROFILE: string;
 		VBOX_MSI_INSTALL_PATH: string;
 		VCPKG_ROOT: string;
+		VSCODE_DEBUGPY_ADAPTER_ENDPOINTS: string;
 		VSCODE_GIT_ASKPASS_EXTRA_ARGS: string;
 		VSCODE_GIT_ASKPASS_MAIN: string;
 		VSCODE_GIT_ASKPASS_NODE: string;
 		VSCODE_GIT_IPC_HANDLE: string;
 		VSCODE_INJECTION: string;
+		VSCODE_PYTHON_AUTOACTIVATE_GUARD: string;
 		windir: string;
 		[key: `PUBLIC_${string}`]: undefined;
 		[key: `${string}`]: string | undefined;

@@ -4,10 +4,22 @@ import { characterFormSchema } from './characterFormSchema';
 import { zod } from "sveltekit-superforms/adapters";
 import { fail, redirect } from "@sveltejs/kit";
 import { API_BASE_URL } from '$lib/common';
-
-export const load: PageServerLoad = (async () => {
+import { type Token } from '$lib/types'
+import { dev } from '$app/environment';
+if (dev) {
+  process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+}
+export const load: PageServerLoad = (async (event) => {
+      const tokenResponse = await event.fetch(`${API_BASE_URL}/general/getTokenPrice`);
+      let token: Token | null;
+      if (!tokenResponse.ok) {
+        token = null;
+      } else {
+        token = await tokenResponse.json();
+      }
     return {
         form: await superValidate(zod(characterFormSchema)),
+        token
     };
 }) satisfies PageServerLoad;
 

@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { ItemQuality, type CharacterData } from '$lib/types';
-    import type { PageData } from './$types';
     import * as Tooltip from '$lib/components/ui/tooltip';
     import { itemQualityColor } from '$lib/utils';
 	import { Badge } from '$lib/components/ui/badge';
+    import { classIcons, raceIcons } from '$lib/metadata';
     let { character }: { character: CharacterData } = $props();
 
     let head = character.raiderIOCharacterData.gear.items.head;
@@ -23,7 +23,6 @@
     let mainhand = character.raiderIOCharacterData.gear.items.mainhand;
     let offhand = character.raiderIOCharacterData.gear.items.offhand;
 
-    
 const hasEpicMilestone = [
 head, neck, shoulders, back, chest, wrists, hands, waist, legs, feet, 
 ring1, ring2, trinket1, trinket2, mainhand, offhand
@@ -49,27 +48,38 @@ function itemRarityColor(itemQuality: number): string {
             return '#ffffff'; // Default color in case no match
     }
 }
+
+const raceGenderString = `${character.raiderIOCharacterData.race.replace(' ', '').toLowerCase()}-${character.raiderIOCharacterData.gender}`
 </script>
-<div>
+<div class="">
     <header class="mb-8">
             <h1 class="text-2xl lg:text-4xl font-semibold">
                 {character.raiderIOCharacterData.name}-{character.raiderIOCharacterData.realm} 
-                {#if character.raiderIOCharacterData.guild != null}
-                <a target="_blank" class="hover:text-purple-700 transition-colors ease-in-out duration-300" href="https://worldofwarcraft.blizzard.com/en-us/guild/{character.raiderIOCharacterData.region}/{character.raiderIOCharacterData.guild.realm.replace('\'', "")}/{character.raiderIOCharacterData.guild.name.replace(' ', '-')}/">&lt;{character.raiderIOCharacterData.guild.name}&gt;</a>
-                {/if}
             </h1>
-            <div class="mt-2 flex md:flex-row gap-x-5 gap-y-2 md:gap-y-0">                	
-            <Badge variant="outline" style="color: {character.classColor}; border-color: {character.classColor};" class="text-center md:text-xl h-fit my-auto">{character.raiderIOCharacterData.race}</Badge>
-            <Badge variant="outline" style="color: {character.classColor}; border-color: {character.classColor};" class="text-center md:text-xl h-fit my-auto">{character.raiderIOCharacterData.active_spec_name} {character.raiderIOCharacterData.char_class}</Badge>
- 
+            {#if character.raiderIOCharacterData.guild != null}
+            <h2 class="text-xl lg:text-3x; font-semibold">
+                <a target="_blank" class="hover:text-purple-700 transition-colors ease-in-out duration-300" href="https://worldofwarcraft.blizzard.com/en-us/guild/{character.raiderIOCharacterData.region}/{character.raiderIOCharacterData.guild.realm.replace('\'', "")}/{character.raiderIOCharacterData.guild.name.replace(' ', '-')}/">&lt;{character.raiderIOCharacterData.guild.name}&gt;</a>
+            </h2>
+            {/if}
+
+            <div class="mt-2 flex md:flex-row gap-x-5 gap-y-2 md:gap-y-0">
+                <div class="flex flex-row gap-x-1 max-w-full">
+                    <img src={raceIcons[raceGenderString]} alt={character.raiderIOCharacterData.race} class="max-w-8 max-h-8 mt-1 rounded-full ml"/>
+                    <p class="text-center md:text-xl h-fit my-auto">{character.raiderIOCharacterData.race}</p>
+                </div>
+                <div class="flex flex-row gap-x-1">
+                    <img src={classIcons[character.raiderIOCharacterData.char_class]} alt={character.raiderIOCharacterData.char_class} class="max-w-8 max-h-8 mt-1 rounded-full"/>
+                    <p class="text-center md:text-xl h-fit my-auto">{character.raiderIOCharacterData.char_class}</p>
+                </div>
+            
                 <a aria-label="raider.io link" href="https://raider.io/characters/{character.raiderIOCharacterData.region}/{character.raiderIOCharacterData.realm}/{character.raiderIOCharacterData.name}" target="_blank">
-                    <img src="/raiderioicon.png" class="w-10" alt="raider io logo">
+                    <img src="/raiderioicon.png" class="w-10 h-10" alt="raider io logo">
                 </a>
                 <a class="ml-1" href="https://www.warcraftlogs.com/character/{character.raiderIOCharacterData.region}/{character.raiderIOCharacterData.realm}/{character.raiderIOCharacterData.name}" target="_blank">
-                    <img src="/warcraftlogsicon.png" class="w-10" alt="warcraft logs logo"/>
+                    <img src="/warcraftlogsicon.png" class="w-10 h-10" alt="warcraft logs logo"/>
                 </a>
                 <a class="ml-1" href="https://worldofwarcraft.blizzard.com/en-gb/character/{character.raiderIOCharacterData.region}/{character.raiderIOCharacterData.realm}/{character.raiderIOCharacterData.name}" target="_blank">
-                    <img src="/wowicon.png" class="w-10" alt="world of warcraft logo"/>
+                    <img src="/wowicon.png" class="w-10 h-10" alt="world of warcraft logo"/>
                 </a>
             </div>
         </header>        
@@ -86,7 +96,7 @@ function itemRarityColor(itemQuality: number): string {
                             </div>
                         </Tooltip.Trigger>                          
                             <Tooltip.Content class="bg-slate-700 text-[{itemQualityColor(item.item_quality)}]">
-                                <span class="rounded shadow-lg">{item.name}</span>
+                                <span style="color: {itemQualityColor(item.item_quality)}" class="rounded shadow-lg">{item.name}</span>
                             </Tooltip.Content>
                     </Tooltip.Root>
                 </Tooltip.Provider>
@@ -133,7 +143,7 @@ function itemRarityColor(itemQuality: number): string {
             <img 
                 src={character.characterMedia ? character.characterMedia[2].link : '/default-image.png'} 
                 alt="Character Render" 
-                class=" sm:order-last md:order-none md:max-w-2xl lg:max-w-3xl lg:max-h-max object-cover mx-0"
+                class=" sm:order-last md:order-none md:max-w-2xl lg:max-w-3xl lg:max-h-max fit mx-0"
             />
             <div class="flex lg:flex-col flex-row sm:mx-auto lg:mx-0 md:order-none gap-x-2">
                 {#each [hands, waist, legs, feet, ring1, ring2, trinket1, trinket2] as item}
@@ -147,7 +157,7 @@ function itemRarityColor(itemQuality: number): string {
                             </div>
                         </Tooltip.Trigger>                          
                             <Tooltip.Content class="bg-slate-700 text-[{itemQualityColor(item.item_quality)}]">
-                                <span class="rounded shadow-lg">{item.name}</span>
+                                <span style="color: {itemQualityColor(item.item_quality)}" class="rounded shadow-lg">{item.name}</span>
                             </Tooltip.Content>
                     </Tooltip.Root>
                 </Tooltip.Provider>

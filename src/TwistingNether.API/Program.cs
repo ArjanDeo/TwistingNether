@@ -1,11 +1,8 @@
 using LazyCache;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Pathoschild.Http.Client;
-using TwistingNether.Core;
 using TwistingNether.Core.Services;
-using TwistingNether.DataAccess;
 using TwistingNether.DataAccess.Configuration;
+using Common = TwistingNether.Core.Common;
 
 namespace TwistingNether.API
 {
@@ -70,7 +67,7 @@ namespace TwistingNether.API
 
             app.MapControllers();
 
-            app.MapGet("/", () => Results.Redirect("/swagger/index.html"));
+            app.MapGet("/", () => Results.Redirect("/swagger/index.html"));           
 
             app.Run();
         }

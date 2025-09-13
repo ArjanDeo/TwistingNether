@@ -449,6 +449,13 @@ export type CharacterData = {
           normal_bosses_killed: number
           heroic_bosses_killed: number
           mythic_bosses_killed: number
+        },
+        manaforge_omega: {
+          summary: string
+          total_bosses: number
+          normal_bosses_killed: number
+          heroic_bosses_killed: number
+          mythic_bosses_killed: number
         }
        // amirdrassilthedreamshope: unknown
        // vaultoftheincarnates: unknown
@@ -517,7 +524,16 @@ export type CharacterData = {
     region: string;
     class: keyof typeof ClassColors;
   }
-  
+  export type Token = {
+  _links: {
+    self: {
+      href: string
+    }
+  }
+  last_updated_timestamp: number
+  price: number
+}
+
   export const ClassColors = {
     Warrior: '#C69B6D',
     Hunter: '#AAD372',
@@ -533,3 +549,20 @@ export type CharacterData = {
     DeathKnight: '#C41E3A',
     Evoker: '#33937F',
   } as const;
+
+  export interface Encounter {
+  id: number;
+  slug: string;
+  name: string;
+}
+
+export const bosses: Encounter[] = [
+  { id: 197124, slug: "plexus-sentinel", name: "Plexus Sentinel" },
+  { id: 197125, slug: "loomithar", name: "Loom'ithar" },
+  { id: 197126, slug: "soulbinder-naazindhri", name: "Soulbinder Naazindhri" },
+  { id: 197127, slug: "forgeweaver-araz", name: "Forgeweaver Araz" },
+  { id: 197128, slug: "the-soul-hunters", name: "The Soul Hunters" },
+  { id: 197129, slug: "fractillus", name: "Fractillus" },
+  { id: 197130, slug: "nexus-king-salhadaar", name: "Nexus-King Salhadaar" },
+  { id: 197131, slug: "dimensius", name: "Dimensius" }
+];

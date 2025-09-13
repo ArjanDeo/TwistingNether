@@ -31,8 +31,7 @@ namespace TwistingNether.API.Controllers
                 }
                 catch (ApiException ex)
                 {
-                    Console.Error.WriteLine($"Error fetching character: {await ex.Response.AsString()}");
-                    return BadRequest("Failed to get character.");
+                    return BadRequest($"Failed to get character: {await ex.Response.AsString()}");
                 }
             });
            

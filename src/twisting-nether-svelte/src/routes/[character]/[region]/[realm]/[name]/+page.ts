@@ -5,7 +5,6 @@ import { API_BASE_URL } from '$lib/common';
 
 export const load = (async ({fetch, params}) => {
     const charDataResponse = await fetch(`${API_BASE_URL}/character/getcharacter?realm=${params.realm}&name=${params.name}&region=${params.region}`);
-
     if (!charDataResponse.ok) {
         throw error(400, `Error fetching character. Status: ${charDataResponse.status} ${charDataResponse.statusText}`);
     }
