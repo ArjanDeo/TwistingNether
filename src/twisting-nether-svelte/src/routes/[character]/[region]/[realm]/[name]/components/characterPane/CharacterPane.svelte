@@ -27,7 +27,6 @@
     mainhand: equipped.find(i => i.slot.name === "Main Hand"),
     offhand: equipped.find(i => i.slot.name === "Off Hand"),
     };
-console.log(equippedGear)
 function itemRarityColor(itemQuality: string): string {
     switch (itemQuality) {
         case ItemQuality.Common:
@@ -48,6 +47,8 @@ function itemRarityColor(itemQuality: string): string {
             return '#ffffff'; // Default color in case no match
     }
 }
+
+
 
 const raceGenderString = `${character.raiderIOCharacterData.race.replace(' ', '').toLowerCase()}-${character.raiderIOCharacterData.gender}`
 </script>
@@ -73,13 +74,13 @@ const raceGenderString = `${character.raiderIOCharacterData.race.replace(' ', ''
                 </div>
             
                 <a aria-label="raider.io link" href="https://raider.io/characters/{character.raiderIOCharacterData.region}/{character.raiderIOCharacterData.realm}/{character.raiderIOCharacterData.name}" target="_blank">
-                    <img src="/raiderioicon.png" class="w-10 h-10" alt="raider io logo">
+                    <img src="/raiderioicon.webp" class="w-10 h-10" alt="raider io logo">
                 </a>
                 <a class="ml-1" href="https://www.warcraftlogs.com/character/{character.raiderIOCharacterData.region}/{character.raiderIOCharacterData.realm}/{character.raiderIOCharacterData.name}" target="_blank">
-                    <img src="/warcraftlogsicon.png" class="w-10 h-10" alt="warcraft logs logo"/>
+                    <img src="/warcraftlogsicon.webp" class="w-10 h-10" alt="warcraft logs logo"/>
                 </a>
                 <a class="ml-1" href="https://worldofwarcraft.blizzard.com/en-gb/character/{character.raiderIOCharacterData.region}/{character.raiderIOCharacterData.realm}/{character.raiderIOCharacterData.name}" target="_blank">
-                    <img src="/wowicon.png" class="w-10 h-10" alt="world of warcraft logo"/>
+                    <img src="/wowicon.webp" class="w-10 h-10" alt="world of warcraft logo"/>
                 </a>
             </div>
     </header>        
@@ -102,9 +103,10 @@ const raceGenderString = `${character.raiderIOCharacterData.race.replace(' ', ''
         <!-- Character Render with Centered Weapons -->
     <div class="flex flex-col items-center sm:order-last md:order-none mx-auto">
         <img 
-            src={character.characterMedia ? character.characterMedia[2].link : '/default-image.png'} 
+            src={character.characterMedia ? `https://wsrv.nl/?url=${character.characterMedia[2].link}&w=800&output=webp&q=80` : '/default-image.webp'} 
             alt="Character Render" 
             class="md:max-w-2xl lg:max-w-3xl lg:max-h-max"
+            fetchpriority=high
         />
 
         <!-- Main & Off-Hand Weapons -->

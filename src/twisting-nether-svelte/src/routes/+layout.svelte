@@ -3,9 +3,8 @@ import "../app.css";
 import { ModeWatcher, toggleMode } from "mode-watcher";
 import SunIcon from "@lucide/svelte/icons/sun";
 import MoonIcon from "@lucide/svelte/icons/moon";
-	import { Button } from "$lib/components/ui/button";
-	import { Toaster } from "$lib/components/ui/sonner";
-
+import { Button } from "$lib/components/ui/button";
+import { Toaster } from "$lib/components/ui/sonner";
 let { children } = $props();
 </script>
 <ModeWatcher />
@@ -21,7 +20,7 @@ let { children } = $props();
 <nav class="bg-primary-foreground w-auto sticky top-0 z-10 p-2">
 	<div class="flex flex-row lg:gap-x-3">
 		<a href="/" class="flex">
-			<img class="max-w-20" src="../../../argus_500.png" alt="Argus Logo">
+			<enhanced:img class="max-w-20" src="../lib/argus_500.webp" alt="Argus Logo" />
 			<span class="place-self-center text-2xl bg-clip-text text-transparent inline-block bg-gradient-to-r from-green-600 to-green-900">
 				THE TWISTING NETHER
 			</span>
@@ -55,7 +54,7 @@ let { children } = $props();
 <style lang="postcss">
 	@reference "tailwindcss";
 	:global(body) {    
-	  background-image: url("/WoW_7.3_Shadows_of_Argus_05.png");
+	  background-image: url("/WoW_7.3_Shadows_of_Argus_05.webp");
 	  background-repeat: no-repeat;
 	  background-attachment: fixed;
 	  background-position: center;

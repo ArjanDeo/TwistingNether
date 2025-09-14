@@ -40,7 +40,7 @@
 	<div class="mx-auto">
 <h2 class="text-2xl font-bold text-yellow-400">WoW Token Price</h2>
   <p class="text-lg text-white mt-3 flex flex-row ">
-	<img src="/money-gold.gif" alt="gold icon" class="h-fit my-auto mr-1 "/>
+	<img src="/money-gold.webp" alt="gold icon" class="h-fit my-auto mr-1 "/>
 	{#if data.token != null}
     {(data.token.price / 10000).toLocaleString()} Gold
 	{:else}

@@ -36,7 +36,7 @@ namespace TwistingNether.API.Controllers
         public async Task<IActionResult> PingCharacter([FromQuery] CharacterRequestModel character)
         {
             dynamic? pingChar = await _characterService.PingCharacter(character);
-            return pingChar != null ? Ok(pingChar) : NotFound("Character not found.");
+            return pingChar != null ? Ok(pingChar) : NotFound("Couldn't find character.");
 
         }
 

@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite'
+import { enhancedImages } from '@sveltejs/enhanced-img';
 import mkcert from 'vite-plugin-mkcert'
 import path from 'path';
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-	plugins: [tailwindcss(), sveltekit(), mkcert()],
+	plugins: [enhancedImages(), tailwindcss(), sveltekit(), mkcert()],
 	server: {
 		proxy: {
 			'/api': {

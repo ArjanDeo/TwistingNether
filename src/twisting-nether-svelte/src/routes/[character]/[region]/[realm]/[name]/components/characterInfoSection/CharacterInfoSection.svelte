@@ -72,7 +72,7 @@ console.log(character.raidBossesKilledThisWeek)
                             style="background-image: url({run.background_image_url});"
                         >
                         <Table.Cell class="bg-black/40 py-2 px-3 flex items-center gap-2">
-                            <img src="{run.icon_url}" alt="{run.dungeon}" class="w-10 h-10 rounded-sm" />
+                            <img src="{run.icon_url}" alt="{run.dungeon}" class="w-10 h-10 rounded-sm" loading="lazy" />
                             <span class="w-12 text-right {run.num_keystone_upgrades === 0 ? 'text-gray-500' : ''}">
                                 {'+'.repeat(run.num_keystone_upgrades)}{run.mythic_level}
                             </span>

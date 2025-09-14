@@ -21,7 +21,7 @@
  * 
  * You can override `.env` values from the command line like so:
  * 
- * ```bash
+ * ```sh
  * MY_FEATURE_FLAG="enabled" npm run dev
  * ```
  */
@@ -31,13 +31,12 @@ declare module '$env/static/private' {
 	export const ACSvcPort: string;
 	export const ALLUSERSPROFILE: string;
 	export const APPDATA: string;
+	export const APPLICATIONINSIGHTS_CONFIGURATION_CONTENT: string;
+	export const APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL: string;
 	export const BOOST_ROOT: string;
-	export const BUNDLED_DEBUGPY_PATH: string;
 	export const ChocolateyInstall: string;
 	export const ChocolateyLastPathUpdate: string;
 	export const CHROME_CRASHPAD_PIPE_NAME: string;
-	export const COLOR: string;
-	export const COLORTERM: string;
 	export const CommonProgramFiles: string;
 	export const CommonProgramW6432: string;
 	export const COMPUTERNAME: string;
@@ -45,49 +44,22 @@ declare module '$env/static/private' {
 	export const CUDA_PATH: string;
 	export const CUDA_PATH_V11_8: string;
 	export const DriverData: string;
-	export const EDITOR: string;
 	export const EFC_8340: string;
+	export const ELECTRON_NO_ASAR: string;
+	export const ELECTRON_RUN_AS_NODE: string;
 	export const ENABLE_XAML_DIAGNOSTICS_SOURCE_INFO: string;
-	export const GIT_ASKPASS: string;
 	export const GIT_LFS_PATH: string;
-	export const HOME: string;
 	export const HOMEDRIVE: string;
 	export const HOMEPATH: string;
-	export const INIT_CWD: string;
 	export const JAVA_HOME: string;
 	export const JD2_HOME: string;
 	export const KMP_BLOCKTIME: string;
-	export const LANG: string;
 	export const LOCALAPPDATA: string;
 	export const LOGONSERVER: string;
 	export const MSMPI_BENCHMARKS: string;
 	export const MSMPI_BIN: string;
-	export const NODE: string;
 	export const NODE_ENV: string;
 	export const NODE_TLS_REJECT_UNAUTHORIZED: string;
-	export const npm_command: string;
-	export const npm_config_cache: string;
-	export const npm_config_cafile: string;
-	export const npm_config_engine_strict: string;
-	export const npm_config_globalconfig: string;
-	export const npm_config_global_prefix: string;
-	export const npm_config_init_module: string;
-	export const npm_config_local_prefix: string;
-	export const npm_config_node_gyp: string;
-	export const npm_config_noproxy: string;
-	export const npm_config_npm_version: string;
-	export const npm_config_prefix: string;
-	export const npm_config_registry: string;
-	export const npm_config_strict_ssl: string;
-	export const npm_config_userconfig: string;
-	export const npm_config_user_agent: string;
-	export const npm_execpath: string;
-	export const npm_lifecycle_event: string;
-	export const npm_lifecycle_script: string;
-	export const npm_node_execpath: string;
-	export const npm_package_json: string;
-	export const npm_package_name: string;
-	export const npm_package_version: string;
 	export const NUMBER_OF_PROCESSORS: string;
 	export const NVTOOLSEXT_PATH: string;
 	export const OculusBase: string;
@@ -106,19 +78,13 @@ declare module '$env/static/private' {
 	export const ProgramData: string;
 	export const ProgramFiles: string;
 	export const ProgramW6432: string;
-	export const PROMPT: string;
 	export const PSModulePath: string;
 	export const PUBLIC: string;
-	export const PYDEVD_DISABLE_FILE_VALIDATION: string;
-	export const PYTHONSTARTUP: string;
-	export const PYTHON_BASIC_REPL: string;
 	export const RlsSvcPort: string;
 	export const SESSIONNAME: string;
 	export const SystemDrive: string;
 	export const SystemRoot: string;
 	export const TEMP: string;
-	export const TERM_PROGRAM: string;
-	export const TERM_PROGRAM_VERSION: string;
 	export const TMP: string;
 	export const USERDOMAIN: string;
 	export const USERDOMAIN_ROAMINGPROFILE: string;
@@ -126,13 +92,17 @@ declare module '$env/static/private' {
 	export const USERPROFILE: string;
 	export const VBOX_MSI_INSTALL_PATH: string;
 	export const VCPKG_ROOT: string;
-	export const VSCODE_DEBUGPY_ADAPTER_ENDPOINTS: string;
-	export const VSCODE_GIT_ASKPASS_EXTRA_ARGS: string;
-	export const VSCODE_GIT_ASKPASS_MAIN: string;
-	export const VSCODE_GIT_ASKPASS_NODE: string;
-	export const VSCODE_GIT_IPC_HANDLE: string;
-	export const VSCODE_INJECTION: string;
-	export const VSCODE_PYTHON_AUTOACTIVATE_GUARD: string;
+	export const VIPSHOME: string;
+	export const VSCODE_CODE_CACHE_PATH: string;
+	export const VSCODE_CRASH_REPORTER_PROCESS_TYPE: string;
+	export const VSCODE_CWD: string;
+	export const VSCODE_DOTNET_INSTALL_TOOL_ORIGINAL_HOME: string;
+	export const VSCODE_ESM_ENTRYPOINT: string;
+	export const VSCODE_HANDLES_UNCAUGHT_ERRORS: string;
+	export const VSCODE_IPC_HOOK: string;
+	export const VSCODE_L10N_BUNDLE_LOCATION: string;
+	export const VSCODE_NLS_CONFIG: string;
+	export const VSCODE_PID: string;
 	export const windir: string;
 }
 
@@ -154,14 +124,12 @@ declare module '$env/static/public' {
  * 
  * This module cannot be imported into client-side code.
  * 
- * Dynamic environment variables cannot be used during prerendering.
- * 
  * ```ts
  * import { env } from '$env/dynamic/private';
  * console.log(env.DEPLOYMENT_SPECIFIC_VARIABLE);
  * ```
  * 
- * > In `dev`, `$env/dynamic` always includes environment variables from `.env`. In `prod`, this behavior will depend on your adapter.
+ * > [!NOTE] In `dev`, `$env/dynamic` always includes environment variables from `.env`. In `prod`, this behavior will depend on your adapter.
  */
 declare module '$env/dynamic/private' {
 	export const env: {
@@ -170,13 +138,12 @@ declare module '$env/dynamic/private' {
 		ACSvcPort: string;
 		ALLUSERSPROFILE: string;
 		APPDATA: string;
+		APPLICATIONINSIGHTS_CONFIGURATION_CONTENT: string;
+		APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL: string;
 		BOOST_ROOT: string;
-		BUNDLED_DEBUGPY_PATH: string;
 		ChocolateyInstall: string;
 		ChocolateyLastPathUpdate: string;
 		CHROME_CRASHPAD_PIPE_NAME: string;
-		COLOR: string;
-		COLORTERM: string;
 		CommonProgramFiles: string;
 		CommonProgramW6432: string;
 		COMPUTERNAME: string;
@@ -184,49 +151,22 @@ declare module '$env/dynamic/private' {
 		CUDA_PATH: string;
 		CUDA_PATH_V11_8: string;
 		DriverData: string;
-		EDITOR: string;
 		EFC_8340: string;
+		ELECTRON_NO_ASAR: string;
+		ELECTRON_RUN_AS_NODE: string;
 		ENABLE_XAML_DIAGNOSTICS_SOURCE_INFO: string;
-		GIT_ASKPASS: string;
 		GIT_LFS_PATH: string;
-		HOME: string;
 		HOMEDRIVE: string;
 		HOMEPATH: string;
-		INIT_CWD: string;
 		JAVA_HOME: string;
 		JD2_HOME: string;
 		KMP_BLOCKTIME: string;
-		LANG: string;
 		LOCALAPPDATA: string;
 		LOGONSERVER: string;
 		MSMPI_BENCHMARKS: string;
 		MSMPI_BIN: string;
-		NODE: string;
 		NODE_ENV: string;
 		NODE_TLS_REJECT_UNAUTHORIZED: string;
-		npm_command: string;
-		npm_config_cache: string;
-		npm_config_cafile: string;
-		npm_config_engine_strict: string;
-		npm_config_globalconfig: string;
-		npm_config_global_prefix: string;
-		npm_config_init_module: string;
-		npm_config_local_prefix: string;
-		npm_config_node_gyp: string;
-		npm_config_noproxy: string;
-		npm_config_npm_version: string;
-		npm_config_prefix: string;
-		npm_config_registry: string;
-		npm_config_strict_ssl: string;
-		npm_config_userconfig: string;
-		npm_config_user_agent: string;
-		npm_execpath: string;
-		npm_lifecycle_event: string;
-		npm_lifecycle_script: string;
-		npm_node_execpath: string;
-		npm_package_json: string;
-		npm_package_name: string;
-		npm_package_version: string;
 		NUMBER_OF_PROCESSORS: string;
 		NVTOOLSEXT_PATH: string;
 		OculusBase: string;
@@ -245,19 +185,13 @@ declare module '$env/dynamic/private' {
 		ProgramData: string;
 		ProgramFiles: string;
 		ProgramW6432: string;
-		PROMPT: string;
 		PSModulePath: string;
 		PUBLIC: string;
-		PYDEVD_DISABLE_FILE_VALIDATION: string;
-		PYTHONSTARTUP: string;
-		PYTHON_BASIC_REPL: string;
 		RlsSvcPort: string;
 		SESSIONNAME: string;
 		SystemDrive: string;
 		SystemRoot: string;
 		TEMP: string;
-		TERM_PROGRAM: string;
-		TERM_PROGRAM_VERSION: string;
 		TMP: string;
 		USERDOMAIN: string;
 		USERDOMAIN_ROAMINGPROFILE: string;
@@ -265,13 +199,17 @@ declare module '$env/dynamic/private' {
 		USERPROFILE: string;
 		VBOX_MSI_INSTALL_PATH: string;
 		VCPKG_ROOT: string;
-		VSCODE_DEBUGPY_ADAPTER_ENDPOINTS: string;
-		VSCODE_GIT_ASKPASS_EXTRA_ARGS: string;
-		VSCODE_GIT_ASKPASS_MAIN: string;
-		VSCODE_GIT_ASKPASS_NODE: string;
-		VSCODE_GIT_IPC_HANDLE: string;
-		VSCODE_INJECTION: string;
-		VSCODE_PYTHON_AUTOACTIVATE_GUARD: string;
+		VIPSHOME: string;
+		VSCODE_CODE_CACHE_PATH: string;
+		VSCODE_CRASH_REPORTER_PROCESS_TYPE: string;
+		VSCODE_CWD: string;
+		VSCODE_DOTNET_INSTALL_TOOL_ORIGINAL_HOME: string;
+		VSCODE_ESM_ENTRYPOINT: string;
+		VSCODE_HANDLES_UNCAUGHT_ERRORS: string;
+		VSCODE_IPC_HOOK: string;
+		VSCODE_L10N_BUNDLE_LOCATION: string;
+		VSCODE_NLS_CONFIG: string;
+		VSCODE_PID: string;
 		windir: string;
 		[key: `PUBLIC_${string}`]: undefined;
 		[key: `${string}`]: string | undefined;
@@ -282,8 +220,6 @@ declare module '$env/dynamic/private' {
  * Similar to [`$env/dynamic/private`](https://svelte.dev/docs/kit/$env-dynamic-private), but only includes variables that begin with [`config.kit.env.publicPrefix`](https://svelte.dev/docs/kit/configuration#env) (which defaults to `PUBLIC_`), and can therefore safely be exposed to client-side code.
  * 
  * Note that public dynamic environment variables must all be sent from the server to the client, causing larger network requests — when possible, use `$env/static/public` instead.
- * 
- * Dynamic environment variables cannot be used during prerendering.
  * 
  * ```ts
  * import { env } from '$env/dynamic/public';

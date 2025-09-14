@@ -116,7 +116,7 @@ let filteredRealms: () => { name: string, region: string}[] = $derived(() => {
                 <Form.Control>
                     {#snippet children({ props })}
                         <Select.Root type="single" bind:value={$formData.region} name={props.name} >
-                            <Select.Trigger {...props} class="w-20 bg-white cursor-pointer">
+                            <Select.Trigger {...props} class="w-20 bg-white cursor-pointer" aria-label="Region Select">
                                 {$formData.region
                                 ? $formData.region
                                 : "Select the characters region"}

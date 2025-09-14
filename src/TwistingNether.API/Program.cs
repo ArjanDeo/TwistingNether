@@ -70,7 +70,7 @@ namespace TwistingNether.API
 
             app.MapControllers();
 
-            app.MapGet("/", () => Results.Redirect("/swagger/index.html"));           
+            app.MapGet("/", () => Results.Redirect("/swagger/index.html"));
 
             app.Run();
         }

@@ -59,7 +59,7 @@
                     <img
                         style="border-color: {itemRarityColor(gear.quality.type)};"
                         class="max-w-11 mb-2 hover:cursor-pointer border"
-                        src="{gear.item.iconUrl}"
+                        src="https://wsrv.nl/?url={gear.item.iconUrl}"
                         alt="{gear.name}" />
                 </a>
             </div>
