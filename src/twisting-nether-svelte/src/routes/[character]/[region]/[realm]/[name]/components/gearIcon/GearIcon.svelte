@@ -54,13 +54,16 @@
 <Tooltip.Provider>
     <Tooltip.Root>
         <Tooltip.Trigger>
-            <div class="flex items-center">
+            <div class="relative flex items-center">
                 <a target="_blank" href="https://www.wowhead.com/item={gear.item.id}/">
                     <img
                         style="border-color: {itemRarityColor(gear.quality.type)};"
-                        class="max-w-11 mb-2 hover:cursor-pointer border"
+                        class="max-w-12 mb-2 hover:cursor-pointer border"
                         src="https://wsrv.nl/?url={gear.item.iconUrl}"
                         alt="{gear.name}" />
+                    <span style="color: {itemQualityColor(gear.quality.type)}" class="absolute bottom-2 -right-0.5 text-xs font-bold px-1 rounded-tl">
+                        {gear.level.value}
+                    </span>
                 </a>
             </div>
         </Tooltip.Trigger>
@@ -108,7 +111,7 @@
         <Tooltip.Trigger>
             <div class="flex items-center">
                 <img
-                    class="w-11 mb-2"
+                    class="w-12 mb-2"
                     src="{equipmentIcons[slot]}"
                     alt="Missing {slot}" />
             </div>

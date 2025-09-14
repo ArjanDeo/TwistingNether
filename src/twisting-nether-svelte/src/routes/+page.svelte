@@ -1,14 +1,10 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
-	import { API_BASE_URL } from "$lib/common";
-	import { realms } from "$lib/realms";
 	import type { Character } from "$lib/types";
 	import { onMount } from "svelte";
 	import CharacterForm from "./components/character-form.svelte";
 	import type { PageServerData } from "./$types";
 	import * as Carousel from "$lib/components/ui/carousel";
 	import { toast } from "svelte-sonner";
-	import { dev } from "$app/environment";
 
 	let recentCharacters: Array<Character> = $state([]);
 	let newsPosts: Array<any> = $state([]);

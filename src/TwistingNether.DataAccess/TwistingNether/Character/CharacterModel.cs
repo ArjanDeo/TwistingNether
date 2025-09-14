@@ -1,6 +1,7 @@
 ﻿using TwistingNether.DataAccess.BattleNet.WoW.Character;
 using TwistingNether.DataAccess.RaiderIO;
 using TwistingNether.DataAccess.TwistingNether.Raid;
+using TwistingNether.DataAccess.WarcraftLogs;
 
 namespace TwistingNether.DataAccess.TwistingNether.Character
 {
@@ -11,6 +12,7 @@ namespace TwistingNether.DataAccess.TwistingNether.Character
         public List<int>? DungeonVaultSlots { get; set; }
         public List<CharacterMediaModel>? CharacterMedia { get; set; }
         public WoWCharacterEquipmentModel CharacterEquipment { get; set; }
+        public ZoneRankings RaidPerformance { get; set; }
         public string? classColor { get; set; }
     }
 }

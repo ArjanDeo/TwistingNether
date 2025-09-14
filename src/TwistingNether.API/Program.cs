@@ -29,7 +29,8 @@ namespace TwistingNether.API
             builder.Services.AddSingleton<FluentClient>();
             Settings.ClientId = builder.Configuration.GetSection("BattleNet").GetSection("ClientId").Value;
             Settings.ClientSecret = builder.Configuration.GetSection("BattleNet").GetSection("ClientSecret").Value;
-
+            Settings.WarcraftLogsClientId = builder.Configuration.GetSection("WarcraftLogs").GetSection("ClientId").Value;
+            Settings.WarcraftLogsClientSecret = builder.Configuration.GetSection("WarcraftLogs").GetSection("ClientSecret").Value;
             //builder.Services.AddDbContext<ApplicationDbContext>(options =>
             //options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
 

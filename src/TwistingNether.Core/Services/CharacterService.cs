@@ -9,6 +9,8 @@ using TwistingNether.DataAccess.RaiderIO;
 using TwistingNether.DataAccess.TwistingNether.Character;
 using TwistingNether.DataAccess.TwistingNether.Exceptions;
 using TwistingNether.DataAccess.TwistingNether.Raid;
+using TwistingNether.DataAccess.WarcraftLogs;
+using TwistingNether.DataAccess.WarcraftLogs.OAuth;
 
 namespace TwistingNether.Core.Services
 {
@@ -75,7 +77,8 @@ namespace TwistingNether.Core.Services
                     classColor = await _common.GetClassColor(raiderIOCharacterData.char_class),
                     CharacterMedia = characterMediaList,
                     RaidBossesKilledThisWeek = await GetCharacterRaids(character.Name, character.Realm, character.Region),
-                    CharacterEquipment = characterGear
+                    CharacterEquipment = characterGear,
+                    RaidPerformance = await GetLatestRaidPerformance(character, 0) // 0: Highest, 1: LFR, 2: Normal, 3: Heroic, 4: Mythic
 
                 };
             }, TimeSpan.FromMinutes(60));
@@ -186,31 +189,68 @@ namespace TwistingNether.Core.Services
 
             return undermineWeeklyQuests;
         }
-
-        public async Task<object?> PingCharacter(CharacterRequestModel character)
+        public async Task<bool> PingCharacter(CharacterRequestModel character)
         {
             try
             {
-                RaiderIOCharacterDataModel data = await _client
+                IResponse response = await _client
                       .GetAsync("https://raider.io/api/v1/characters/profile")
                       .WithArgument("region", character.Region)
                       .WithArgument("name", character.Name)
-                      .WithArgument("realm", character.Realm.Replace(" ", "-"))
-                      .As<RaiderIOCharacterDataModel>();
+                      .WithArgument("realm", character.Realm.Replace(" ", "-"));
 
-
-                return new
-                {
-                    Name = data.name,
-                    Realm = data.realm,
-                    Region = data.region,
-                    Class = data.char_class.Replace(" ", "")
-                };
+               return response.IsSuccessStatusCode;
             }
             catch
             {
-                return null;
+                return false;
             }
         }
+        public async Task<ZoneRankings> GetLatestRaidPerformance(CharacterRequestModel character, int difficulty)
+        {
+            await _common.GetNewWarcraftLogsAccessToken();
+            return await _cache.GetOrAddAsync($"GetLatestRaidPerformance-{character.Region}-{character.Realm}-{character.Name}-{difficulty}", async () =>
+            {
+                try
+                {
+                    var query = $$"""                     
+                    query CharacterData($name: String!, $serverSlug: String!, $serverRegion: String!) 
+                    { characterData 
+                        { character(name: $name, serverSlug: $serverSlug, serverRegion: $serverRegion) 
+                            { canonicalID classID hidden zoneRankings } 
+                        } 
+                    }
+                    """;
+                    Dictionary<string, object> payload = new()
+                    {
+                        ["query"] = query,
+                        ["variables"] = new
+                        {
+                            name = character.Name,
+                            serverSlug = character.Realm,
+                            serverRegion = character.Region
+                        }
+                    };
+                    IResponse response = await _client
+                    .PostAsync("https://www.warcraftlogs.com/api/v2/client")
+                    .WithBearerAuthentication(AppConstants.WarcraftLogsAccessToken.access_token)
+                    .WithBody(payload);
+                    var stringResponse = await response.AsString();
+                    var formattedResponse = await response.As<WarcraftLogsCharacterDataModel>();
+
+                    return formattedResponse.data.characterData.character.zoneRankings;
+                }
+                catch (ApiException ex)
+                {
+                    throw new Exception($"There was an issue trying to get the character's raid performance. {await ex.Response.AsString()}");
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+
+            }, TimeSpan.FromMinutes(60));
+        }
+
     }
 }

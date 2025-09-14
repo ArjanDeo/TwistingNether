@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TwistingNether.DataAccess.BattleNet.OAuth;
 using TwistingNether.DataAccess.TwistingNether.Character;
+using TwistingNether.DataAccess.WarcraftLogs.OAuth;
 
 namespace TwistingNether.DataAccess.Configuration
 {
@@ -27,6 +28,7 @@ namespace TwistingNether.DataAccess.Configuration
             new CharacterClass { Id = 12, ClassName = "Death Knight", ColorCode = "#C41E3A" },
             new CharacterClass { Id = 13, ClassName = "Evoker", ColorCode = "#33937F" }
         ];
+        public static WarcraftLogsAccessTokenModel WarcraftLogsAccessToken { get; set; }
         public static List<string> Realms = new()
         {
             "Alexstrasza", "Alleria", "Blackhand", "Dalaran", "Dentarg", "Galakrond", "Garona", "Ghostlands", "Goldrinn",

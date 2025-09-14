@@ -1,3 +1,4 @@
+// Classes
 import warrior from '$lib/classes/warrior.webp';
 import paladin from '$lib/classes/paladin.webp';
 import monk from '$lib/classes/monk.webp';
@@ -12,6 +13,7 @@ import rogue from '$lib/classes/rogue.webp';
 import hunter from '$lib/classes/hunter.webp';
 import druid from '$lib/classes/druid.webp';
 
+// Races
 import bloodelfMale from '$lib/races/bloodelf-male.webp';
 import bloodelfFemale from '$lib/races/bloodelf-female.webp';
 import draeneiMale from '$lib/races/draenei-male.webp';
@@ -54,13 +56,39 @@ import zandalaritrollMale from '$lib/races/zandalaritroll-male.webp';
 import zandalaritrollFemale from '$lib/races/zandalaritroll-female.webp';
 import dracthyrMale from '$lib/races/dracthyr-male.webp';
 import dracthyrFemale from '$lib/races/dracthyr-female.webp';
-import shirtIcon from '$lib/icons/shirt.webp';
-import tabardIcon from '$lib/icons/tabard.webp';
+
+// Equipment
+import chestIcon from '$lib/icons/chest.webp';
+import feetIcon from '$lib/icons/feet.webp';
+import finger1Icon from '$lib/icons/finger 1.webp';
+import finger2Icon from '$lib/icons/finger 2.webp';
+import handsIcon from '$lib/icons/hands.webp';
+import headIcon from '$lib/icons/head.webp';
+import legsIcon from '$lib/icons/legs.webp';
 import mainhandIcon from '$lib/icons/mainhand.webp';
+import neckIcon from '$lib/icons/neck.webp';
 import offhandIcon from '$lib/icons/offhand.webp';
+import shirtIcon from '$lib/icons/shirt.webp';
+import shoulderIcon from '$lib/icons/shoulder.webp';
+import tabardIcon from '$lib/icons/tabard.webp';
+import trinket1Icon from '$lib/icons/trinket 1.webp';
+import trinket2Icon from '$lib/icons/trinket 2.webp';
+import waistIcon from '$lib/icons/waist.webp';
+import wristsIcon from '$lib/icons/wrists.webp';
+
+// Crafting Tiers
 import tier1Icon from '$lib/icons/quality/tier1.webp';
 import tier2Icon from '$lib/icons/quality/tier2.webp';
 import tier3Icon from '$lib/icons/quality/tier3.webp';
+
+import plexusSentinel from '$lib/icons/bosses/3129.webp'
+import forgeweaverAraz from '$lib/icons/bosses/3132.webp'
+import soulbinderNaazdhrini from '$lib/icons/bosses/3130.webp'
+import loomithar from '$lib/icons/bosses/3131.webp'
+import soulHunters from '$lib/icons/bosses/3122.webp'
+import fractillus from '$lib/icons/bosses/3133.webp'
+import nexusKingSalhadaar from '$lib/icons/bosses/3134.webp'
+import dimensius from '$lib/icons/bosses/3135.webp'
 
 export const raceIcons: Record<string, string> = {
   'bloodelf-male': bloodelfMale,
@@ -123,13 +151,37 @@ export const classIcons: Record<string, string> = {
   'Druid': druid
 };
 export const equipmentIcons: Record<string, string> = {
-  'Tabard': tabardIcon,
-  'Shirt': shirtIcon,
+  'Chest': chestIcon,
+  'Feet': feetIcon,
+  'Finger 1': finger1Icon,
+  'Finger 2': finger2Icon,
+  'Hands': handsIcon,
+  'Head': headIcon,
+  'Legs': legsIcon,
   'Main Hand': mainhandIcon,
-  'Off Hand': offhandIcon
+  'Neck': neckIcon,
+  'Off Hand': offhandIcon,
+  'Shirt': shirtIcon,
+  'Shoulder': shoulderIcon,
+  'Tabard': tabardIcon,
+  'Trinket 1': trinket1Icon,
+  'Trinket 2': trinket2Icon,
+  'Waist': waistIcon,
+  'Wrists': wristsIcon,
 }
+
 export const qualityIcons: Record<string, string> = {
   'Tier 1': tier1Icon,
   'Tier 2': tier2Icon,
   'Tier 3': tier3Icon
+}
+export const bossIcons: Record<number, string> = {
+  3129: plexusSentinel,
+  3132: forgeweaverAraz,
+  3130: soulbinderNaazdhrini,
+  3131: loomithar,
+  3122: soulHunters,
+  3133: fractillus,
+  3134: nexusKingSalhadaar,
+  3135: dimensius,
 }

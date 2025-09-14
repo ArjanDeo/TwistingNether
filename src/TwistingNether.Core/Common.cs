@@ -1,6 +1,7 @@
 ﻿using Pathoschild.Http.Client;
 using TwistingNether.DataAccess.BattleNet.OAuth;
 using TwistingNether.DataAccess.Configuration;
+using TwistingNether.DataAccess.WarcraftLogs.OAuth;
 
 namespace TwistingNether.Core
 {
@@ -48,7 +49,45 @@ namespace TwistingNether.Core
                 return false;
             }
         }
-        
+
+        public async Task<bool> GetNewWarcraftLogsAccessToken()
+        {
+            // If there is an access token already, and it has not expired yet.
+            if (AppConstants.WarcraftLogsAccessToken != null &&
+                AppConstants.WarcraftLogsAccessToken.acquired_at.AddSeconds(AppConstants.BattleNetAccessToken.expires_in).AddMinutes(-5) > DateTime.UtcNow)
+            {
+                return true;
+            }
+
+            Dictionary<string, string> AccessTokenPayload = new()
+            {
+                ["grant_type"] = "client_credentials"
+            };
+
+            try
+            {
+                var Response = await _client
+                    .PostAsync("https://www.warcraftlogs.com/oauth/token")
+                    .WithBody(AccessTokenPayload)
+                    .WithBasicAuthentication(Settings.WarcraftLogsClientId, Settings.WarcraftLogsClientSecret)
+                    .As<WarcraftLogsAccessTokenModel>();
+
+                if (Response?.access_token != null)
+                {
+                    AppConstants.WarcraftLogsAccessToken = Response;
+                    AppConstants.WarcraftLogsAccessToken.acquired_at = DateTime.UtcNow;
+                    return true;
+                }
+
+                return false;
+            }
+            catch (ApiException ex)
+            {
+                var responseText = await ex.Response.AsString();
+                Console.WriteLine($"Error fetching oauth token from battle.net: {responseText}");
+                return false;
+            }
+        }
 
         public async Task<string> GetClassColor(string char_class)
         {

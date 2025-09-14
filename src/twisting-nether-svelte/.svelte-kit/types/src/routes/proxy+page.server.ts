@@ -11,7 +11,7 @@ if (dev) {
   process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 }
 export const load = (async (event) => {
-      const tokenResponse = await event.fetch(`${API_BASE_URL}/general/getTokenPrice`);
+      const tokenResponse = await event.fetch(`${API_BASE_URL}/general/token-price`);
       let token: Token | null;
       if (!tokenResponse.ok) {
         token = null;
@@ -32,7 +32,9 @@ export const actions = {
         form,
       });
     }
-    const pingCharacter = await event.fetch(`${API_BASE_URL}/character/pingcharacter?name=${form.data.name.toLowerCase()}&realm=${form.data.realm.toLowerCase()}&region=${form.data.region.toLowerCase()}`);
+    const pingCharacter = await event.fetch(`${API_BASE_URL}/characters/?name=${form.data.name.toLowerCase()}&realm=${form.data.realm.toLowerCase()}&region=${form.data.region.toLowerCase()}`, {
+      method: 'HEAD',
+    });
     if (!pingCharacter.ok) {
       return setError(form, 'Character not found.')
     } else {

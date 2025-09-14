@@ -6,14 +6,15 @@ using TwistingNether.DataAccess.TwistingNether.Character;
 
 namespace TwistingNether.API.Controllers
 {
-    [Route("api/character")]
+    [Route("api/characters")]
     [ApiController]
     public class CharacterController(ICharacterService characterService, IAppCache appCache) : ControllerBase
     {
         private readonly ICharacterService _characterService = characterService;
         private readonly IAppCache _appCache = appCache;
 
-        [HttpGet("getCharacter")]
+        // GET /api/characters?name=thrall&realm=area-52&region=us
+        [HttpGet]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -29,46 +30,51 @@ namespace TwistingNether.API.Controllers
             }
         }
 
-        [HttpGet("pingCharacter")]
+        // HEAD /api/characters?name=thrall&realm=area-52&region=us
+        // (using HEAD makes sense for a "ping")
+        [HttpHead]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> PingCharacter([FromQuery] CharacterRequestModel character)
         {
-            dynamic? pingChar = await _characterService.PingCharacter(character);
-            return pingChar != null ? Ok(pingChar) : NotFound("Couldn't find character.");
-
+            var pingChar = await _characterService.PingCharacter(character);
+            return pingChar != null ? Ok() : NotFound();
         }
 
-        [HttpGet("getCompletedQuests")]
+        // GET /api/characters/quests?name=thrall&realm=area-52&region=us
+        [HttpGet("quests")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetCharacterCompletedQuests([FromQuery] CharacterRequestModel character)
+        public async Task<IActionResult> GetCompletedQuests([FromQuery] CharacterRequestModel character)
         {
             var quests = await _characterService.GetCharacterCompletedQuests(character);
             return quests != null ? Ok(quests) : NotFound("Character or quests not found.");
         }
 
-        [HttpPut("updateCharacter")]
+        // PUT /api/characters/cache
+        [HttpPut("cache")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateCharacter([FromBody] CharacterRequestModel character)
+        public async Task<IActionResult> UpdateCharacterCache([FromBody] CharacterRequestModel character)
         {
             character.Name = character.Name.ToLower();
             character.Realm = character.Realm.ToLower();
             character.Region = character.Region.ToLower();
 
-            var characterCache = await _appCache.GetAsync<ActionResult<CharacterModel>>($"GetCharacter_{character.Name}_{character.Realm}_{character.Region}");
+            var characterCache = await _appCache.GetAsync<ActionResult<CharacterModel>>(
+                $"GetCharacter_{character.Name}_{character.Realm}_{character.Region}");
 
-            if (characterCache == null) return NotFound("Character not found."); else
+            if (characterCache == null)
+                return NotFound("Character not found.");
+
             _appCache.Remove($"{nameof(GetCharacter)}_{character.Name}_{character.Realm}_{character.Region}");
 
             return NoContent();
         }
-
     }
 }
