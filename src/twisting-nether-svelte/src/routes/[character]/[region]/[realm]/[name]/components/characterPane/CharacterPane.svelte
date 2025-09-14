@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { ItemQuality, type CharacterData } from '$lib/types';
-    import * as Tooltip from '$lib/components/ui/tooltip';
-    import { itemQualityColor } from '$lib/utils';
-    import { classIcons, raceIcons, equipmentIcons } from '$lib/metadata';
+    import { classIcons, raceIcons } from '$lib/metadata';
     import GearIcon from '../gearIcon/GearIcon.svelte';
         let { character }: { character: CharacterData } = $props();
     const equipped = character.characterEquipment.equipped_items;
@@ -66,11 +64,11 @@ const raceGenderString = `${character.raiderIOCharacterData.race.replace(' ', ''
             <div class="mt-2 flex md:flex-row gap-x-5 gap-y-2 md:gap-y-0">
                 <div class="flex flex-row gap-x-1 max-w-full">
                     <img src={raceIcons[raceGenderString]} alt={character.raiderIOCharacterData.race} class="max-w-8 max-h-8 mt-1 rounded-full ml"/>
-                    <p class="text-center md:text-xl h-fit my-auto">{character.raiderIOCharacterData.race}</p>
+                    <p class="text-center md:text-xl h-fit my-auto font-semibold">{character.raiderIOCharacterData.race}</p>
                 </div>
                 <div class="flex flex-row gap-x-1">
                     <img src={classIcons[character.raiderIOCharacterData.char_class]} alt={character.raiderIOCharacterData.char_class} class="max-w-8 max-h-8 mt-1 rounded-full"/>
-                    <p class="text-center md:text-xl h-fit my-auto">{character.raiderIOCharacterData.char_class}</p>
+                    <p class="text-center md:text-xl h-fit my-auto font-semibold">{character.raiderIOCharacterData.char_class}</p>
                 </div>
             
                 <a aria-label="raider.io link" href="https://raider.io/characters/{character.raiderIOCharacterData.region}/{character.raiderIOCharacterData.realm}/{character.raiderIOCharacterData.name}" target="_blank">
@@ -86,7 +84,7 @@ const raceGenderString = `${character.raiderIOCharacterData.race.replace(' ', ''
     </header>        
     <div class="md:flex items-start md:mx-auto lg:mx-0 flex-wrap lg:flex-none">
         <!-- First Gear Column-->
-        <div class="flex lg:flex-col flex-row sm:mx-auto lg:mx-0 md:order-none order-1 gap-x-2">
+        <div class="flex  2xl:flex-col flex-row sm:mx-auto md:order-none order-1 gap-x-2">
             {#each [
             { slot: 'Head', gear: equippedGear.head },
             { slot: 'Neck', gear: equippedGear.neck },
@@ -120,7 +118,7 @@ const raceGenderString = `${character.raiderIOCharacterData.race.replace(' ', ''
         </div>
     </div>
         <!-- Second Gear Column-->
-        <div class="flex lg:flex-col flex-row sm:mx-auto lg:mx-0 md:order-none gap-x-2">
+        <div class="flex 2xl:flex-col flex-row sm:mx-auto mx-0 md:order-none gap-x-2 mt-5 xl:mt-0">
             {#each [
                 { slot: 'Hands', gear: equippedGear.hands },
                 { slot: 'Waist', gear: equippedGear.waist },

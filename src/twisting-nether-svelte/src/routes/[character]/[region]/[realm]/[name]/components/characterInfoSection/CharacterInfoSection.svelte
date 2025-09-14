@@ -49,7 +49,7 @@ console.log(character.raidBossesKilledThisWeek)
             {/if}
         </Tabs.Content>
 
-        <Tabs.Content value="m+" class="p-4 bg-gray-50 dark:bg-gray-800 rounded-md">
+        <Tabs.Content value="m+" class="p-4 bg-gray-50 dark:bg-gray-800 rounded-md w-xl">
             <h1 class="text-4xl mb-4" style="color: {character.classColor};">Top Mythic+ Runs:</h1>
             <div class="rounded-2xl overflow-hidden shadow-md w-fit text-white">
                 <Table.Root class="w-full table-auto">

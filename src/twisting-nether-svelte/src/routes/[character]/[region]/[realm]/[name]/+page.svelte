@@ -23,11 +23,11 @@ onMount(() => {
     <span class="loading loading-spinner text-success mx-auto block justify-center scale-150 self-center my-auto"></span>
 {/if}
 {#if data.character && !loading}
-<div class="flex flex-row p-8 min-h-screen gap-x-20" style="color: {data.character.classColor};">
-  <div class="sticky -top-0 self-start">
+<div class="flex flex-col md:flex-row p-8 min-h-screen gap-y-10 md:gap-x-20" style="color: {data.character.classColor};">
+  <div class="">
     <CharacterPane character={data.character}/>
   </div>
-  <div>
+  <div class="">
     <CharacterInfoSection character={data.character}/>
   </div>
 </div>
