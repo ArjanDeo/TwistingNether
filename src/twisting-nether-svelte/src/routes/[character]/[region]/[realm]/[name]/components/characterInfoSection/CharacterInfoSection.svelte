@@ -1,13 +1,12 @@
 <script lang="ts">
     import { bosses, getScoreColor, type CharacterData } from "$lib/types";
     import * as Tabs from '$lib/components/ui/tabs';
-    import * as Table from "$lib/components/ui/table";
     import { bossIcons } from "$lib/metadata";
     import { getParseColor, getRaidDifficulty } from "$lib/common";
 
     let activeTab = $state('stats');
     
-    let { character }: { character: CharacterData } = $props();
+    let { character }: { character: CharacterData | undefined } = $props();
     
     function msToTime(ms: number): string {
         const totalSeconds = Math.floor(ms / 1000);
@@ -104,8 +103,8 @@
         z-index: 2;
     }
 </style>
-
-<div class="max-w-6xl mx-auto p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white rounded-2xl shadow-2xl border border-gray-700">
+{#if character}
+<div class="w-4xl h-fit mx-auto p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white rounded-2xl shadow-2xl border border-gray-700">
     <!-- Enhanced Header -->
     <div class="text-center mb-8 relative">
         <div class="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-blue-500/10 rounded-xl blur-xl"></div>
@@ -396,3 +395,66 @@
         </Tabs.Content>
     </Tabs.Root>
 </div>
+{:else}
+<div class="max-w-6xl w-3xl mx-auto p-6 bg-gray-900 rounded-2xl shadow-2xl border border-gray-700 animate-pulse">
+    <!-- Header Skeleton -->
+    <div class="text-center mb-8 relative">
+        <div class="h-10 w-48 mx-auto bg-gray-700 rounded-lg mb-2"></div>
+        <div class="h-6 w-32 mx-auto bg-gray-700 rounded-lg"></div>
+    </div>
+
+    <!-- Tabs Skeleton -->
+    <div class="flex border-b-2 border-gray-700 mb-6 bg-gray-800/50 rounded-t-lg p-1 gap-2">
+        <div class="flex-1 h-10 bg-gray-700 rounded-md"></div>
+        <div class="flex-1 h-10 bg-gray-700 rounded-md"></div>
+        <div class="flex-1 h-10 bg-gray-700 rounded-md"></div>
+    </div>
+
+    <!-- Stats Tab Skeleton -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="h-40 bg-gray-800 rounded-xl border border-gray-600"></div>
+        <div class="h-40 bg-gray-800 rounded-xl border border-gray-600"></div>
+        <div class="h-40 bg-gray-800 rounded-xl border border-gray-600"></div>
+    </div>
+
+    <!-- Raid Tab Skeleton -->
+    <div class="mt-8 space-y-6">
+        <div class="bg-gray-800 rounded-xl border border-gray-600 p-6 space-y-4">
+            <div class="h-8 w-64 bg-gray-700 rounded-lg mb-4"></div>
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-12 gap-4">
+                {#each Array(3) as _, i}
+                    <div class="space-y-2 md:col-span-1 lg:col-span-2 xl:col-span-4">
+                        <div class="h-6 bg-gray-700 rounded-lg"></div>
+                        <div class="h-3 bg-gray-700 rounded-full"></div>
+                    </div>
+                {/each}
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-xl border border-gray-600 p-6 space-y-2">
+            <div class="h-6 w-48 bg-gray-700 rounded-lg mb-4"></div>
+            {#each Array(3) as _, i}
+                <div class="flex items-center gap-4 p-4 bg-gray-700/50 rounded-lg">
+                    <div class="w-12 h-12 bg-gray-600 rounded-lg"></div>
+                    <div class="flex-1 space-y-1">
+                        <div class="h-4 bg-gray-600 rounded w-32"></div>
+                        <div class="h-3 bg-gray-600 rounded w-20"></div>
+                    </div>
+                    <div class="w-10 h-6 bg-gray-600 rounded-lg"></div>
+                </div>
+            {/each}
+        </div>
+    </div>
+
+    <!-- M+ Tab Skeleton -->
+    <div class="mt-8 space-y-6">
+        <div class="h-8 w-64 bg-gray-700 rounded-lg mb-4"></div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {#each Array(4) as _, i}
+                <div class="h-24 bg-gray-800 rounded-xl border border-gray-600"></div>
+            {/each}
+        </div>
+    </div>
+</div>
+
+{/if}

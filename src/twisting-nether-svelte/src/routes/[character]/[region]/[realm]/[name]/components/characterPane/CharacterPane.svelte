@@ -1,65 +1,48 @@
 <script lang="ts">
-    import { ItemQuality, raceColors, type CharacterData } from '$lib/types';
+    import { raceColors, type CharacterData, type EquippedGear, type GearPiece } from '$lib/types';
     import { classIcons, raceIcons } from '$lib/metadata';
     import GearIcon from '../gearIcon/GearIcon.svelte';
+	import { onMount } from 'svelte';
     
-    let { character }: { character: CharacterData } = $props();
-    const equipped = character.characterEquipment.equipped_items;
+    let { character }: { character: CharacterData | undefined } = $props();
+    let equipped: GearPiece[] | undefined = $state()
+    let equippedGear: EquippedGear | undefined = $state();
 
-    const equippedGear = {
-        head: equipped.find(i => i.inventory_type.name === "Head"),
-        neck: equipped.find(i => i.inventory_type.name === "Neck"),
-        shoulders: equipped.find(i => i.inventory_type.name === "Shoulder"),
-        back: equipped.find(i => i.inventory_type.name === "Back"),
-        chest: equipped.find(i => i.inventory_type.name === "Chest"),
-        tabard: equipped.find(i => i.inventory_type.name === "Tabard"),
-        shirt: equipped.find(i => i.inventory_type.name === "Shirt"),
-        wrists: equipped.find(i => i.inventory_type.name === "Wrist"),
-        hands: equipped.find(i => i.inventory_type.name === "Hands"),
-        waist: equipped.find(i => i.inventory_type.name === "Waist"),
-        legs: equipped.find(i => i.inventory_type.name === "Legs"),
-        feet: equipped.find(i => i.inventory_type.name === "Feet"),
-        ring1: equipped.find(i => i.slot.name === "Ring 1"),
-        ring2: equipped.find(i => i.slot.name === "Ring 2"),
-        trinket1: equipped.find(i => i.slot.name === "Trinket 1"),
-        trinket2: equipped.find(i => i.slot.name === "Trinket 2"),
-        mainhand: equipped.find(i => i.slot.name === "Main Hand"),
-        offhand: equipped.find(i => i.slot.name === "Off Hand"),
-    };
-
-    function itemRarityColor(itemQuality: string): string {
-        switch (itemQuality) {
-            case ItemQuality.Common:
-                return '#ffffff';
-            case ItemQuality.Uncommon:
-                return '#1eff00';
-            case ItemQuality.Rare:
-                return '#0070dd';
-            case ItemQuality.Epic:
-                return '#a335ee';
-            case ItemQuality.Legendary:
-                return '#ff8000';
-            case ItemQuality.Artifact:
-                return '#e6cc80';
-            case ItemQuality.Heirloom:
-                return '#00ccff';
-            default:
-                return '#ffffff';
-        }
-    }
-
-    const raceGenderString = `${character.raiderIOCharacterData.race.replace(' ', '').toLowerCase()}-${character.raiderIOCharacterData.gender}`;
-
-    // Calculate average item level
-    const validGear = Object.values(equippedGear).filter(item => item && item.level.value);
-    
+       
+    let raceGenderString: string = $state("");
 
     // Animation delay helper
     function staggerDelay(index: number): string {
         return `animation-delay: ${index * 50}ms;`;
     }
-</script>
 
+    onMount(() => {
+        if (character) {
+            equipped = character.characterEquipment.equipped_items;
+            equippedGear = {
+                head: equipped.find(i => i.inventory_type.name === "Head"),
+                neck: equipped.find(i => i.inventory_type.name === "Neck"),
+                shoulders: equipped.find(i => i.inventory_type.name === "Shoulder"),
+                back: equipped.find(i => i.inventory_type.name === "Back"),
+                chest: equipped.find(i => i.inventory_type.name === "Chest"),
+                tabard: equipped.find(i => i.inventory_type.name === "Tabard"),
+                shirt: equipped.find(i => i.inventory_type.name === "Shirt"),
+                wrists: equipped.find(i => i.inventory_type.name === "Wrist"),
+                hands: equipped.find(i => i.inventory_type.name === "Hands"),
+                waist: equipped.find(i => i.inventory_type.name === "Waist"),
+                legs: equipped.find(i => i.inventory_type.name === "Legs"),
+                feet: equipped.find(i => i.inventory_type.name === "Feet"),
+                ring1: equipped.find(i => i.slot.name === "Ring 1"),
+                ring2: equipped.find(i => i.slot.name === "Ring 2"),
+                trinket1: equipped.find(i => i.slot.name === "Trinket 1"),
+                trinket2: equipped.find(i => i.slot.name === "Trinket 2"),
+                mainhand: equipped.find(i => i.slot.name === "Main Hand"),
+                offhand: equipped.find(i => i.slot.name === "Off Hand"),
+            }
+            raceGenderString = `${character.raiderIOCharacterData.race.replace(' ', '').toLowerCase()}-${character.raiderIOCharacterData.gender}`;
+        }
+    })
+</script>
 <style>
     .character-container {
         background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e293b 100%);
@@ -157,7 +140,7 @@
         animation: float 3s ease-in-out infinite;
     }
 </style>
-
+{#if character}
 <div class="character-container rounded-2xl p-8 shadow-2xl">
     <!-- Enhanced Header -->
     <header class="header-glow rounded-xl p-6 mb-8">
@@ -258,24 +241,26 @@
     <div class="flex items-start justify-center flex-wrap lg:flex-nowrap gap-8">
         <!-- Left Gear Column -->
         <div class="flex flex-col gap-3 order-2 lg:order-1">
-            {#each [
-                { slot: 'Head', gear: equippedGear.head },
-                { slot: 'Neck', gear: equippedGear.neck },
-                { slot: 'Shoulders', gear: equippedGear.shoulders },
-                { slot: 'Back', gear: equippedGear.back },
-                { slot: 'Chest', gear: equippedGear.chest },
-                { slot: 'Tabard', gear: equippedGear.tabard },
-                { slot: 'Shirt', gear: equippedGear.shirt },
-                { slot: 'Wrists', gear: equippedGear.wrists }
-            ] as { slot, gear }, index}
-                <div class="gear-item" style="{staggerDelay(index)}">
-                    <GearIcon 
-                        gear={gear} 
-                        slot={slot} 
-                        characterSpec={character.raiderIOCharacterData.active_spec_name} 
-                    />
-                </div>
-            {/each}
+            {#if equippedGear}
+                {#each [
+                    { slot: 'Head', gear: equippedGear.head },
+                    { slot: 'Neck', gear: equippedGear.neck },
+                    { slot: 'Shoulders', gear: equippedGear.shoulders },
+                    { slot: 'Back', gear: equippedGear.back },
+                    { slot: 'Chest', gear: equippedGear.chest },
+                    { slot: 'Tabard', gear: equippedGear.tabard },
+                    { slot: 'Shirt', gear: equippedGear.shirt },
+                    { slot: 'Wrists', gear: equippedGear.wrists }
+                ] as { slot, gear }, index}
+                    <div class="gear-item" style="{staggerDelay(index)}">
+                        <GearIcon 
+                            gear={gear} 
+                            slot={slot} 
+                            characterSpec={character.raiderIOCharacterData.active_spec_name} 
+                        />
+                    </div>
+                {/each}
+            {/if}
         </div>
 
         <!-- Character Render -->
@@ -297,11 +282,37 @@
 
             <!-- Weapons -->
             <div class="flex gap-6 mt-6">
+                {#if equippedGear}
+                    {#each [
+                        { slot: 'Main Hand', gear: equippedGear.mainhand },
+                        { slot: 'Off Hand', gear: equippedGear.offhand }
+                    ] as { slot, gear }, index}
+                        <div class="gear-item" style="{staggerDelay(index + 16)}">
+                            <GearIcon 
+                                gear={gear} 
+                                slot={slot} 
+                                characterSpec={character.raiderIOCharacterData.active_spec_name}
+                            />
+                        </div>
+                    {/each}
+                {/if}
+            </div>
+        </div>
+
+        <!-- Right Gear Column -->
+        <div class="flex flex-col gap-3 order-3">
+            {#if equippedGear}
                 {#each [
-                    { slot: 'Main Hand', gear: equippedGear.mainhand },
-                    { slot: 'Off Hand', gear: equippedGear.offhand }
+                    { slot: 'Hands', gear: equippedGear.hands },
+                    { slot: 'Waist', gear: equippedGear.waist },
+                    { slot: 'Legs', gear: equippedGear.legs },
+                    { slot: 'Feet', gear: equippedGear.feet },
+                    { slot: 'Ring 1', gear: equippedGear.ring1 },
+                    { slot: 'Ring 2', gear: equippedGear.ring2 },
+                    { slot: 'Trinket 1', gear: equippedGear.trinket1 },
+                    { slot: 'Trinket 2', gear: equippedGear.trinket2 }
                 ] as { slot, gear }, index}
-                    <div class="gear-item" style="{staggerDelay(index + 16)}">
+                    <div class="gear-item" style="{staggerDelay(index + 8)}">
                         <GearIcon 
                             gear={gear} 
                             slot={slot} 
@@ -309,29 +320,108 @@
                         />
                     </div>
                 {/each}
+            {/if}
+        </div>
+    </div>
+</div>
+{:else} 
+<div class="character-container rounded-2xl p-8 shadow-2xl">
+    <!-- Enhanced Header -->
+    <header class="header-glow rounded-xl p-6 mb-8">
+        <div class="text-center mb-6">
+            <div class="text-3xl lg:text-5xl font-bold mb-2 w-10 h-10">
+                <span class="text-2xl lg:text-3xl w-10 animate-pulse h-10 bg-gray-700 "></span>
+            </div>
+            <!-- Character Info Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <!-- Race Card -->
+                <div class="stat-card rounded-lg p-4 flex items-center gap-3">
+                    <div 
+                        class="w-10 h-10 rounded-full border-2 border-gray-600 animate-pulse bg-gray-700"
+                    ></div>
+                    <div>
+                        <p class="text-xs text-gray-400 uppercase tracking-wide">Race</p>
+                        <p class="text-lg font-semibold  animate-pulse w-12"></p>
+                    </div>
+                </div>
+
+                <!-- Class Card -->
+                <div class="stat-card rounded-lg p-4 flex items-center gap-3">
+                    <div 
+                        class="w-10 h-10 rounded-full border-2 border-gray-600 animate-pulse bg-gray-700"
+                    ></div>
+                    <div>
+                        <p class="text-xs text-gray-400 uppercase tracking-wide">Class</p>
+                        <p class="text-lg font-semibold animate-pulse w-12" >
+                        </p>
+                        <p class="-mt-2 text-sm text-center animate-pulse w-12">
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Item Level Card -->
+                <div class="stat-card rounded-lg p-4 flex items-center gap-3">
+                    <div class="w-10 h-10 animate-pulse bg-gray-700 border-gray-600 border-2 rounded-full flex items-center justify-center">
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400 uppercase tracking-wide">Item Level</p>
+                        <p class="text-lg font-semibold text-yellow-400 w-10 animate-pulse"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- External Links -->
+            <div class="flex justify-center gap-4">
+              
+                    <div class="w-10 h-10 animate-pulse bg-gray-700 rounded-full" ></div>
+                
+                    <div  class="w-10 h-10 animate-pulse bg-gray-700 rounded-full"></div>
+                
+                    <div class="w-10 h-10 animate-pulse bg-gray-700 rounded-full" ></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Enhanced Gear Layout -->
+    <div class="flex items-start justify-center flex-wrap lg:flex-nowrap gap-8">
+        <!-- Left Gear Column -->
+        <div class="flex flex-col gap-3 order-2 lg:order-1">
+                {#each {length: 8} as _, i}
+                    <div class="gear-item" style="{staggerDelay(i)}">
+                        <div class="w-12 h-12 animate-pulse bg-gray-500 rounded-md"></div>
+                    </div>
+                {/each}
+        </div>
+
+        <!-- Character Render -->
+        <div class="flex flex-col items-center order-1 lg:order-2">
+            <div class="relative">
+                <div class="floating overflow-hidden">
+                    <div class="character-render w-[800px] animate-pulse max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl rounded-2xl h-[500px] bg-gray-500"></div>
+                </div>
+            </div>
+
+            <!-- Weapons -->
+            <div class="flex gap-6 mt-6">
+                    {#each {length: 2}as _, index}
+                        <div class="gear-item" style="{staggerDelay(index + 16)}">
+                            <div class="gear-item" style="{staggerDelay(index + 8)}">
+                        <div class="w-12 h-12 animate-pulse bg-gray-500 rounded-md"></div>
+                    </div>
+                        </div>
+                    {/each}
             </div>
         </div>
 
         <!-- Right Gear Column -->
         <div class="flex flex-col gap-3 order-3">
-            {#each [
-                { slot: 'Hands', gear: equippedGear.hands },
-                { slot: 'Waist', gear: equippedGear.waist },
-                { slot: 'Legs', gear: equippedGear.legs },
-                { slot: 'Feet', gear: equippedGear.feet },
-                { slot: 'Ring 1', gear: equippedGear.ring1 },
-                { slot: 'Ring 2', gear: equippedGear.ring2 },
-                { slot: 'Trinket 1', gear: equippedGear.trinket1 },
-                { slot: 'Trinket 2', gear: equippedGear.trinket2 }
-            ] as { slot, gear }, index}
-                <div class="gear-item" style="{staggerDelay(index + 8)}">
-                    <GearIcon 
-                        gear={gear} 
-                        slot={slot} 
-                        characterSpec={character.raiderIOCharacterData.active_spec_name}
-                    />
-                </div>
-            {/each}
+                {#each {length: 8} as _, i}
+                    <div class="gear-item" style="{staggerDelay(i + 8)}">
+                            <div class="w-12 h-12 animate-pulse bg-gray-500 rounded-md"></div>
+
+                    </div>
+                {/each}
         </div>
     </div>
 </div>
+{/if}

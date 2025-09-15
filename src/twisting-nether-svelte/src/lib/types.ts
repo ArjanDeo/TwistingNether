@@ -1002,3 +1002,24 @@ export function getScoreColor(score: number): string {
   }
   return "#ffffff"; // default fallback
 }
+
+export type EquippedGear = {
+    head: GearPiece | undefined
+    neck: GearPiece | undefined
+    shoulders: GearPiece | undefined
+    back: GearPiece | undefined
+    chest: GearPiece | undefined
+    tabard: GearPiece | undefined
+    shirt: GearPiece | undefined
+    wrists: GearPiece | undefined
+    hands: GearPiece | undefined
+    waist: GearPiece | undefined
+    legs: GearPiece | undefined
+    feet: GearPiece | undefined
+    ring1: GearPiece | undefined
+    ring2: GearPiece | undefined
+    trinket1: GearPiece | undefined
+    trinket2: GearPiece | undefined
+    mainhand: GearPiece | undefined
+    offhand: GearPiece | undefined
+}
