@@ -3,7 +3,6 @@
   let { data }: { data: PageData } = $props();
   import { onMount } from 'svelte';
   import CharacterPane from './components/characterPane/CharacterPane.svelte';
-  import * as Table from "$lib/components/ui/table";
   import { browser } from '$app/environment';
 	import CharacterInfoSection from './components/characterInfoSection/CharacterInfoSection.svelte';
 
@@ -31,9 +30,6 @@ onMount(() => {
     <CharacterInfoSection character={data.character}/>
   </div>
 </div>
-
-
-
 
 {:else if loading}
     <span class="loading loading-spinner text-success mx-auto block justify-center scale-150 self-center my-auto"></span>

@@ -28,6 +28,10 @@ namespace TwistingNether.API.Controllers
             {
                 return BadRequest($"Failed to get character: {await ex.Response.AsString()}");
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound($"Character couldn't be found.");
+            }
         }
 
         // HEAD /api/characters?name=thrall&realm=area-52&region=us
@@ -39,7 +43,7 @@ namespace TwistingNether.API.Controllers
         public async Task<IActionResult> PingCharacter([FromQuery] CharacterRequestModel character)
         {
             var pingChar = await _characterService.PingCharacter(character);
-            return pingChar != null ? Ok() : NotFound();
+            return pingChar ? Ok() : NotFound();
         }
 
         // GET /api/characters/quests?name=thrall&realm=area-52&region=us

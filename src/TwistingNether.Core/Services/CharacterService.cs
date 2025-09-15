@@ -27,13 +27,18 @@ namespace TwistingNether.Core.Services
                 character.Realm = character.Realm.ToLower();
                 character.Region = character.Region.ToLower();
                 character.Realm = character.Realm.Replace(" ", "-").Replace("\'", "");
-                RaiderIOCharacterDataModel raiderIOCharacterData = await _client
+                IResponse raiderIOCharacterDataResponse = await _client
                                  .GetAsync("https://raider.io/api/v1/characters/profile")
+                                 .WithOptions(ignoreHttpErrors: true)
                                  .WithArgument("region", character.Region)
                                  .WithArgument("name", character.Name)
                                  .WithArgument("realm", character.Realm)
-                                 .WithArgument("fields", "raid_progression,mythic_plus_weekly_highest_level_runs,mythic_plus_scores_by_season:current,guild,gear,mythic_plus_highest_level_runs,mythic_plus_best_runs,raid_achievement_curve:nerubar-palace,raid_achievement_curve:manaforge-omega")
-                                 .As<RaiderIOCharacterDataModel>();
+                                 .WithArgument("fields", "raid_progression,mythic_plus_weekly_highest_level_runs,mythic_plus_scores_by_season:current,guild,gear,mythic_plus_highest_level_runs,mythic_plus_best_runs,raid_achievement_curve:manaforge-omega");
+                if (!raiderIOCharacterDataResponse.IsSuccessStatusCode)
+                {
+                    throw new KeyNotFoundException($"Character {character.Name} on realm {character.Realm} in region {character.Region} was not found.");
+                }
+                var raiderIOCharacterData = await raiderIOCharacterDataResponse.As<RaiderIOCharacterDataModel>();
 
                 bool tokenSuccessful = await _common.GetNewBattleNetAccessToken();
 

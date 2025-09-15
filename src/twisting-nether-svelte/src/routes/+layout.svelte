@@ -9,15 +9,10 @@ let { children } = $props();
 </script>
 <ModeWatcher />
 <Toaster />
-
-<!-- im pretty sure I dont need this anymore but just commenting out to be safe
-<div>
-	<p class="invisible">the background image breaks if i dont put this text here</p>
-</div>-->
 <svelte:head>
 	<title>The Twisting Nether</title>
 </svelte:head>
-<nav class="bg-primary-foreground w-auto sticky top-0 z-10 p-2">
+<nav class="bg-primary-foreground w-auto sticky top-0 z-20 p-2">
 	<div class="flex flex-row lg:gap-x-3">
 		<a href="/" class="flex">
 			<enhanced:img class="max-w-20" src="../lib/argus_500.webp" alt="Argus Logo" />

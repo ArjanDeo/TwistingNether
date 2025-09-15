@@ -12,20 +12,6 @@
 
 	onMount(async () => {
 		recentCharacters = JSON.parse(localStorage.getItem("recentCharacters") || "[]");
-		// Updating the news endpoint is requiring constant change, i'm considering leaving this functionality out as it doesnt really fit with the app.
-		
-		// try {
-		// 	const news = await fetch(`${API_BASE_URL}/General/GetNews?limit=15`);
-
-		// 	if (!news.ok) {
-		// 		toast.error("Couldn't fetch news.");				
-		// 		return;
-		// 	}
-
-		// 	newsPosts = await news.json();
-		// } catch (error) {
-		// 	toast.error("Couldn't fetch news.");
-		// }
 		if (data.token === null) {
 			toast.error("Couldn't fetch WoW Token info.")
 		}

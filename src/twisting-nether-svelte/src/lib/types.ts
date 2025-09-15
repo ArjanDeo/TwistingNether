@@ -937,3 +937,68 @@ export const specToMainStat: Record<string, "Strength" | "Agility" | "Intellect"
   "Preservation": "Intellect",
   "Augmentation": "Intellect"
 };
+
+// raceColors.ts
+export const raceColors: Record<string, string> = {
+  "Human": "#F0E6D2",
+  "Orc": "#1EFF00",
+  "Dwarf": "#B5A048",
+  "Night Elf": "#A335EE",
+  "Undead": "#AAAAAA",
+  "Tauren": "#8C6E4A",
+  "Gnome": "#FF69CC",
+  "Troll": "#00AEEF",
+  "Goblin": "#3EFF00",
+  "Blood Elf": "#FF4D4D",
+  "Draenei": "#6A5ACD",
+  "Worgen": "#4C4C4C",
+  "Pandaren": "#FFF5BA",
+  "Nightborne": "#7C3AED",
+  "Highmountain Tauren": "#8B5A2B",
+  "Void Elf": "#6B00B8",
+  "Lightforged Draenei": "#FFD700",
+  "Dark Iron Dwarf": "#4B3621",
+  "Mag'har Orc": "#8B4513",
+  "Vulpera": "#E9967A",
+  "Zandalari Troll": "#009999",
+  "Mechagnome": "#C0C0C0",
+  "Dracthyr": "#1E90FF"
+};
+const scoreColors: { min: number; color: string }[] = [
+  { min: 3725, color: "#ff8000" },
+  { min: 3570, color: "#f87441" },
+  { min: 3450, color: "#f06864" },
+  { min: 3330, color: "#e55b84" },
+  { min: 3210, color: "#d84fa3" },
+  { min: 3090, color: "#c644c2" },
+  { min: 2970, color: "#af39e1" },
+  { min: 2840, color: "#874fe9" },
+  { min: 2720, color: "#4769e0" },
+  { min: 2555, color: "#2d79d4" },
+  { min: 2435, color: "#4787c4" },
+  { min: 2315, color: "#5496b5" },
+  { min: 2195, color: "#5ca5a5" },
+  { min: 2075, color: "#5fb494" },
+  { min: 1955, color: "#5ec482" },
+  { min: 1835, color: "#59d36e" },
+  { min: 1715, color: "#4fe357" },
+  { min: 1595, color: "#3df239" },
+  { min: 1475, color: "#2eff15" },
+  { min: 1350, color: "#5aff40" },
+  { min: 1225, color: "#77ff5a" },
+  { min: 1100, color: "#8dff71" },
+  { min: 975,  color: "#a1ff86" },
+  { min: 850,  color: "#b3ff9b" },
+  { min: 725,  color: "#c3ffae" },
+  { min: 600,  color: "#d3ffc2" },
+  { min: 475,  color: "#e1ffd5" },
+  { min: 350,  color: "#efffe8" },
+  { min: 225,  color: "#fcfffb" },
+  { min: 200,  color: "#ffffff" },
+];
+export function getScoreColor(score: number): string {
+  for (const { min, color } of scoreColors) {
+    if (score >= min) return color;
+  }
+  return "#ffffff"; // default fallback
+}
