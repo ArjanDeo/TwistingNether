@@ -810,14 +810,14 @@ export type GearPiece = {
 }
 
 export const bosses: Encounter[] = [
-  { id: 197124, slug: "plexus-sentinel", name: "Plexus Sentinel" },
-  { id: 197125, slug: "loomithar", name: "Loom'ithar" },
-  { id: 197126, slug: "soulbinder-naazindhri", name: "Soulbinder Naazindhri" },
-  { id: 197127, slug: "forgeweaver-araz", name: "Forgeweaver Araz" },
-  { id: 197128, slug: "the-soul-hunters", name: "The Soul Hunters" },
-  { id: 197129, slug: "fractillus", name: "Fractillus" },
-  { id: 197130, slug: "nexus-king-salhadaar", name: "Nexus-King Salhadaar" },
-  { id: 197131, slug: "dimensius", name: "Dimensius" }
+  { id: 3129, slug: "plexus-sentinel", name: "Plexus Sentinel" },
+  { id: 3131, slug: "loomithar", name: "Loom'ithar" },
+  { id: 3130, slug: "soulbinder-naazindhri", name: "Soulbinder Naazindhri" },
+  { id: 3132, slug: "forgeweaver-araz", name: "Forgeweaver Araz" },
+  { id: 3122, slug: "the-soul-hunters", name: "The Soul Hunters" },
+  { id: 3133, slug: "fractillus", name: "Fractillus" },
+  { id: 3134, slug: "nexus-king-salhadaar", name: "Nexus-King Salhadaar" },
+  { id: 3135, slug: "dimensius", name: "Dimensius" }
 ];
 
 export type RaidPerformance = {

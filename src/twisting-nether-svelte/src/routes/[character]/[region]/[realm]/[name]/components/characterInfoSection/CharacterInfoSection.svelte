@@ -1,5 +1,7 @@
 <script lang="ts">
     import { bosses, getScoreColor, type CharacterData } from "$lib/types";
+    import * as Tooltip from '$lib/components/ui/tooltip';
+    import { CircleQuestionMark } from '@lucide/svelte'
     import * as Tabs from '$lib/components/ui/tabs';
     import { bossIcons } from "$lib/metadata";
     import { getParseColor, getRaidDifficulty } from "$lib/common";
@@ -179,6 +181,22 @@
                     <div class="flex items-center gap-3 mb-3">
                         <span class="text-2xl">🏆</span>
                         <h3 class="text-lg font-semibold">Top Parse</h3>
+                        {#if character.raidPerformance && character.raidPerformance.bestPerformanceAverage == null}
+                        <div class="ml-auto">
+                            <Tooltip.Provider>
+                                    <Tooltip.Root>
+                                    <Tooltip.Trigger>
+                                        <div class="ml-auto cursor-pointer transform transition duration-300 ease-in-out hover:scale-110 hover:text-blue-400">
+                                        <CircleQuestionMark style="color: {character.classColor}" />
+                                        </div>
+                                    </Tooltip.Trigger>
+                                    <Tooltip.Content side="top" align="center" class="bg-gray-700 p-2 rounded-md shadow-lg text-sm">
+                                        <span style="color: {character.classColor}">No parses? This person may have their logs hidden.<br/>(Or they just don't like raiding)</span>
+                                    </Tooltip.Content>
+                                </Tooltip.Root>
+                            </Tooltip.Provider>
+                        </div>
+                        {/if}
                     </div>
                     <p class="text-3xl font-bold text-center" style="color: {character.raidPerformance?.bestPerformanceAverage ? getParseColor(character.raidPerformance.bestPerformanceAverage) : '#9d9d9d'}">
                         {#if character.raidPerformance && character.raidPerformance.bestPerformanceAverage != null}
@@ -263,21 +281,29 @@
                         Bosses Killed This Week
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {#each character.raidBossesKilledThisWeek as encounter, i}
-                            <div class="staggered-item flex items-center gap-4 p-4 bg-gray-700/50 rounded-lg hover:bg-gray-600/50 transition-all duration-300" style="{stagger(i)}">
-                                {#if bosses.find(e => e.name == encounter.boss)?.slug}
+                       {#each character.raidBossesKilledThisWeek as encounter, i}
+                            {#if bosses.find(e => e.name === encounter.boss)}
+                                <div class="staggered-item flex items-center gap-4 p-4 bg-gray-700/50 rounded-lg hover:bg-gray-600/50 transition-all duration-300" style="{stagger(i)}">
                                     <img 
-                                        src="https://wow.zamimg.com/images/wow/journal/ui-ej-{bosses.find(e => e.name == encounter.boss)?.slug}.jpg" 
+                                        src={bossIcons[bosses.find(e => e.name === encounter.boss)?.id ?? 0]} 
                                         alt="{encounter.boss} Image"
                                         class="w-12 h-12 rounded-lg object-cover border-2 border-gray-500"
                                     >
-                                {/if}
-                                <div>
-                                    <p class="font-semibold text-lg">{encounter.boss}</p>
-                                    <p class="text-sm opacity-75">{encounter.difficulty}</p>
+
+                                    <div>
+                                        <p class="font-semibold text-lg">{encounter.boss}</p>
+                                        {#if encounter.difficulty == "Normal"}
+                                        <p class="text-sm opacity-75 text-[#38f531]">{encounter.difficulty}</p>
+                                        {:else if encounter.difficulty == "Heroic"}
+                                        <p class="text-sm opacity-75 text-[#4369e0]">{encounter.difficulty}</p>
+                                        {:else if encounter.difficulty == "Mythic"}
+                                        <p class="text-sm opacity-75 text-[#c342c7]">{encounter.difficulty}</p>
+                                        {/if}
+                                    </div>
                                 </div>
-                            </div>
+                            {/if}
                         {/each}
+
                     </div>
                 </div>
             {:else}
