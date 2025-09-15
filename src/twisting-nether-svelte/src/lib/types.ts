@@ -807,17 +807,18 @@ export type GearPiece = {
   id: number;
   slug: string;
   name: string;
+  journalIndex: number;
 }
 
 export const bosses: Encounter[] = [
-  { id: 3129, slug: "plexus-sentinel", name: "Plexus Sentinel" },
-  { id: 3131, slug: "loomithar", name: "Loom'ithar" },
-  { id: 3130, slug: "soulbinder-naazindhri", name: "Soulbinder Naazindhri" },
-  { id: 3132, slug: "forgeweaver-araz", name: "Forgeweaver Araz" },
-  { id: 3122, slug: "the-soul-hunters", name: "The Soul Hunters" },
-  { id: 3133, slug: "fractillus", name: "Fractillus" },
-  { id: 3134, slug: "nexus-king-salhadaar", name: "Nexus-King Salhadaar" },
-  { id: 3135, slug: "dimensius", name: "Dimensius" }
+  { id: 3129, journalIndex: 1, slug: "plexus-sentinel", name: "Plexus Sentinel" },
+  { id: 3131, journalIndex: 2, slug: "loomithar", name: "Loom'ithar" },
+  { id: 3130, journalIndex: 3,slug: "soulbinder-naazindhri", name: "Soulbinder Naazindhri" },
+  { id: 3132, journalIndex: 4,slug: "forgeweaver-araz", name: "Forgeweaver Araz" },
+  { id: 3122, journalIndex: 5,slug: "the-soul-hunters", name: "The Soul Hunters" },
+  { id: 3133, journalIndex: 6,slug: "fractillus", name: "Fractillus" },
+  { id: 3134, journalIndex: 7,slug: "nexus-king-salhadaar", name: "Nexus-King Salhadaar" },
+  { id: 3135, journalIndex: 8,slug: "dimensius", name: "Dimensius" }
 ];
 
 export type RaidPerformance = {

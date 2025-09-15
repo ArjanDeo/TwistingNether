@@ -1,10 +1,11 @@
 <script lang="ts">
-    import { bosses, getScoreColor, type CharacterData } from "$lib/types";
+    import { bosses, getScoreColor, type CharacterData, type Encounter } from "$lib/types";
     import * as Tooltip from '$lib/components/ui/tooltip';
     import { CircleQuestionMark } from '@lucide/svelte'
     import * as Tabs from '$lib/components/ui/tabs';
     import { bossIcons } from "$lib/metadata";
     import { getParseColor, getRaidDifficulty } from "$lib/common";
+	import { onMount } from "svelte";
 
     let activeTab = $state('stats');
     
@@ -29,6 +30,19 @@
     function stagger(index: number): string {
         return `animation-delay: ${index * 100}ms;`;
     }
+
+    const bossIndex: Record<string, number> = bosses.reduce(
+    (acc, b) => ({ ...acc, [b.name]: b.journalIndex }),
+    {}
+  );
+let sortedEncounters: any = $state([]);
+onMount(() => {
+    if (character) {
+      sortedEncounters = [...character.raidBossesKilledThisWeek].sort(
+        (a, b) => (bossIndex[a.boss] ?? 999) - (bossIndex[b.boss] ?? 999)
+      );
+    }
+  });
 </script>
 
 <style>
@@ -281,8 +295,7 @@
                         Bosses Killed This Week
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                       {#each character.raidBossesKilledThisWeek as encounter, i}
-                            {#if bosses.find(e => e.name === encounter.boss)}
+                       {#each sortedEncounters as encounter, i}
                                 <div class="staggered-item flex items-center gap-4 p-4 bg-gray-700/50 rounded-lg hover:bg-gray-600/50 transition-all duration-300" style="{stagger(i)}">
                                     <img 
                                         src={bossIcons[bosses.find(e => e.name === encounter.boss)?.id ?? 0]} 
@@ -301,7 +314,6 @@
                                         {/if}
                                     </div>
                                 </div>
-                            {/if}
                         {/each}
 
                     </div>
