@@ -1,6 +1,8 @@
 using LazyCache;
 using Pathoschild.Http.Client;
 using TwistingNether.Core.Services;
+using TwistingNether.Core.Services.BattleNet;
+using TwistingNether.Core.Services.Character;
 using TwistingNether.DataAccess.Configuration;
 using Common = TwistingNether.Core.Common;
 
@@ -26,6 +28,7 @@ namespace TwistingNether.API
             builder.Services.AddScoped<IGeneralService, GeneralService>();
             builder.Services.AddScoped<IKeystoneService, KeystoneService>();
             builder.Services.AddScoped<ICharacterService, CharacterService>();
+            builder.Services.AddScoped<IBattleNetService, BattleNetService>();
             builder.Services.AddSingleton<FluentClient>();
             Settings.ClientId = builder.Configuration.GetSection("BattleNet").GetSection("ClientId").Value;
             Settings.ClientSecret = builder.Configuration.GetSection("BattleNet").GetSection("ClientSecret").Value;

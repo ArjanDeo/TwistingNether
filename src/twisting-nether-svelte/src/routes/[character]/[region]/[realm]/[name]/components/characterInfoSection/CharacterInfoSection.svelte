@@ -315,7 +315,6 @@ onMount(() => {
                                     </div>
                                 </div>
                         {/each}
-
                     </div>
                 </div>
             {:else}

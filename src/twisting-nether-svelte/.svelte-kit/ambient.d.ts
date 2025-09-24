@@ -46,7 +46,7 @@ declare module '$env/static/private' {
 	export const CUDA_PATH_V11_8: string;
 	export const DriverData: string;
 	export const EDITOR: string;
-	export const EFC_6920: string;
+	export const EFC_7164: string;
 	export const ENABLE_XAML_DIAGNOSTICS_SOURCE_INFO: string;
 	export const FPS_BROWSER_APP_PROFILE_STRING: string;
 	export const FPS_BROWSER_USER_PROFILE_STRING: string;
@@ -186,7 +186,7 @@ declare module '$env/dynamic/private' {
 		CUDA_PATH_V11_8: string;
 		DriverData: string;
 		EDITOR: string;
-		EFC_6920: string;
+		EFC_7164: string;
 		ENABLE_XAML_DIAGNOSTICS_SOURCE_INFO: string;
 		FPS_BROWSER_APP_PROFILE_STRING: string;
 		FPS_BROWSER_USER_PROFILE_STRING: string;

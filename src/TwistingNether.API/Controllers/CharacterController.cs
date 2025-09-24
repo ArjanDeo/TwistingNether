@@ -1,7 +1,7 @@
 ﻿using LazyCache;
 using Microsoft.AspNetCore.Mvc;
 using Pathoschild.Http.Client;
-using TwistingNether.Core.Services;
+using TwistingNether.Core.Services.Character;
 using TwistingNether.DataAccess.TwistingNether.Character;
 
 namespace TwistingNether.API.Controllers

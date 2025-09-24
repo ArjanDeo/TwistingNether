@@ -1,24 +1,22 @@
 ﻿using LazyCache;
 using Microsoft.EntityFrameworkCore;
 using Pathoschild.Http.Client;
-using TwistingNether.BattleNet.WoW.Character;
+using TwistingNether.Core.Services.BattleNet;
 using TwistingNether.DataAccess.BattleNet.WoW.Character;
-using TwistingNether.DataAccess.BattleNet.WoW.Media;
 using TwistingNether.DataAccess.Configuration;
 using TwistingNether.DataAccess.RaiderIO;
 using TwistingNether.DataAccess.TwistingNether.Character;
-using TwistingNether.DataAccess.TwistingNether.Exceptions;
 using TwistingNether.DataAccess.TwistingNether.Raid;
 using TwistingNether.DataAccess.WarcraftLogs;
-using TwistingNether.DataAccess.WarcraftLogs.OAuth;
 
-namespace TwistingNether.Core.Services
+namespace TwistingNether.Core.Services.Character
 {
-    public class CharacterService(Common common, FluentClient client, IAppCache cache) : ICharacterService
+    public class CharacterService(Common common, FluentClient client, IAppCache cache, IBattleNetService battleNetService) : ICharacterService
     {
         private readonly Common _common = common;
         private readonly FluentClient _client = client;
         private readonly IAppCache _cache = cache;
+        private readonly IBattleNetService _battleNetService = battleNetService;
         public async Task<CharacterModel> GetCharacter(CharacterRequestModel character)
         {
             return await _cache.GetOrAddAsync($"character-{character.Region}-{character.Realm}-{character.Name}", async () =>
@@ -27,82 +25,64 @@ namespace TwistingNether.Core.Services
                 character.Realm = character.Realm.ToLower();
                 character.Region = character.Region.ToLower();
                 character.Realm = character.Realm.Replace(" ", "-").Replace("\'", "");
-                IResponse raiderIOCharacterDataResponse = await _client
+
+                var raiderIOCharacterDataResponse = _client
                                  .GetAsync("https://raider.io/api/v1/characters/profile")
                                  .WithOptions(ignoreHttpErrors: true)
                                  .WithArgument("region", character.Region)
                                  .WithArgument("name", character.Name)
                                  .WithArgument("realm", character.Realm)
                                  .WithArgument("fields", "raid_progression,mythic_plus_weekly_highest_level_runs,mythic_plus_scores_by_season:current,guild,gear,mythic_plus_highest_level_runs,mythic_plus_best_runs,raid_achievement_curve:manaforge-omega");
-                if (!raiderIOCharacterDataResponse.IsSuccessStatusCode)
-                {
-                    throw new KeyNotFoundException($"Character {character.Name} on realm {character.Realm} in region {character.Region} was not found.");
-                }
-                var raiderIOCharacterData = await raiderIOCharacterDataResponse.As<RaiderIOCharacterDataModel>();
+                var raiderIOCharacterDataTask = raiderIOCharacterDataResponse.As<RaiderIOCharacterDataModel>();
+                var characterMediaListTask = _battleNetService.GetCharacterMediaAsync(character);
+                var characterEquipmentTask = _battleNetService.GetCharacterEquipmentAsync(character);
+                var raidBossesKilledTask = GetCharacterWeeklyBossesKilled(character);
+                var raidPerformanceTask = GetLatestRaidPerformance(character, 0);
 
-                bool tokenSuccessful = await _common.GetNewBattleNetAccessToken();
+                await Task.WhenAll(
+                    raiderIOCharacterDataTask,
+                    characterMediaListTask,
+                    characterEquipmentTask,
+                    raidBossesKilledTask,
+                    raidPerformanceTask
+                );
 
-                if (!tokenSuccessful)
-                {
-                    throw new TokenRetrievalException("Could not get a token from BattleNet.");
-                }
+                var raiderIOCharacterData = raiderIOCharacterDataTask.Result;
+                var characterMediaList = characterMediaListTask.Result;
+                var characterEquipment = characterEquipmentTask.Result;
+                var raidBossesKilled = raidBossesKilledTask.Result;
+                var raidPerformance = raidPerformanceTask.Result;
 
-                WoWCharacterMediaModel data = await _client
-                 .GetAsync($"https://{character.Region}.api.blizzard.com/profile/wow/character/{character.Realm}/{character.Name}/character-media?namespace=profile-us&locale=en_US&:region=us")
-                 .WithBearerAuthentication(AppConstants.BattleNetAccessToken.access_token)
-                 .As<WoWCharacterMediaModel>();
+                var classColor = await _common.GetClassColor(raiderIOCharacterData.char_class);
 
-                List<CharacterMediaModel> characterMediaList = [];
-                foreach (var image in data.assets)
-                {
-                    CharacterMediaModel characterMediaModel = new()
-                    {
-                        Link = image.value,
-                        Type = image.key
-                    };
-
-                    characterMediaList.Add(characterMediaModel);
-                }
-
-                WoWCharacterEquipmentModel characterGear = await _client
-                .GetAsync($"https://{character.Region}.api.blizzard.com/profile/wow/character/{character.Realm}/{character.Name}/equipment?namespace=profile-us&locale=en_US&:region=us")
-                .WithBearerAuthentication(AppConstants.BattleNetAccessToken.access_token)
-                .As<WoWCharacterEquipmentModel>();
-
-                for (int i = 0; i < characterGear.equipped_items.Count; i++)
-                {
-                    var item = characterGear.equipped_items[i];
-                    if (item.item != null)
-                        characterGear.equipped_items[i].item.iconUrl = await GetItemMedia(item.item.id.ToString());
-                }
 
                 return new CharacterModel
                 {
                     RaiderIOCharacterData = raiderIOCharacterData,
-                    classColor = await _common.GetClassColor(raiderIOCharacterData.char_class),
+                    classColor = classColor,
                     CharacterMedia = characterMediaList,
-                    RaidBossesKilledThisWeek = await GetCharacterRaids(character.Name, character.Realm, character.Region),
-                    CharacterEquipment = characterGear,
-                    RaidPerformance = await GetLatestRaidPerformance(character, 0) // 0: Highest, 1: LFR, 2: Normal, 3: Heroic, 4: Mythic
+                    RaidBossesKilledThisWeek = raidBossesKilled,
+                    CharacterEquipment = characterEquipment,
+                    RaidPerformance = raidPerformance
 
                 };
             }, TimeSpan.FromMinutes(60));
             
         }
-        private async Task<List<RaidEncounter>> GetCharacterRaids(string name, string realm, string region)
+        // Returns a list of current tier raid bosses killed this week by the specified character.
+        private async Task<List<RaidEncounter>> GetCharacterWeeklyBossesKilled(CharacterRequestModel character)
         {
-            realm = realm.ToLower();
-            name = name.ToLower();
-            region = region.ToLower();
+            character.Realm = character.Realm.ToLower();
+            character.Name = character.Name.ToLower();
+            character.Region = character.Region.ToLower();
 
             await _common.GetNewBattleNetAccessToken();
 
             WoWCharacterRaidsModel data = await _client
-                .GetAsync($"https://{region}.api.blizzard.com/profile/wow/character/{realm}/{name}/encounters/raids?namespace=profile-us&locale=en_US")
+                .GetAsync($"https://{character.Region}.api.blizzard.com/profile/wow/character/{character.Realm}/{character.Name}/encounters/raids?namespace=profile-{character.Region}&locale=en_US")
                 .WithBearerAuthentication(AppConstants.BattleNetAccessToken.access_token)
                 .As<WoWCharacterRaidsModel>();
 
-            Dictionary<string, (DateTime Timestamp, string Difficulty)> lastKilledTimestamps = [];
 
             var responseEncounters = data.expansions
                 .SelectMany(e => e.instances)
@@ -110,47 +90,28 @@ namespace TwistingNether.Core.Services
 
             List<string> validRaidBosses = ["Plexus Sentinel", "Loom'ithar", "Soulbinder Naazindhri", "Forgeweaver Araz", "The Soul Hunters", "Fractillus", "Nexus-King Salhadaar", "Dimensius"];
 
-            foreach (var encounter in responseEncounters)
+            var lastKilledTimestamps = responseEncounters
+            .SelectMany(encounter => encounter.progress.encounters.Select(boss => new
             {
-                string difficultyLevel = encounter.difficulty.name;
-                foreach (var boss in encounter.progress.encounters)
-                {
-                    string bossName = boss.encounter.name;
-                    long lastKillTimestamp = boss.last_kill_timestamp;
+                BossName = boss.encounter.name,
+                Difficulty = encounter.difficulty.name,
+                Timestamp = DateTimeOffset.FromUnixTimeMilliseconds(boss.last_kill_timestamp).UtcDateTime
+            }))
+            .Where(x => validRaidBosses.Contains(x.BossName))
+            .GroupBy(x => x.BossName)
+            .ToDictionary(
+                g => g.Key,
+                g => g.OrderByDescending(x => x.Timestamp).First()
+            );
 
-                    if (validRaidBosses.Contains(bossName))
-                    {
-                        DateTime lastKillDateTime = DateTimeOffset.FromUnixTimeMilliseconds(lastKillTimestamp).UtcDateTime;
+            return [.. lastKilledTimestamps
+             .Where(entry => entry.Value.Timestamp > GetLastReset())
+             .Select(entry => new RaidEncounter
+             {
+                 Boss = entry.Key,
+                 Difficulty = entry.Value.Difficulty
+             })];
 
-                        if (lastKilledTimestamps.TryGetValue(bossName, out var existingEntry))
-                        {
-                            if (existingEntry.Timestamp < lastKillDateTime)
-                            {
-                                lastKilledTimestamps[bossName] = (lastKillDateTime, difficultyLevel);
-                            }
-                        }
-                        else
-                        {
-                            lastKilledTimestamps[bossName] = (lastKillDateTime, difficultyLevel);
-                        }
-                    }
-                }
-            }
-
-            List<RaidEncounter> clearedBossList = [];
-
-            foreach (var entry in lastKilledTimestamps)
-            {
-                if (entry.Value.Timestamp > GetLastReset())
-                {
-                    clearedBossList.Add(new RaidEncounter
-                    {
-                        Boss = entry.Key,
-                        Difficulty = entry.Value.Difficulty
-                    });
-                }
-            }
-            return clearedBossList;
         }
         private static DateTime GetLastReset()
         {
@@ -161,22 +122,7 @@ namespace TwistingNether.Core.Services
             }
             return lastTuesday;
         }
-        private async Task<string> GetItemMedia(string id)
-        {
-            await _common.GetNewBattleNetAccessToken();
-            return await _cache.GetOrAddAsync($"item-media-{id}", async () =>
-            {
-                WowItemMediaModel res = await _client.GetAsync($"https://us.api.blizzard.com/data/wow/media/item/{id}")
-                .WithArguments(new Dictionary<string, string>()
-                    {
-                        { "namespace", "static-us" },
-                        {"locale", "en_US" }
-                    })
-                .WithBearerAuthentication(AppConstants.BattleNetAccessToken.access_token)
-                .As<WowItemMediaModel>();
-                return res.assets.FirstOrDefault(a => a.key == "icon")?.value ?? "";
-            }, TimeSpan.MaxValue);
-        }
+        
         public async Task<List<Quest>> GetCharacterCompletedQuests(CharacterRequestModel character)
         {
             await _common.GetNewBattleNetAccessToken();

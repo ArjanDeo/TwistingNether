@@ -13,4 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TwistingNether.DataAccess\TwistingNether.DataAccess.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\WarcraftLogs\" />
+  </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@
 using TwistingNether.DataAccess.TwistingNether.Character;
 using TwistingNether.DataAccess.WarcraftLogs;
 
-namespace TwistingNether.Core.Services
+namespace TwistingNether.Core.Services.Character
 {
     public interface ICharacterService
     {
