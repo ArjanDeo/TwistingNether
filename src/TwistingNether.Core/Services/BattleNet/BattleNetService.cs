@@ -4,6 +4,7 @@ using TwistingNether.BattleNet.WoW.Character;
 using TwistingNether.DataAccess.BattleNet.OAuth;
 using TwistingNether.DataAccess.BattleNet.WoW.Character;
 using TwistingNether.DataAccess.BattleNet.WoW.Media;
+using TwistingNether.DataAccess.BattleNet.WoW.Token;
 using TwistingNether.DataAccess.Configuration;
 using TwistingNether.DataAccess.TwistingNether.Character;
 
@@ -92,7 +93,6 @@ namespace TwistingNether.Core.Services.BattleNet
                 return res.assets.FirstOrDefault(a => a.key == "icon")?.value ?? "";
             }, TimeSpan.MaxValue);
         }
-
         public async Task<WoWCharacterEquipmentModel> GetCharacterEquipmentAsync(CharacterRequestModel character)
         {
             await GetNewBattleNetAccessTokenAsync();
@@ -119,6 +119,32 @@ namespace TwistingNether.Core.Services.BattleNet
                 Console.WriteLine($"Error fetching character media for {character.Name} on {character.Realm} in {character.Region}: {await ex.Response.AsString()}");
                 throw;
             }
+        }
+        public async Task<WoWCharacterRaidsModel> GetCharacterRaidsAsync(CharacterRequestModel character)
+        {
+            await GetNewBattleNetAccessTokenAsync();
+
+            IResponse response = await _client
+                .GetAsync($"https://{character.Region}.api.blizzard.com/profile/wow/character/{character.Realm}/{character.Name}/encounters/raids?namespace=profile-{character.Region}&locale=en_US")
+                .WithBearerAuthentication(AppConstants.BattleNetAccessToken.access_token);
+            return await response.As<WoWCharacterRaidsModel>();
+        }
+
+        public async Task<WowTokenModel> GetTokenPriceAsync()
+        {
+            return await _cache.GetOrAddAsync("WowTokenPrice", async () =>
+            {
+                await GetNewBattleNetAccessTokenAsync();
+
+                return await _client.GetAsync("https://us.api.blizzard.com/data/wow/token/index")
+                .WithArguments(new Dictionary<string, string>()
+                    {
+                        { "namespace", "dynamic-us" },
+                        {"locale", "en_US" }
+                    })
+                .WithBearerAuthentication(AppConstants.BattleNetAccessToken.access_token)
+                .As<WowTokenModel>();
+            }, TimeSpan.FromMinutes(20));
         }
     }
 }

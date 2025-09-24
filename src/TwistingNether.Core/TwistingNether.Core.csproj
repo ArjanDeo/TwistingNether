@@ -5,15 +5,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.71" />
     <PackageReference Include="LazyCache" Version="2.4.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0" />
-    <PackageReference Include="Pathoschild.Http.FluentClient" Version="4.4.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.9" />
+    <PackageReference Include="Pathoschild.Http.FluentClient" Version="4.4.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TwistingNether.DataAccess\TwistingNether.DataAccess.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\WarcraftLogs\" />
   </ItemGroup>
 </Project>

@@ -3,6 +3,7 @@ using Pathoschild.Http.Client;
 using TwistingNether.Core.Services;
 using TwistingNether.Core.Services.BattleNet;
 using TwistingNether.Core.Services.Character;
+using TwistingNether.Core.Services.WarcraftLogs;
 using TwistingNether.DataAccess.Configuration;
 using Common = TwistingNether.Core.Common;
 
@@ -25,17 +26,14 @@ namespace TwistingNether.API
 
             builder.Services.AddScoped<IAppCache, CachingService>();
             builder.Services.AddScoped<Common>();
-            builder.Services.AddScoped<IGeneralService, GeneralService>();
-            builder.Services.AddScoped<IKeystoneService, KeystoneService>();
             builder.Services.AddScoped<ICharacterService, CharacterService>();
             builder.Services.AddScoped<IBattleNetService, BattleNetService>();
+            builder.Services.AddScoped<IWarcraftLogsService, WarcraftLogsService>();
             builder.Services.AddSingleton<FluentClient>();
             Settings.ClientId = builder.Configuration.GetSection("BattleNet").GetSection("ClientId").Value;
             Settings.ClientSecret = builder.Configuration.GetSection("BattleNet").GetSection("ClientSecret").Value;
             Settings.WarcraftLogsClientId = builder.Configuration.GetSection("WarcraftLogs").GetSection("ClientId").Value;
             Settings.WarcraftLogsClientSecret = builder.Configuration.GetSection("WarcraftLogs").GetSection("ClientSecret").Value;
-            //builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            //options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
 
             builder.Services.AddCors(options =>
             {
