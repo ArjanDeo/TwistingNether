@@ -16,7 +16,7 @@ namespace TwistingNether.Core.Services.WarcraftLogs
         {
             // If there is an access token already, and it has not expired yet.
             if (AppConstants.WarcraftLogsAccessToken != null &&
-                AppConstants.WarcraftLogsAccessToken.acquired_at.AddSeconds(AppConstants.BattleNetAccessToken.expires_in).AddMinutes(-5) > DateTime.UtcNow)
+                AppConstants.WarcraftLogsAccessToken.acquired_at.AddSeconds(AppConstants.WarcraftLogsAccessToken.expires_in).AddMinutes(-5) > DateTime.UtcNow)
             {
                 return true;
             }
@@ -58,13 +58,14 @@ namespace TwistingNether.Core.Services.WarcraftLogs
                 try
                 {
                     const string query = """                     
-                    query CharacterData($name: String!, $serverSlug: String!, $serverRegion: String!) 
+                    query CharacterData($name: String!, $serverSlug: String!, $serverRegion: String!, $difficulty: Int) 
                     { characterData 
                         { character(name: $name, serverSlug: $serverSlug, serverRegion: $serverRegion) 
-                            { canonicalID classID hidden zoneRankings } 
+                            { canonicalID classID hidden zoneRankings(difficulty: $difficulty) } 
                         } 
                     }
                     """;
+
                     Dictionary<string, object> payload = new()
                     {
                         ["query"] = query,
@@ -72,7 +73,8 @@ namespace TwistingNether.Core.Services.WarcraftLogs
                         {
                             name = character.Name,
                             serverSlug = character.Realm,
-                            serverRegion = character.Region
+                            serverRegion = character.Region,
+                            difficulty = difficulty != null ? difficulty : 0
                         }
                     };
                     IResponse response = await _client

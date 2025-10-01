@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { bosses, getScoreColor, type CharacterData, type Encounter } from "$lib/types";
+    import { bosses, getScoreColor, type CharacterData } from "$lib/types";
     import * as Tooltip from '$lib/components/ui/tooltip';
     import { CircleQuestionMark } from '@lucide/svelte'
     import * as Tabs from '$lib/components/ui/tabs';
