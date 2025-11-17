@@ -33,7 +33,7 @@
 	<div class="bg-primary-foreground p-4 rounded-md max-h-44">
 		<CharacterForm {data} />
 	</div>
-	<div class="w-xs mx-auto">
+	<!-- <div class="w-xs mx-auto">
         <div class="bg-gradient-to-br from-slate-900/90 to-slate-800/90 p-6 rounded-xl backdrop-blur-sm border border-purple-500/30 shadow-2xl">
             <div class="flex items-center justify-between mb-6">
                 <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
@@ -91,5 +91,5 @@
                 </button>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
