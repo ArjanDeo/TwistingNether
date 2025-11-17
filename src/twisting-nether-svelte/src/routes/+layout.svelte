@@ -23,7 +23,7 @@ let { children } = $props();
 		<div class="flex flex-row gap-x-4 lg:gap-x-3 mx-auto lg:m-0">
 			<a class="text-center my-auto hover:text-green-700 transition-colors ease-in-out" href="/">Home</a>
 			<a class="text-center my-auto hover:text-green-700 transition-colors ease-in-out" href="/about">About</a>
-			<a class="text-center my-auto hover:text-green-700 transition-colors ease-in-out" href="/io-calculator">IO Calculator</a>
+			<!-- <a class="text-center my-auto hover:text-green-700 transition-colors ease-in-out" href="/io-calculator">IO Calculator</a> -->
 		</div>
 		<div class="my-auto">
 			<Button onclick={toggleMode} variant="outline" size="icon" class="cursor-pointer">

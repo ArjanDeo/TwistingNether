@@ -1,13 +1,16 @@
 <script lang="ts">
-    import { raceColors, type CharacterData, type EquippedGear, type GearPiece } from '$lib/types';
+    import { raceColors, type EquippedGear, type GearPiece } from '$lib/types';
+    import { type Character, type CharacterMedia, type EquippedItem } from '$lib/types/character'
     import { classIcons, raceIcons } from '$lib/metadata';
     import GearIcon from '../gearIcon/GearIcon.svelte';
 	import { onMount } from 'svelte';
+	import { API_BASE_URL } from '$lib/common';
+	import { toast } from 'svelte-sonner';
     
-    let { character }: { character: CharacterData | undefined } = $props();
-    let equipped: GearPiece[] | undefined = $state()
+    let { character }: { character: Character | undefined } = $props();
+    let equipped: EquippedItem[] | undefined = $state()
     let equippedGear: EquippedGear | undefined = $state();
-
+    let characterMedia: CharacterMedia[] | undefined = $state();
        
     let raceGenderString: string = $state("");
 
@@ -16,7 +19,18 @@
         return `animation-delay: ${index * 50}ms;`;
     }
 
-    onMount(() => {
+    async function setCharacterMedia(name: string, realm: string, region: string) {
+        const res = await fetch(`${API_BASE_URL}/characters/media?name=${name}&realm=${realm}&region=${region}`);
+
+        if (!res.ok) {
+            toast.error('Couldn\'t get character media.');
+            return;
+        }
+        characterMedia = await res.json();
+        return;
+    }
+
+    onMount(async () => {
         if (character) {
             equipped = character.characterEquipment.equipped_items;
             equippedGear = {
@@ -39,7 +53,8 @@
                 mainhand: equipped.find(i => i.slot.name === "Main Hand"),
                 offhand: equipped.find(i => i.slot.name === "Off Hand"),
             }
-            raceGenderString = `${character.raiderIOCharacterData.race.replace(' ', '').toLowerCase()}-${character.raiderIOCharacterData.gender}`;
+            raceGenderString = `${character.characterData.race.replace(' ', '').toLowerCase()}-${character.characterData.gender}`;
+            await setCharacterMedia(character.characterData.name, character.characterData.realm, character.characterData.region);
         }
     })
 </script>
@@ -146,18 +161,18 @@
     <header class="header-glow rounded-xl p-6 mb-8">
         <div class="text-center mb-6">
             <h1 class="text-3xl lg:text-5xl font-bold mb-2 ">
-                {character.raiderIOCharacterData.name}
-                <span class="text-2xl lg:text-3xl">-{character.raiderIOCharacterData.realm}</span>
+                {character.characterData.name}
+                <span class="text-2xl lg:text-3xl">-{character.characterData.realm}</span>
             </h1>
             
-            {#if character.raiderIOCharacterData.guild != null}
+            {#if character.characterData.guild != null}
                 <h2 class="text-xl lg:text-2xl font-semibold mb-4">
                     <a 
                         target="_blank" 
                         class="guild-link hover:scale-105 transition-transform duration-300 inline-block" 
-                        href="https://worldofwarcraft.blizzard.com/en-us/guild/{character.raiderIOCharacterData.region}/{character.raiderIOCharacterData.guild.realm.replace('\'', "")}/{character.raiderIOCharacterData.guild.name.replace(' ', '-')}/"
+                        href="https://worldofwarcraft.blizzard.com/en-us/guild/{character.characterData.region}/{character.characterData.guild.realm.replace('\'', "")}/{character.characterData.guild.name.replace(' ', '-')}/"
                     >
-                        &lt;{character.raiderIOCharacterData.guild.name}&gt;
+                        &lt;{character.characterData.guild.name}&gt;
                     </a>
                 </h2>
             {/if}
@@ -168,29 +183,29 @@
                 <div class="stat-card rounded-lg p-4 flex items-center gap-3">
                     <img 
                         src={raceIcons[raceGenderString]} 
-                        alt={character.raiderIOCharacterData.race} 
+                        alt={character.characterData.race} 
                         class="w-10 h-10 rounded-full border-2 border-gray-600"
                     />
                     <div>
                         <p class="text-xs text-gray-400 uppercase tracking-wide">Race</p>
-                        <p class="text-lg font-semibold " style="color: {raceColors[character.raiderIOCharacterData.race]}">{character.raiderIOCharacterData.race}</p>
+                        <p class="text-lg font-semibold " style="color: {raceColors[character.characterData.race]}">{character.characterData.race}</p>
                     </div>
                 </div>
 
                 <!-- Class Card -->
                 <div class="stat-card rounded-lg p-4 flex items-center gap-3">
                     <img 
-                        src={classIcons[character.raiderIOCharacterData.char_class]} 
-                        alt={character.raiderIOCharacterData.char_class} 
+                        src={classIcons[character.characterData.char_class]} 
+                        alt={character.characterData.char_class} 
                         class="w-10 h-10 rounded-full border-2 border-gray-600"
                     />
                     <div>
                         <p class="text-xs text-gray-400 uppercase tracking-wide">Class</p>
                         <p class="text-lg font-semibold" style="color: {character.classColor};">
-                            {character.raiderIOCharacterData.char_class}
+                            {character.characterData.char_class}
                         </p>
                         <p class="-mt-2 text-sm text-center">
-                            {character.raiderIOCharacterData.active_spec_name}
+                            {character.characterData.active_spec_name}
                         </p>
                     </div>
                 </div>
@@ -202,7 +217,7 @@
                     </div>
                     <div>
                         <p class="text-xs text-gray-400 uppercase tracking-wide">Item Level</p>
-                        <p class="text-lg font-semibold text-yellow-400">{character.raiderIOCharacterData.gear.item_level_equipped}</p>
+                        <p class="text-lg font-semibold text-yellow-400">{character.characterData.gear.item_level_equipped}</p>
                     </div>
                 </div>
             </div>
@@ -211,7 +226,7 @@
             <div class="flex justify-center gap-4">
                 <a 
                     aria-label="raider.io link" 
-                    href="https://raider.io/characters/{character.raiderIOCharacterData.region}/{character.raiderIOCharacterData.realm}/{character.raiderIOCharacterData.name}" 
+                    href="https://raider.io/characters/{character.characterData.region}/{character.characterData.realm}/{character.characterData.name}" 
                     target="_blank"
                     class="external-link p-3"
                 >
@@ -219,7 +234,7 @@
                 </a>
                 <a 
                     aria-label="warcraft logs link"
-                    href="https://www.warcraftlogs.com/character/{character.raiderIOCharacterData.region}/{character.raiderIOCharacterData.realm}/{character.raiderIOCharacterData.name}" 
+                    href="https://www.warcraftlogs.com/character/{character.characterData.region}/{character.characterData.realm}/{character.characterData.name}" 
                     target="_blank"
                     class="external-link p-3"
                 >
@@ -227,7 +242,7 @@
                 </a>
                 <a 
                     aria-label="world of warcraft armory link"
-                    href="https://worldofwarcraft.blizzard.com/en-gb/character/{character.raiderIOCharacterData.region}/{character.raiderIOCharacterData.realm}/{character.raiderIOCharacterData.name}" 
+                    href="https://worldofwarcraft.blizzard.com/en-gb/character/{character.characterData.region}/{character.characterData.realm}/{character.characterData.name}" 
                     target="_blank"
                     class="external-link p-3"
                 >
@@ -256,7 +271,7 @@
                         <GearIcon 
                             gear={gear} 
                             slot={slot} 
-                            characterSpec={character.raiderIOCharacterData.active_spec_name} 
+                            characterSpec={character.characterData.active_spec_name} 
                         />
                     </div>
                 {/each}
@@ -267,13 +282,18 @@
         <div class="flex flex-col items-center order-1 lg:order-2">
             <div class="relative">
                 <!-- Floating animation wrapper -->
-                <div class="floating  overflow-hidden">
+                <div class="floating overflow-hidden">
+                    {#if characterMedia}
                     <img 
-                        src={character.characterMedia ? `https://wsrv.nl/?url=${character.characterMedia[2].link}&w800&output=webp&q=80` : '/default-image.webp'} 
+                        src={characterMedia[2].link ? `https://wsrv.nl/?url=${characterMedia[2].link}&w800&output=webp&q=80` : '/default-image.webp'} 
                         alt="Character Render" 
                         class="character-render max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl rounded-2xl object-cover"
                         fetchpriority="high"
                     />
+                    {:else}
+                    <div class="w-[800px] character-render max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl rounded-2xl object-cover animate-pulse"></div>
+                    {/if}
+                    
                 </div>
                 
                 <!-- Glow effect -->
@@ -291,7 +311,7 @@
                             <GearIcon 
                                 gear={gear} 
                                 slot={slot} 
-                                characterSpec={character.raiderIOCharacterData.active_spec_name}
+                                characterSpec={character.characterData.active_spec_name}
                             />
                         </div>
                     {/each}
@@ -316,7 +336,7 @@
                         <GearIcon 
                             gear={gear} 
                             slot={slot} 
-                            characterSpec={character.raiderIOCharacterData.active_spec_name}
+                            characterSpec={character.characterData.active_spec_name}
                         />
                     </div>
                 {/each}

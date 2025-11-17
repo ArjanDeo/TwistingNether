@@ -54,6 +54,11 @@ namespace TwistingNether.Core.Services.BattleNet
         }
         public async Task<List<CharacterMediaModel>> GetCharacterMediaAsync(CharacterRequestModel character)
         {
+            character.Name = character.Name.ToLower();
+            character.Realm = character.Realm.ToLower();
+            character.Region = character.Region.ToLower();
+            character.Realm = character.Realm.Replace(" ", "-").Replace("\'", "");
+
             await GetNewBattleNetAccessTokenAsync();
             try
             {

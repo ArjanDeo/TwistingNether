@@ -1,3 +1,6 @@
+import type { EquippedItem } from "./types/character"
+import type { RaidPerformance } from "./types/warcraftLogs"
+
 export type CharacterData = {
   raiderIOCharacterData: {
     name: string
@@ -821,50 +824,7 @@ export const bosses: Encounter[] = [
   { id: 3135, journalIndex: 8,slug: "dimensius", name: "Dimensius" }
 ];
 
-export type RaidPerformance = {
-    bestPerformanceAverage: number
-    medianPerformanceAverage: number
-    difficulty: number
-    metric: string
-    partition: number
-    zone: number
-    size: number
-    allStars: Array<{
-      partition: number
-      spec: string
-      points: number
-      possiblePoints: number
-      rank: number
-      regionRank: number
-      serverRank: number
-      rankPercent: number
-      total: number
-    }>
-    rankings: Array<{
-      encounter: {
-        id: number
-        name: string
-      }
-      rankPercent: number
-      medianPercent: number
-      lockedIn: boolean
-      totalKills: number
-      fastestKill: number
-      allStars: {
-        points: number
-        possiblePoints: number
-        partition: number
-        rank: number
-        regionRank: number
-        serverRank: number
-        rankPercent: number
-        total: number
-      }
-      spec: string
-      bestSpec: string
-      bestAmount: number
-    }>
-}
+
 
 export enum MainStats {
   AGILITY = 'Agility',
@@ -1005,22 +965,22 @@ export function getScoreColor(score: number): string {
 }
 
 export type EquippedGear = {
-    head: GearPiece | undefined
-    neck: GearPiece | undefined
-    shoulders: GearPiece | undefined
-    back: GearPiece | undefined
-    chest: GearPiece | undefined
-    tabard: GearPiece | undefined
-    shirt: GearPiece | undefined
-    wrists: GearPiece | undefined
-    hands: GearPiece | undefined
-    waist: GearPiece | undefined
-    legs: GearPiece | undefined
-    feet: GearPiece | undefined
-    ring1: GearPiece | undefined
-    ring2: GearPiece | undefined
-    trinket1: GearPiece | undefined
-    trinket2: GearPiece | undefined
-    mainhand: GearPiece | undefined
-    offhand: GearPiece | undefined
+    head: EquippedItem | undefined
+    neck: EquippedItem | undefined
+    shoulders: EquippedItem | undefined
+    back: EquippedItem | undefined
+    chest: EquippedItem | undefined
+    tabard: EquippedItem | undefined
+    shirt: EquippedItem | undefined
+    wrists: EquippedItem | undefined
+    hands: EquippedItem | undefined
+    waist: EquippedItem | undefined
+    legs: EquippedItem | undefined
+    feet: EquippedItem | undefined
+    ring1: EquippedItem | undefined
+    ring2: EquippedItem | undefined
+    trinket1: EquippedItem | undefined
+    trinket2: EquippedItem | undefined
+    mainhand: EquippedItem | undefined
+    offhand: EquippedItem | undefined
 }

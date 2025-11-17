@@ -74,7 +74,7 @@ namespace TwistingNether.Core.Services.WarcraftLogs
                             name = character.Name,
                             serverSlug = character.Realm,
                             serverRegion = character.Region,
-                            difficulty = difficulty != null ? difficulty : 0
+                            difficulty = difficulty ?? 0
                         }
                     };
                     IResponse response = await _client

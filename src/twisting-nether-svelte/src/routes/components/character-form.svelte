@@ -56,11 +56,11 @@ let filteredRealms: () => { name: string, region: string}[] = $derived(() => {
     }
 });
 </script>
-{#if dev}
+<!-- {#if dev}
 <div class="mb-2">
     <SuperDebug data={formData} />
 </div>
-{/if}
+{/if} -->
 <form method="POST" use:enhance>
     <Form.Field {form} name="name" class="w-full">
         <Form.FieldErrors />

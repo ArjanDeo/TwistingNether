@@ -14,7 +14,7 @@
     </title>
     {:then char}
     <title>
-      {char.raiderIOCharacterData.name} - {char.raiderIOCharacterData.realm}
+      {char.characterData.name} - {char.characterData.realm}
     </title>
     {/await}
     {/if}
@@ -22,13 +22,13 @@
 
 {#await data.character}
   <!-- Skeleton while loading -->
-  <div class="flex flex-col md:flex-row p-8 min-h-screen gap-y-10 md:gap-x-20">
+  <div class="flex flex-col md:flex-row p-8 min-h-fit gap-y-10 md:gap-x-20">
     <CharacterPane character={undefined}/>
     <CharacterInfoSection character={undefined}/>
   </div>
 {:then character}
   <!-- Actual content -->
-  <div class="flex flex-col md:flex-row p-8 min-h-screen gap-y-10 md:gap-x-20" style="color: {character.classColor};">
+  <div class="flex flex-col md:flex-row p-8 min-h-fit gap-y-10 md:gap-x-20" style="color: {character.classColor};">
     <CharacterPane character={character}/>
     <CharacterInfoSection character={character}/>
   </div>

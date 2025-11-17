@@ -13,7 +13,7 @@ export function getParseColor(score: number) {
   return "#000000";
 }
 
-export function getRaidDifficulty(difficultyId: number) {
+export function getRaidDifficultyString(difficultyId: number) {
   switch (difficultyId) {
     case 1:
       return "LFR"
@@ -29,5 +29,23 @@ export function getRaidDifficulty(difficultyId: number) {
       return "M+"
     default:
       return "Unknown"
+  }
+}
+export function getRaidDifficultyId(difficultyName: string) {
+  switch (difficultyName) {
+    case "LFR":
+      return 1
+    case "Flex":
+      return 2
+    case "Normal":
+      return 3
+    case "Heroic":
+      return 4
+    case "Mythic":
+      return 5
+    case "M+":
+      return 10
+    default:
+      return 0
   }
 }

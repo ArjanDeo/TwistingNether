@@ -20,11 +20,11 @@ namespace TwistingNether.API.Controllers
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CharacterModel>> GetCharacter([FromQuery] CharacterRequestModel character)
+        public async Task<IActionResult> GetCharacter([FromQuery] CharacterRequestModel character)
         {
             try
             {
-                return Ok(await _characterService.GetCharacter(character));
+                return Ok(await _characterService.GetBaseCharacterAsync(character));
             }
             catch (ApiException ex)
             {
@@ -35,6 +35,48 @@ namespace TwistingNether.API.Controllers
                 return NotFound($"Character couldn't be found.");
             }
         }
+        // GET /api/characters/media?name=thrall&realm=area-52&region=us
+        [HttpGet("media")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetCharacterMedia([FromQuery] CharacterRequestModel character)
+        {
+            try
+            {
+                return Ok(await _characterService.GetCharacterMediaAsync(character));
+            }
+            catch (ApiException ex)
+            {
+                return BadRequest($"Failed to get character: {await ex.Response.AsString()}");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound($"Character couldn't be found.");
+            }
+        }
+
+        // GET /api/characters/media?name=thrall&realm=area-52&region=us
+        [HttpGet("weekly-bosses")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetCharacterWeeklyBosses([FromQuery] CharacterRequestModel character)
+        {
+            try
+            {
+                return Ok(await _characterService.GetCharacterWeeklyBossesKilledAsync(character));
+            }
+            catch (ApiException ex)
+            {
+                return BadRequest($"Failed to get character: {await ex.Response.AsString()}");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound($"Character couldn't be found.");
+            }
+        }
+
 
         // DELETE /api/characters/cache
         [HttpDelete("cache")]

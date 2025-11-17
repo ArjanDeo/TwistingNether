@@ -2,6 +2,7 @@
 using Pathoschild.Http.Client;
 using TwistingNether.Core.Services.BattleNet;
 using TwistingNether.Core.Services.WarcraftLogs;
+using TwistingNether.DataAccess.BattleNet.WoW.Character;
 using TwistingNether.DataAccess.RaiderIO;
 using TwistingNether.DataAccess.TwistingNether.Character;
 using TwistingNether.DataAccess.TwistingNether.Raid;
@@ -26,7 +27,6 @@ namespace TwistingNether.Core.Services.Character
 
                 var raiderIOCharacterDataResponse = _client
                                  .GetAsync("https://raider.io/api/v1/characters/profile")
-                                 .WithOptions(ignoreHttpErrors: true)
                                  .WithArgument("region", character.Region)
                                  .WithArgument("name", character.Name)
                                  .WithArgument("realm", character.Realm)
@@ -65,10 +65,9 @@ namespace TwistingNether.Core.Services.Character
 
                 };
             }, TimeSpan.FromMinutes(60));
-            
         }
         // Returns a list of current tier raid bosses killed this week by the specified character.
-        private async Task<List<RaidEncounter>> GetCharacterWeeklyBossesKilledAsync(CharacterRequestModel character)
+        public async Task<List<RaidEncounter>> GetCharacterWeeklyBossesKilledAsync(CharacterRequestModel character)
         {
             character.Realm = character.Realm.ToLower();
             character.Name = character.Name.ToLower();
@@ -116,7 +115,56 @@ namespace TwistingNether.Core.Services.Character
              })];
 
         }
-        
+        public async Task<BaseCharacterModel> GetBaseCharacterAsync(CharacterRequestModel character)
+        {
+            return await _cache.GetOrAddAsync($"raiderio-{character.Region}-{character.Realm}-{character.Name}", async () =>
+            {
+                character.Name = character.Name.ToLower();
+                character.Realm = character.Realm.ToLower();
+                character.Region = character.Region.ToLower();
+                character.Realm = character.Realm.Replace(" ", "-").Replace("\'", "");
+
+                var raiderIOCharacterDataResponse = _client
+                    .GetAsync("https://raider.io/api/v1/characters/profile")
+                    .WithOptions(ignoreHttpErrors: true)
+                    .WithArgument("region", character.Region)
+                    .WithArgument("name", character.Name)
+                    .WithArgument("realm", character.Realm)
+                    .WithArgument("fields", "raid_progression,mythic_plus_weekly_highest_level_runs,mythic_plus_scores_by_season:current,guild,gear,mythic_plus_highest_level_runs,mythic_plus_best_runs,raid_achievement_curve:manaforge-omega");
+
+                var raiderIOCharacterDataTask = raiderIOCharacterDataResponse.As<RaiderIOCharacterDataModel>();
+                var characterEquipmentTask = _battleNetService.GetCharacterEquipmentAsync(character);
+
+
+
+                await Task.WhenAll(
+                    raiderIOCharacterDataTask,
+                    characterEquipmentTask
+                );
+
+                var raiderIOCharacterData = raiderIOCharacterDataTask.Result;
+                var characterEquipment = characterEquipmentTask.Result;
+
+                var classColor = await _common.GetClassColor(raiderIOCharacterData.char_class);
+
+                return new BaseCharacterModel
+                {
+                    CharacterData = raiderIOCharacterData,
+                    CharacterEquipment = characterEquipment,
+                    ClassColor = classColor
+                };
+            }, TimeSpan.FromMinutes(60));
+            
+        }
+        public async Task<List<CharacterMediaModel>> GetCharacterMediaAsync(CharacterRequestModel character)
+        {
+            return await _cache.GetOrAddAsync($"characterMedia-{character.Region}-{character.Realm}-{character.Name}", async () =>
+            {
+                var characterMediaList = await _battleNetService.GetCharacterMediaAsync(character);
+                return characterMediaList;
+            }, TimeSpan.FromHours(6));
+            
+        }
 
     }
 }

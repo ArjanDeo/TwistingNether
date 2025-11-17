@@ -1,10 +1,11 @@
 <script lang="ts">
 	import * as Tooltip from "$lib/components/ui/tooltip";
-	import { ItemQuality, MainStats, specToMainStat, type GearPiece } from "$lib/types";
+	import { ItemQuality, MainStats, specToMainStat } from "$lib/types";
 	import { equipmentIcons, qualityIcons } from "$lib/metadata";
     import enchant_scroll from "$lib/icons/misc/inv_misc_enchantedscroll.webp"
     import prismatic_socket from "$lib/icons/misc/ui_prismatic_socket.webp"
-    let { gear, slot, characterSpec }: { gear: GearPiece | undefined, slot: string, characterSpec: string  } = $props();
+	import type { EquippedItem } from "$lib/types/character";
+    let { gear, slot, characterSpec }: { gear: EquippedItem | undefined, slot: string, characterSpec: string  } = $props();
     function itemRarityColor(itemQuality: string): string {
         switch (itemQuality) {
             case ItemQuality.Common:
@@ -217,11 +218,11 @@
                         {#each gear.stats as stat}
                             {#if stat.type.name == displayStat}
                                 <p class="stat-primary text-sm">
-                                    +{stat.value} {stat.type.name}
+                                    +{stat.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} {stat.type.name}
                                 </p>
                             {:else if stat.type.name !== "Agility" && stat.type.name !== "Strength" && stat.type.name !== "Intellect"}
                                 <p class="stat-secondary text-sm">
-                                    +{stat.value} {stat.type.name}
+                                    +{stat.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} {stat.type.name}
                                 </p>
                             {/if}
                         {/each}

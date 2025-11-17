@@ -4,12 +4,19 @@
     import { CircleQuestionMark } from '@lucide/svelte'
     import * as Tabs from '$lib/components/ui/tabs';
     import { bossIcons } from "$lib/metadata";
-    import { getParseColor, getRaidDifficulty } from "$lib/common";
+    import { API_BASE_URL, getParseColor, getRaidDifficultyId, getRaidDifficultyString } from "$lib/common";
 	import { onMount } from "svelte";
+	import type { Character, WeeklyBosses } from "$lib/types/character";
+	import { toast } from "svelte-sonner";
+	import type { RaidPerformance } from "$lib/types/warcraftLogs";
+    import * as DropdownMenu from "$lib/components/ui/dropdown-menu"
 
-    let activeTab = $state('stats');
-    
-    let { character }: { character: CharacterData | undefined } = $props();
+    let activeTab: string = $state('stats');
+    let sortedEncounters: any = $state([]);
+    let raidBossesKilledThisWeek: WeeklyBosses[] | undefined = $state();
+    let raidPerformance: RaidPerformance | undefined = $state();
+    let raidPerformanceDifficulty: "LFR" | "Flex" | "Normal" | "Heroic" | "Mythic" | "M+" | "Unknown" | undefined = $state();
+    let { character }: { character: Character | undefined } = $props();
     
     function msToTime(ms: number): string {
         const totalSeconds = Math.floor(ms / 1000);
@@ -35,14 +42,51 @@
     (acc, b) => ({ ...acc, [b.name]: b.journalIndex }),
     {}
   );
-let sortedEncounters: any = $state([]);
-onMount(() => {
+
+  async function setWeeklyBosses(name: string, realm: string, region: string) {
+        const res = await fetch(`${API_BASE_URL}/characters/weekly-bosses?name=${name}&realm=${realm}&region=${region}`);
+
+        if (!res.ok) {
+            toast.error('Couldn\'t get character weekly lockout.');
+            return;
+        }
+        raidBossesKilledThisWeek = await res.json();
+        return;
+    }
+
+      async function setRaidPerformance(name: string, realm: string, region: string, difficulty: number) {
+        raidPerformance = undefined;
+        const res = await fetch(`${API_BASE_URL}/characters/zone-rankings?name=${name}&realm=${realm}&region=${region}&difficulty=${difficulty}`);
+
+        if (!res.ok) {
+            toast.error('Couldn\'t get character raid performance.');
+            return;
+        }
+        raidPerformance = await res.json();
+        if (raidPerformance && raidPerformance.difficulty)  
+            raidPerformanceDifficulty = getRaidDifficultyString(raidPerformance.difficulty);
+        return;
+    }
+onMount(async () => {
     if (character) {
-      sortedEncounters = [...character.raidBossesKilledThisWeek].sort(
-        (a, b) => (bossIndex[a.boss] ?? 999) - (bossIndex[b.boss] ?? 999)
-      );
+        await setWeeklyBosses(character.characterData.name, character.characterData.realm, character.characterData.region);
+        await setRaidPerformance(character.characterData.name, character.characterData.realm, character.characterData.region, 0);
+        if (raidBossesKilledThisWeek)
+            sortedEncounters = [...raidBossesKilledThisWeek].sort(
+                (a, b) => (bossIndex[a.boss] ?? 999) - (bossIndex[b.boss] ?? 999)
+            );
     }
   });
+$effect(() => {
+  if (!character || !raidPerformanceDifficulty) return;
+
+  setRaidPerformance(
+    character.characterData.name,
+    character.characterData.realm,
+    character.characterData.region,
+    getRaidDifficultyId(raidPerformanceDifficulty)
+  );
+});
 </script>
 
 <style>
@@ -126,10 +170,10 @@ onMount(() => {
         <div class="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-blue-500/10 rounded-xl blur-xl"></div>
         <div class="relative">
             <h1 class="text-4xl font-bold mb-2" style="color: {character.classColor}">
-                {character.raiderIOCharacterData.name || 'Character'}
+                {character.characterData.name || 'Character'}
             </h1>
             <p class="text-xl font-semibold" style="color: {character.classColor};">
-                {character.raiderIOCharacterData.active_spec_name} {character.raiderIOCharacterData.char_class}
+                {character.characterData.active_spec_name} {character.characterData.char_class}
             </p>
         </div>
     </div>
@@ -183,19 +227,19 @@ onMount(() => {
                         <h3 class="text-lg font-semibold">Item Level</h3>
                     </div>
                     <p class="text-3xl font-bold text-yellow-400">
-                        {character.raiderIOCharacterData.gear.item_level_equipped}
+                        {character.characterData.gear.item_level_equipped}
                     </p>
                     <div class="mt-2 h-1 bg-gray-600 rounded-full overflow-hidden">
                         <div class="h-full bg-gradient-to-r from-yellow-400 to-orange-500 progress-bar" 
-                             style="width: {Math.min((character.raiderIOCharacterData.gear.item_level_equipped / 500) * 100, 100)}%"></div>
+                             style="width: {Math.min((character.characterData.gear.item_level_equipped / 500) * 100, 100)}%"></div>
                     </div>
                 </div>
 
                 <div class="staggered-item bg-gradient-to-br from-gray-800 to-gray-700 p-6 rounded-xl border border-gray-600 hover-lift" style="{stagger(1)}">
                     <div class="flex items-center gap-3 mb-3">
                         <span class="text-2xl">🏆</span>
-                        <h3 class="text-lg font-semibold">Top Parse</h3>
-                        {#if character.raidPerformance && character.raidPerformance.bestPerformanceAverage == null}
+                        <h3 class="text-lg font-semibold">Average Parse</h3>
+                        {#if raidPerformance && raidPerformance.bestPerformanceAverage == null}
                         <div class="ml-auto">
                             <Tooltip.Provider>
                                     <Tooltip.Root>
@@ -212,9 +256,9 @@ onMount(() => {
                         </div>
                         {/if}
                     </div>
-                    <p class="text-3xl font-bold text-center" style="color: {character.raidPerformance?.bestPerformanceAverage ? getParseColor(character.raidPerformance.bestPerformanceAverage) : '#9d9d9d'}">
-                        {#if character.raidPerformance && character.raidPerformance.bestPerformanceAverage != null}
-                        {Math.ceil(character.raidPerformance.bestPerformanceAverage)} ({getRaidDifficulty(character.raidPerformance.difficulty)})
+                    <p class="text-3xl font-bold text-center" style="color: {raidPerformance?.bestPerformanceAverage ? getParseColor(raidPerformance.bestPerformanceAverage) : '#9d9d9d'}">
+                        {#if raidPerformance && raidPerformance.bestPerformanceAverage != null}
+                        {Math.ceil(raidPerformance.bestPerformanceAverage)} ({getRaidDifficultyString(raidPerformance.difficulty)})
                         {:else}
                         N/A
                         {/if}
@@ -226,8 +270,8 @@ onMount(() => {
                         <span class="text-2xl">⭐</span>
                         <h3 class="text-lg font-semibold">M+ Rating</h3>
                     </div>
-                    <p class="text-3xl font-bold text-center" style="color: {getScoreColor(character.raiderIOCharacterData.mythic_plus_scores_by_season?.[0]?.scores?.all)}">
-                        {character.raiderIOCharacterData.mythic_plus_scores_by_season?.[0]?.scores?.all || '0'}
+                    <p class="text-3xl font-bold text-center" style="color: {getScoreColor(character.characterData.mythic_plus_scores_by_season?.[0]?.scores?.all)}">
+                        {character.characterData.mythic_plus_scores_by_season?.[0]?.scores?.all || '0'}
                     </p>
                 </div>
             </div>
@@ -236,122 +280,139 @@ onMount(() => {
         <!-- Enhanced Raid Tab -->
         <Tabs.Content value="raid" class="tab-enter space-y-8">
             <!-- Raid Progress Section -->
-            <div class="bg-gradient-to-br from-gray-800 to-gray-700 p-8 rounded-xl border border-gray-600">
-                <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">
+            <div class="bg-[url('/raids-manaforge-omega.webp')] bg-right  rounded-xl border border-gray-600">
+                <div class="backdrop-blur-sm w-full rounded-xl p-8">
+                    <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">
                     <span class="text-3xl">🏰</span>
                     Manaforge: Omega Progress
-                </h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-12 gap-8">
-                    <!-- Normal Progress -->
-                    <div class="space-y-4 md:col-span-1 lg:col-span-2 xl:col-span-4">
-                        <div class="flex justify-between items-center">
-                            <span class="text-green-400 font-bold text-lg">Normal</span>
-                            <span class="text-xl font-semibold">
-                                {character.raiderIOCharacterData.raid_progression.manaforge_omega.normal_bosses_killed}/{character.raiderIOCharacterData.raid_progression.manaforge_omega.total_bosses}
-                            </span>
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-12 gap-8">
+                        <!-- Normal Progress -->
+                        <div class="space-y-4 md:col-span-1 lg:col-span-2 xl:col-span-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-green-400 font-bold text-lg">Normal</span>
+                                <span class="text-xl font-semibold">
+                                    {character.characterData.raid_progression.manaforge_omega.normal_bosses_killed}/{character.characterData.raid_progression.manaforge_omega.total_bosses}
+                                </span>
+                            </div>
+                            <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-green-500 to-green-400 progress-bar shadow-lg" 
+                                    style="width: {getProgressPercent(character.characterData.raid_progression.manaforge_omega.normal_bosses_killed, character.characterData.raid_progression.manaforge_omega.total_bosses)}%; box-shadow: 0 0 10px #10b981;"></div>
+                            </div>
                         </div>
-                        <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
-                            <div class="h-full bg-gradient-to-r from-green-500 to-green-400 progress-bar shadow-lg" 
-                                 style="width: {getProgressPercent(character.raiderIOCharacterData.raid_progression.manaforge_omega.normal_bosses_killed, character.raiderIOCharacterData.raid_progression.manaforge_omega.total_bosses)}%; box-shadow: 0 0 10px #10b981;"></div>
-                        </div>
-                    </div>
 
-                    <!-- Heroic Progress -->
-                    <div class="space-y-4 md:col-span-1 lg:col-span-2 xl:col-span-4">
-                        <div class="flex justify-between items-center">
-                            <span class="text-blue-400 font-bold text-lg">Heroic</span>
-                            <span class="text-xl font-semibold">
-                                {character.raiderIOCharacterData.raid_progression.manaforge_omega.heroic_bosses_killed}/{character.raiderIOCharacterData.raid_progression.manaforge_omega.total_bosses}
-                            </span>
+                        <!-- Heroic Progress -->
+                        <div class="space-y-4 md:col-span-1 lg:col-span-2 xl:col-span-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-blue-400 font-bold text-lg">Heroic</span>
+                                <span class="text-xl font-semibold">
+                                    {character.characterData.raid_progression.manaforge_omega.heroic_bosses_killed}/{character.characterData.raid_progression.manaforge_omega.total_bosses}
+                                </span>
+                            </div>
+                            <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-blue-500 to-blue-400 progress-bar shadow-lg" 
+                                    style="width: {getProgressPercent(character.characterData.raid_progression.manaforge_omega.heroic_bosses_killed, character.characterData.raid_progression.manaforge_omega.total_bosses)}%; box-shadow: 0 0 10px #3b82f6;"></div>
+                            </div>
                         </div>
-                        <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
-                            <div class="h-full bg-gradient-to-r from-blue-500 to-blue-400 progress-bar shadow-lg" 
-                                 style="width: {getProgressPercent(character.raiderIOCharacterData.raid_progression.manaforge_omega.heroic_bosses_killed, character.raiderIOCharacterData.raid_progression.manaforge_omega.total_bosses)}%; box-shadow: 0 0 10px #3b82f6;"></div>
-                        </div>
-                    </div>
 
-                    <!-- Mythic Progress -->
-                    <div class="space-y-4 md:col-span-1 lg:col-span-2 xl:col-span-4">
-                        <div class="flex justify-between items-center">
-                            <span class="text-purple-400 font-bold text-lg">Mythic</span>
-                            <span class="text-xl font-semibold">
-                                {character.raiderIOCharacterData.raid_progression.manaforge_omega.mythic_bosses_killed}/{character.raiderIOCharacterData.raid_progression.manaforge_omega.total_bosses}
-                            </span>
-                        </div>
-                        <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
-                            <div class="h-full bg-gradient-to-r from-purple-500 to-purple-400 progress-bar shadow-lg" 
-                                 style="width: {getProgressPercent(character.raiderIOCharacterData.raid_progression.manaforge_omega.mythic_bosses_killed, character.raiderIOCharacterData.raid_progression.manaforge_omega.total_bosses)}%; box-shadow: 0 0 10px #a855f7;"></div>
+                        <!-- Mythic Progress -->
+                        <div class="space-y-4 md:col-span-1 lg:col-span-2 xl:col-span-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-purple-400 font-bold text-lg">Mythic</span>
+                                <span class="text-xl font-semibold">
+                                    {character.characterData.raid_progression.manaforge_omega.mythic_bosses_killed}/{character.characterData.raid_progression.manaforge_omega.total_bosses}
+                                </span>
+                            </div>
+                            <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-purple-500 to-purple-400 progress-bar shadow-lg" 
+                                    style="width: {getProgressPercent(character.characterData.raid_progression.manaforge_omega.mythic_bosses_killed, character.characterData.raid_progression.manaforge_omega.total_bosses)}%; box-shadow: 0 0 10px #a855f7;"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
+                
             </div>
             
             <!-- This Week's Kills -->
-            {#if character.raidBossesKilledThisWeek.length !== 0}
-                <div class="bg-gradient-to-br from-gray-800 to-gray-700 p-6 rounded-xl border border-gray-600">
-                    <h3 class="text-2xl font-bold mb-4 flex items-center gap-3">
-                        <span class="text-2xl">🗡️</span>
-                        Bosses Killed This Week
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                       {#each sortedEncounters as encounter, i}
-                                <div class="staggered-item flex items-center gap-4 p-4 bg-gray-700/50 rounded-lg hover:bg-gray-600/50 transition-all duration-300" style="{stagger(i)}">
-                                    <img 
-                                        src={bossIcons[bosses.find(e => e.name === encounter.boss)?.id ?? 0]} 
-                                        alt="{encounter.boss} Image"
-                                        class="w-12 h-12 rounded-lg object-cover border-2 border-gray-500"
-                                    >
-
-                                    <div>
-                                        <p class="font-semibold text-lg">{encounter.boss}</p>
-                                        {#if encounter.difficulty == "Normal"}
-                                        <p class="text-sm opacity-75 text-[#38f531]">{encounter.difficulty}</p>
-                                        {:else if encounter.difficulty == "Heroic"}
-                                        <p class="text-sm opacity-75 text-[#4369e0]">{encounter.difficulty}</p>
-                                        {:else if encounter.difficulty == "Mythic"}
-                                        <p class="text-sm opacity-75 text-[#c342c7]">{encounter.difficulty}</p>
-                                        {/if}
-                                    </div>
-                                </div>
-                        {/each}
+{#if raidBossesKilledThisWeek && raidBossesKilledThisWeek.length !== 0}
+    <div class="bg-gradient-to-br from-gray-800 to-gray-700 p-6 rounded-xl border border-gray-600">
+        <h3 class="text-2xl font-bold mb-4 flex items-center gap-3">
+            <span class="text-2xl">🗡️</span>
+            Bosses Killed This Week
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+           {#each sortedEncounters as encounter, i}
+                <div class="staggered-item flex items-center gap-4 p-4 bg-gray-700/50 rounded-lg hover:bg-gray-600/50 transition-all duration-300" style="{stagger(i)}">
+                    <img 
+                        src={bossIcons[bosses.find(e => e.name === encounter.boss)?.id ?? 0]} 
+                        alt="{encounter.boss} Image"
+                        class="w-12 h-12 rounded-lg object-cover border-2 border-gray-500"
+                    >
+                    <div>
+                        <p class="font-semibold text-lg">{encounter.boss}</p>
+                        <p class="text-sm opacity-75" class:text-[#38f531]={encounter.difficulty === "Normal"}
+                                                        class:text-[#4369e0]={encounter.difficulty === "Heroic"}
+                                                        class:text-[#c342c7]={encounter.difficulty === "Mythic"}>
+                            {encounter.difficulty}
+                        </p>
                     </div>
                 </div>
-            {:else}
-                <div class="text-center py-12 bg-gray-800/50 rounded-xl border border-gray-700">
-                    <span class="text-6xl mb-4 block opacity-50">😴</span>
-                    <p class="text-xl text-gray-400">No raid progress this week!</p>
-                </div>
-            {/if}
+            {/each}
+        </div>
+    </div>
+{:else}
+    <div class="text-center py-12 bg-gray-800/50 rounded-xl border border-gray-700">
+        <span class="text-6xl mb-4 block opacity-50">😴</span>
+        <p class="text-xl text-gray-400">No boss kills this week!</p>
+    </div>
+{/if}
 
-            <!-- Performance Rankings -->
-            {#if character.raidPerformance && character.raidPerformance.bestPerformanceAverage != null}
-                <div class="bg-gradient-to-br from-gray-800 to-gray-700 p-6 rounded-xl border border-gray-600">
-                    <h3 class="text-2xl font-bold mb-4 flex items-center gap-3">
-                        <span class="text-2xl">📊</span>
-                        Rankings for {getRaidDifficulty(character.raidPerformance.difficulty)}
-                    </h3>
-                    <div class="space-y-3">
-                        {#each character.raidPerformance.rankings as ranking, i}
-                            {#if ranking.totalKills != 0}
-                                <div class="staggered-item flex items-center gap-4 p-4 bg-gray-700/50 rounded-lg hover:bg-gray-600/50 transition-all duration-300" style="{stagger(i)}">
-                                    <img src={bossIcons[ranking.encounter.id]} class="w-12 h-12 rounded-lg border-2 border-gray-500" alt={ranking.encounter.name} />
-                                    <div class="flex-1">
-                                        <p class="font-semibold text-lg">{ranking.encounter.name}</p>
-                                        <p class="text-sm opacity-75">{ranking.spec} {character.raiderIOCharacterData.char_class}</p>
-                                    </div>
-                                    <div class="text-right">
-                                        <span class="text-2xl font-bold px-3 py-1 rounded-lg bg-black/30" style="color: {getParseColor(ranking.medianPercent)};">
-                                            {Math.ceil(ranking.medianPercent)}
-                                        </span>
-                                        <p class="text-xs opacity-75 mt-1">{ranking.totalKills} {ranking.totalKills > 1 ? "kills" : "kill"}</p>
-                                    </div>
-                                </div>
-                            {/if}
-                        {/each}
-                    </div>
+<!-- Performance Rankings -->
+    <div class="bg-gradient-to-br from-gray-800 to-gray-700 p-6 rounded-xl border border-gray-600">
+        <h3 class="text-2xl font-bold mb-4 flex items-center gap-3">
+            <span class="text-2xl">📊</span>
+            Top Parses
+            <DropdownMenu.Root>
+                <DropdownMenu.Trigger class="bg-slate-900 hover:bg-slate-800 p-2 rounded-md">{raidPerformanceDifficulty}</DropdownMenu.Trigger>
+                <DropdownMenu.Content>
+                    <DropdownMenu.Group>
+                        <DropdownMenu.Item onclick={() => raidPerformanceDifficulty = "LFR"}>LFR</DropdownMenu.Item>
+                        <DropdownMenu.Item onclick={() => raidPerformanceDifficulty = "Normal"}>Normal</DropdownMenu.Item>
+                        <DropdownMenu.Item onclick={() => raidPerformanceDifficulty = "Heroic"}>Heroic</DropdownMenu.Item>
+                        <DropdownMenu.Item onclick={() => raidPerformanceDifficulty = "Mythic"}>Mythic</DropdownMenu.Item>
+                    </DropdownMenu.Group>
+                </DropdownMenu.Content>
+            </DropdownMenu.Root>
+        </h3>
+        {#if raidPerformance?.rankings && raidPerformance.rankings.length > 0}
+        <div class="space-y-3 grid grid-cols-2 gap-2">
+            {#if !raidPerformance.rankings.find(r => r.totalKills > 0)}
+                <div class="text-center py-12 bg-gray-800/50 rounded-xl border border-gray-700 col-span-2">
+                    <span class="text-6xl mb-4 block opacity-50">📊</span>
+                    <p class="text-xl text-gray-400">No parses for {raidPerformanceDifficulty}</p>
                 </div>
             {/if}
+            {#each raidPerformance.rankings as ranking, i}
+                {#if ranking.totalKills != 0}
+                    <div class="staggered-item flex items-center  gap-4 p-4 bg-gray-700/50 rounded-lg hover:bg-gray-600/50 transition-all duration-300 h-20" style="{stagger(i)}">
+                        <img src={bossIcons[ranking.encounter.id]} class="w-12 h-12 rounded-lg border-2 border-gray-500" alt={ranking.encounter.name} />
+                        <div class="flex-1">
+                            <p class="font-semibold text-lg">{ranking.encounter.name}</p>
+                            <p class="text-sm opacity-75">{ranking.spec} {character.characterData.char_class}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-2xl font-bold px-3 py-1 rounded-lg bg-black/30" style="color: {getParseColor(ranking.medianPercent)};">
+                                {Math.ceil(ranking.medianPercent)}
+                            </span>
+                            <p class="text-xs opacity-75 mt-1">{ranking.totalKills} {ranking.totalKills > 1 ? "kills" : "kill"}</p>
+                        </div>
+                    </div>
+                {/if}
+            {/each}
+        </div>
+        {/if}
+    </div>
         </Tabs.Content>
 
         <!-- Enhanced M+ Tab -->
@@ -365,23 +426,23 @@ onMount(() => {
                     <span>S3 Top Mythic+ Runs</span>
                     <span 
                         class="text-3xl font-bold ml-auto"
-                        style="color: {getScoreColor(character.raiderIOCharacterData.mythic_plus_scores_by_season?.[0]?.scores?.all)}"
+                        style="color: {getScoreColor(character.characterData.mythic_plus_scores_by_season?.[0]?.scores?.all)}"
                     >
-                    {#if character.raiderIOCharacterData.mythic_plus_scores_by_season?.[0]?.scores?.all}
-                        {character.raiderIOCharacterData.mythic_plus_scores_by_season?.[0]?.scores?.all} IO
+                    {#if character.characterData.mythic_plus_scores_by_season?.[0]?.scores?.all}
+                        {character.characterData.mythic_plus_scores_by_season?.[0]?.scores?.all} IO
                     {/if}
                     </span>
                 </h1>
 
                 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    {#if character.raiderIOCharacterData.mythic_plus_best_runs.length === 0}
+                    {#if character.characterData.mythic_plus_best_runs.length === 0}
                         <div class="lg:col-span-2 text-center py-16 bg-gray-800/50 rounded-xl border border-gray-700">
                             <span class="text-6xl mb-4 block opacity-50">⚡</span>
                             <p class="text-xl text-gray-400">No Mythic+ runs found.</p>
                         </div>
                     {:else}
-                        {#each character.raiderIOCharacterData.mythic_plus_best_runs as run, i}
+                        {#each character.characterData.mythic_plus_best_runs as run, i}
                         <a href={run.url} target="_blank">
                             <div 
                                 class="staggered-item mythic-card rounded-lg border border-gray-600 overflow-hidden"
