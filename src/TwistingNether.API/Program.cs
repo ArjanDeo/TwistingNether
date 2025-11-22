@@ -47,7 +47,7 @@ namespace TwistingNether.API
                 options.AddPolicy("ProdPolicy",
                     builder => builder
                     .AllowAnyMethod()
-                    .WithOrigins("https://twistingnether.furyshiftz.com")
+                    .AllowAnyOrigin()
                     .AllowAnyHeader());
             });
             builder.Services.AddOptions();
