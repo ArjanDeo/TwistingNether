@@ -56,11 +56,11 @@ namespace TwistingNether.API
             app.UseSwagger();
             app.UseSwaggerUI(options => options.DefaultModelsExpandDepth(-1));
 
-            var musicPath = Path.Combine(Directory.GetCurrentDirectory(), "static", "music");
+            var staticPath = Path.Combine(Directory.GetCurrentDirectory(), "static");
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(musicPath),
-                RequestPath = "/music"
+                FileProvider = new PhysicalFileProvider(staticPath),
+                RequestPath = "/static"
             });
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
