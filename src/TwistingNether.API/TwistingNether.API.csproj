@@ -21,4 +21,8 @@
     <ProjectReference Include="..\TwistingNether.DataAccess\TwistingNether.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="static\music\" />
+  </ItemGroup>
+
 </Project>

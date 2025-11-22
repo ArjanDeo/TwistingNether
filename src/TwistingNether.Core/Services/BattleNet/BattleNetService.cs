@@ -1,9 +1,11 @@
 ﻿using LazyCache;
 using Pathoschild.Http.Client;
+using HtmlAgilityPack;
 using TwistingNether.BattleNet.WoW.Character;
 using TwistingNether.DataAccess.BattleNet.OAuth;
 using TwistingNether.DataAccess.BattleNet.WoW.Character;
 using TwistingNether.DataAccess.BattleNet.WoW.Media;
+using TwistingNether.DataAccess.BattleNet.WoW.News;
 using TwistingNether.DataAccess.BattleNet.WoW.Token;
 using TwistingNether.DataAccess.Configuration;
 using TwistingNether.DataAccess.TwistingNether.Character;
@@ -150,6 +152,43 @@ namespace TwistingNether.Core.Services.BattleNet
                 .WithBearerAuthentication(AppConstants.BattleNetAccessToken.access_token)
                 .As<WowTokenModel>();
             }, TimeSpan.FromMinutes(20));
+        }
+
+        public async Task<List<WowNewsModel>> GetNews()
+        {
+            const string WowNewsUrl = "https://worldofwarcraft.com/en-us/news";
+
+            var web = new HtmlWeb();
+            var doc = web.Load(WowNewsUrl);
+            var featuredNewsGrid = doc.DocumentNode.SelectSingleNode(
+                "//div[contains(@class, 'Grid') and contains(@class, 'SyncHeight') and contains(@class, 'gutter-small') and contains(@class, 'gutter-all') and contains(@class, 'gutter-negative')]"
+            );
+
+            var newsItems = featuredNewsGrid.SelectNodes(
+                ".//div[contains(@class, 'ArticleTile') and contains(@class, 'ArticleTile--gutter')]"
+            ).Take(5).ToList();
+
+            List<WowNewsModel> newsPosts = [];
+            for (int i = 0; i < newsItems.Count; i++)
+            {
+                string backgroundURL = newsItems[i]
+                    .SelectSingleNode(".//div[contains(@class, 'Tile-bg')]")
+                    .GetAttributeValue("style", "")
+                    .Split("//")[1]
+                    .Split("&")[0];
+                string title = newsItems[i].SelectSingleNode(".//div[contains(@class, 'ArticleTile-title')]").InnerText;
+                string subtitle = newsItems[i].SelectSingleNode(".//div[contains(@class, 'ArticleTile-subtitle')]").InnerText;
+                string link = newsItems[i].SelectSingleNode(".//a[contains(@class, 'ArticleTile-link')]").GetAttributeValue("href", "No Link Found");
+                newsPosts.Add(new WowNewsModel
+                {
+                    Image = backgroundURL,
+                    Title = title,
+                    Subtitle = subtitle,
+                    Link = link
+                });
+            }
+
+            return newsPosts;
         }
     }
 }

@@ -20,6 +20,16 @@ namespace TwistingNether.API.Controllers
         {
             return Ok(await _battleNetService.GetTokenPriceAsync());
         }
+        // GET /api/general/wow-news
+        [HttpGet("wow-news")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Produces("application/json")]
+        public async Task<IActionResult> GetWowNews()
+        {
+            return Ok(await _battleNetService.GetNews());
+        }
 
     }
 }

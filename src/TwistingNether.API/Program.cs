@@ -1,5 +1,7 @@
 using LazyCache;
+using Microsoft.Extensions.FileProviders;
 using Pathoschild.Http.Client;
+using System.Reflection;
 using TwistingNether.Core.Services;
 using TwistingNether.Core.Services.BattleNet;
 using TwistingNether.Core.Services.Character;
@@ -40,13 +42,11 @@ namespace TwistingNether.API
                 options.AddPolicy("DevPolicy",
                     builder => builder
                         .AllowAnyMethod()
-                        .AllowCredentials()
-                        .WithOrigins("http://127.0.0.1", "http://localhost:5173", "http://localhost")
+                        .AllowAnyOrigin()
                         .AllowAnyHeader());
                 options.AddPolicy("ProdPolicy",
                     builder => builder
                     .AllowAnyMethod()
-                    .AllowCredentials()
                     .WithOrigins("https://twistingnether.furyshiftz.com")
                     .AllowAnyHeader());
             });
@@ -56,6 +56,12 @@ namespace TwistingNether.API
             app.UseSwagger();
             app.UseSwaggerUI(options => options.DefaultModelsExpandDepth(-1));
 
+            var musicPath = Path.Combine(Directory.GetCurrentDirectory(), "static", "music");
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(musicPath),
+                RequestPath = "/music"
+            });
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
