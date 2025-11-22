@@ -154,7 +154,7 @@ namespace TwistingNether.Core.Services.BattleNet
             }, TimeSpan.FromMinutes(20));
         }
 
-        public async Task<List<WowNewsModel>> GetNews()
+        public async Task<List<WowNewsModel>> GetWowNews()
         {
             const string WowNewsUrl = "https://worldofwarcraft.com/en-us/news";
 
@@ -171,7 +171,7 @@ namespace TwistingNether.Core.Services.BattleNet
             List<WowNewsModel> newsPosts = [];
             for (int i = 0; i < newsItems.Count; i++)
             {
-                string backgroundURL = newsItems[i]
+                string backgroundURL = "https://" + newsItems[i]
                     .SelectSingleNode(".//div[contains(@class, 'Tile-bg')]")
                     .GetAttributeValue("style", "")
                     .Split("//")[1]
@@ -184,6 +184,39 @@ namespace TwistingNether.Core.Services.BattleNet
                     Image = backgroundURL,
                     Title = title,
                     Subtitle = subtitle,
+                    Link = link
+                });
+            }
+
+            return newsPosts;
+        }
+        public async Task<List<OverwatchNewsModel>> GetOverwatchNews()
+        {
+            const string OverwatchNewsUrl = "https://overwatch.blizzard.com/en-us/news";
+
+            var web = new HtmlWeb();
+            var doc = web.Load(OverwatchNewsUrl);
+            var featuredNewsGrid = doc.DocumentNode.SelectSingleNode(
+                "//div[contains(@class, 'news-header')]"
+            );
+
+            var newsItems = featuredNewsGrid.SelectNodes(
+                ".//a[contains(@slot, 'gallery-items')]"
+            ); // OW News only has 4 compared to WoW's 5
+
+            List<OverwatchNewsModel> newsPosts = [];
+            for (int i = 0; i < newsItems.Count; i++)
+            {
+                string backgroundURL = newsItems[i]
+                    .SelectSingleNode(".//blz-image[contains(@slot, 'media')]")
+                    .GetAttributeValue("src", "");
+
+                string title = newsItems[i].SelectSingleNode(".//h3[contains(@slot, 'heading')]").InnerText;
+                string link = OverwatchNewsUrl + newsItems[i].GetAttributeValue("href", "No Link Found").Substring(5);
+                newsPosts.Add(new OverwatchNewsModel
+                {
+                    Image = backgroundURL,
+                    Title = title,
                     Link = link
                 });
             }

@@ -13,6 +13,7 @@ namespace TwistingNether.Core.Services.BattleNet
         Task<WowTokenModel> GetTokenPriceAsync();
         Task<string> GetItemMediaAsync(string id);
         // Returns top 5 posts
-        Task<List<WowNewsModel>> GetNews();
+        Task<List<WowNewsModel>> GetWowNews();
+        Task<List<OverwatchNewsModel>> GetOverwatchNews();
     }
 }

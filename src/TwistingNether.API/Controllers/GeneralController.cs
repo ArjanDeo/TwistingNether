@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TwistingNether.Core.Services.BattleNet;
+using TwistingNether.DataAccess.BattleNet.WoW.News;
 
 namespace TwistingNether.API.Controllers
 {
@@ -22,14 +23,20 @@ namespace TwistingNether.API.Controllers
         }
         // GET /api/general/wow-news
         [HttpGet("wow-news")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<WowNewsModel>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Produces("application/json")]
         public async Task<IActionResult> GetWowNews()
-        {
-            return Ok(await _battleNetService.GetNews());
-        }
+            => Ok(await _battleNetService.GetWowNews());
 
+        // GET /api/general/overwatch-news
+        [HttpGet("overwatch-news")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<OverwatchNewsModel>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Produces("application/json")]
+        public async Task<IActionResult> GetOverwatchNews()
+            => Ok(await _battleNetService.GetOverwatchNews());
     }
 }
