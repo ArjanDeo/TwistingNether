@@ -2,7 +2,6 @@
 using Pathoschild.Http.Client;
 using TwistingNether.Core.Services.BattleNet;
 using TwistingNether.Core.Services.WarcraftLogs;
-using TwistingNether.DataAccess.BattleNet.WoW.Character;
 using TwistingNether.DataAccess.RaiderIO;
 using TwistingNether.DataAccess.TwistingNether.Character;
 using TwistingNether.DataAccess.TwistingNether.Raid;
@@ -165,6 +164,5 @@ namespace TwistingNether.Core.Services.Character
             }, TimeSpan.FromHours(6));
             
         }
-
     }
 }

@@ -85,7 +85,6 @@ namespace TwistingNether.API
             // Middleman required for Tauri deep linking to work with Battle.net OAuth
             app.MapGet("/old-bnet-tauri-callback", async (HttpRequest req) =>
             {
-               // var query = req.QueryString.HasValue ? req.QueryString.Value : "";
               
                 string code = req.Query.FirstOrDefault(c => c.Key == "code").Value;
                 if (code == null)

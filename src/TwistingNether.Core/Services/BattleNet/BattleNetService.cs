@@ -178,13 +178,13 @@ namespace TwistingNether.Core.Services.BattleNet
                     .Split("&")[0];
                 string title = newsItems[i].SelectSingleNode(".//div[contains(@class, 'ArticleTile-title')]").InnerText;
                 string subtitle = newsItems[i].SelectSingleNode(".//div[contains(@class, 'ArticleTile-subtitle')]").InnerText;
-                string link = newsItems[i].SelectSingleNode(".//a[contains(@class, 'ArticleTile-link')]").GetAttributeValue("href", "No Link Found");
+                HtmlNode? link = newsItems[i].SelectSingleNode(".//a[contains(@class, 'ArticleTile-link')]");
                 newsPosts.Add(new WowNewsModel
                 {
                     Image = backgroundURL,
                     Title = title,
                     Subtitle = subtitle,
-                    Link = link
+                    Link = link != null ? link.GetAttributeValue("href", "No Link Found") : "No Link Found"
                 });
             }
 
