@@ -256,7 +256,7 @@ $effect(() => {
                         </div>
                         {/if}
                     </div>
-                    <p class="text-3xl font-bold text-center" style="color: {raidPerformance?.bestPerformanceAverage ? getParseColor(raidPerformance.bestPerformanceAverage) : '#9d9d9d'}">
+                    <p class="text-3xl font-bold text-center" style="color: {raidPerformance?.bestPerformanceAverage ? getParseColor(Math.ceil(raidPerformance.bestPerformanceAverage)) : '#9d9d9d'}">
                         {#if raidPerformance && raidPerformance.bestPerformanceAverage != null}
                         {Math.ceil(raidPerformance.bestPerformanceAverage)} ({getRaidDifficultyString(raidPerformance.difficulty)})
                         {:else}

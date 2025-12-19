@@ -984,3 +984,9 @@ export type EquippedGear = {
     mainhand: EquippedItem | undefined
     offhand: EquippedItem | undefined
 }
+export type CharacterCache = {
+  name: string
+  realm: string
+  region: string
+  class: keyof typeof ClassColors
+}

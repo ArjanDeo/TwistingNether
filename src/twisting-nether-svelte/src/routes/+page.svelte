@@ -1,11 +1,12 @@
 <script lang="ts">
-	import type { Character } from "$lib/types";
+	import type { Character, CharacterCache } from "$lib/types";
 	import { onMount } from "svelte";
 	import CharacterForm from "./components/character-form.svelte";
 	import type { PageServerData } from "./$types";
 	import { toast } from "svelte-sonner";
+    import { ClassColors } from "$lib/types";
 
-	let recentCharacters: Array<Character> = $state([]);
+	let recentCharacters: Array<CharacterCache> = $state([]);
 	let { data }: {data: PageServerData} = $props();
 
 	onMount(async () => {
@@ -33,63 +34,58 @@
 	<div class="bg-primary-foreground p-4 rounded-md max-h-44">
 		<CharacterForm {data} />
 	</div>
-	<!-- <div class="w-xs mx-auto">
+    {#if recentCharacters.length > 0}
+	<div class="w-xs mx-auto">
         <div class="bg-gradient-to-br from-slate-900/90 to-slate-800/90 p-6 rounded-xl backdrop-blur-sm border border-purple-500/30 shadow-2xl">
             <div class="flex items-center justify-between mb-6">
-                <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
+                <h1 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
                     Recent Searches
                 </h1>
             </div>
-            
             <ul class="flex flex-col gap-y-3">
-                <li class="character-item border-purple-500/50 bg-slate-900/40 border-2 p-4 rounded-lg hover:border-purple-400 cursor-pointer glow-border group">
+                <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+                {#each recentCharacters as char (char.name + char.realm)}
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <li
+                    class="character-item border-2 p-3 rounded-lg cursor-pointer group"
+                    style="border-color: {ClassColors[char.class]}80; background-color: #02061766"
+                    onclick={() =>
+                    window.location.href =
+                        `/character/${char.region}/${char.realm}/${char.name}`
+                    }
+                >
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="w-2 h-2 rounded-full bg-purple-500"></div>
-                            <span class="text-purple-200 font-semibold group-hover:text-purple-100">
-                                Furyshiftz
-                            </span>
-                        </div>
-                        <span class="text-slate-400 text-sm">
-                            US - Tichondrius
+                    <div class="flex items-center gap-3">
+                        <div
+                        class="w-2 h-2 rounded-full"
+                        style="background-color: {ClassColors[char.class]}"
+                        ></div>
+                        <span
+                        class="font-semibold group-hover:opacity-90"
+                        style="color: {ClassColors[char.class]}"
+                        >
+                        {char.name}
                         </span>
                     </div>
-                </li>
-                
-                <li class="character-item border-cyan-500/50 bg-slate-900/40 border-2 p-4 rounded-lg hover:border-cyan-400 cursor-pointer glow-border-cyan group">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="w-2 h-2 rounded-full bg-cyan-500"></div>
-                            <span class="text-cyan-200 font-semibold group-hover:text-cyan-100">
-                                Imonthegcd
-                            </span>
-                        </div>
-                        <span class="text-slate-400 text-sm">
-                            US - Illidan
-                        </span>
+                    <span class="text-slate-400 text-sm">
+                        {char.region.toUpperCase()} – {char.realm}
+                    </span>
                     </div>
                 </li>
-                
-                <li class="character-item border-pink-500/50 bg-slate-900/40 border-2 p-4 rounded-lg hover:border-pink-400 cursor-pointer glow-border-pink group">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="w-2 h-2 rounded-full bg-pink-500"></div>
-                            <span class="text-pink-200 font-semibold group-hover:text-pink-100">
-                                Ellesmere
-                            </span>
-                        </div>
-                        <span class="text-slate-400 text-sm">
-                            EU - Mal'Ganis
-                        </span>
-                    </div>
-                </li>
+                {/each}
             </ul>
-            
             <div class="mt-6 pt-4 border-t border-slate-700/50">
-                <button class="w-full py-2 px-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-purple-500/50">
+                <button
+                    class="w-full py-2 px-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold rounded-lg transition-all"
+                    onclick={() => {
+                        recentCharacters = [];
+                        localStorage.removeItem('recentCharacters');
+                    }}
+                    >
                     Clear History
                 </button>
             </div>
         </div>
-    </div> -->
+    </div>
+    {/if}
 </div>

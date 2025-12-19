@@ -12,7 +12,6 @@ export const load = (async ({ fetch, params }) => {
         }
         return res.json() as Promise<Character>;
     })();
-
     return {
         // SvelteKit will treat this as deferred data
         character: characterPromise
