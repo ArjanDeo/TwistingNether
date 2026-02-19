@@ -31,8 +31,6 @@ declare module '$env/static/private' {
 	export const ACSvcPort: string;
 	export const ALLUSERSPROFILE: string;
 	export const APPDATA: string;
-	export const APPLICATIONINSIGHTS_CONFIGURATION_CONTENT: string;
-	export const APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL: string;
 	export const BOOST_ROOT: string;
 	export const ChocolateyInstall: string;
 	export const ChocolateyLastPathUpdate: string;
@@ -95,14 +93,13 @@ declare module '$env/static/private' {
 	export const VSCODE_CODE_CACHE_PATH: string;
 	export const VSCODE_CRASH_REPORTER_PROCESS_TYPE: string;
 	export const VSCODE_CWD: string;
-	export const VSCODE_DOTNET_INSTALL_TOOL_ORIGINAL_HOME: string;
 	export const VSCODE_ESM_ENTRYPOINT: string;
 	export const VSCODE_HANDLES_UNCAUGHT_ERRORS: string;
 	export const VSCODE_IPC_HOOK: string;
-	export const VSCODE_L10N_BUNDLE_LOCATION: string;
 	export const VSCODE_NLS_CONFIG: string;
 	export const VSCODE_PID: string;
 	export const windir: string;
+	export const __COMPAT_LAYER: string;
 }
 
 /**
@@ -137,8 +134,6 @@ declare module '$env/dynamic/private' {
 		ACSvcPort: string;
 		ALLUSERSPROFILE: string;
 		APPDATA: string;
-		APPLICATIONINSIGHTS_CONFIGURATION_CONTENT: string;
-		APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL: string;
 		BOOST_ROOT: string;
 		ChocolateyInstall: string;
 		ChocolateyLastPathUpdate: string;
@@ -201,14 +196,13 @@ declare module '$env/dynamic/private' {
 		VSCODE_CODE_CACHE_PATH: string;
 		VSCODE_CRASH_REPORTER_PROCESS_TYPE: string;
 		VSCODE_CWD: string;
-		VSCODE_DOTNET_INSTALL_TOOL_ORIGINAL_HOME: string;
 		VSCODE_ESM_ENTRYPOINT: string;
 		VSCODE_HANDLES_UNCAUGHT_ERRORS: string;
 		VSCODE_IPC_HOOK: string;
-		VSCODE_L10N_BUNDLE_LOCATION: string;
 		VSCODE_NLS_CONFIG: string;
 		VSCODE_PID: string;
 		windir: string;
+		__COMPAT_LAYER: string;
 		[key: `PUBLIC_${string}`]: undefined;
 		[key: `${string}`]: string | undefined;
 	}
