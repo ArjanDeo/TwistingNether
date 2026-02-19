@@ -4,6 +4,11 @@
 
     let { data }: { data: PageData } = $props();
 </script>
+<svelte:head>
+    <title>
+        About | Twisting Nether
+    </title>
+</svelte:head>
 <div class="h-full rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-0 border w-fit p-2 ">
     <p class="text-4xl">The Twisting Nether</p>
     <p class="mt-2">A work in progress website to provide information about WoW characters.</p>

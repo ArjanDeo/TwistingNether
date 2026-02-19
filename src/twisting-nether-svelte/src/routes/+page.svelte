@@ -16,7 +16,11 @@
 		}
 	});
 </script>
-
+<svelte:head>
+    <title>
+        Home | Twisting Nether
+    </title>
+</svelte:head>
 <section class="bg-primary-foreground p-6 rounded-xl text-center border border-yellow-500 shadow-lg max-w-md mx-auto">
 	<div class="mx-auto">
 <h2 class="text-2xl font-bold text-yellow-400">WoW Token Price</h2>
