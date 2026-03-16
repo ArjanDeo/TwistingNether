@@ -502,12 +502,13 @@ export interface Corruption17 {
 }
 
 export interface RaidProgression {
-  nerubarpalace: Nerubarpalace
-  liberationofundermine: Liberationofundermine
-  manaforge_omega: ManaforgeOmega
+  tierMn1: Raid
+  // nerubarpalace: Nerubarpalace
+  // liberationofundermine: Liberationofundermine
+  // manaforge_omega: ManaforgeOmega
 }
 
-export interface Nerubarpalace {
+export interface Raid {
   summary: string
   total_bosses: number
   normal_bosses_killed: number
@@ -515,21 +516,29 @@ export interface Nerubarpalace {
   mythic_bosses_killed: number
 }
 
-export interface Liberationofundermine {
-  summary: string
-  total_bosses: number
-  normal_bosses_killed: number
-  heroic_bosses_killed: number
-  mythic_bosses_killed: number
-}
+// export interface Nerubarpalace {
+//   summary: string
+//   total_bosses: number
+//   normal_bosses_killed: number
+//   heroic_bosses_killed: number
+//   mythic_bosses_killed: number
+// }
 
-export interface ManaforgeOmega {
-  summary: string
-  total_bosses: number
-  normal_bosses_killed: number
-  heroic_bosses_killed: number
-  mythic_bosses_killed: number
-}
+// export interface Liberationofundermine {
+//   summary: string
+//   total_bosses: number
+//   normal_bosses_killed: number
+//   heroic_bosses_killed: number
+//   mythic_bosses_killed: number
+// }
+
+// export interface ManaforgeOmega {
+//   summary: string
+//   total_bosses: number
+//   normal_bosses_killed: number
+//   heroic_bosses_killed: number
+//   mythic_bosses_killed: number
+// }
 
 export interface Guild {
   name: string

@@ -1,4 +1,5 @@
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-unused-vars */
 	import { dev } from "$app/environment";
 	import { API_BASE_URL } from "$lib/common";
 	import Button from "$lib/components/ui/button/button.svelte";
@@ -57,7 +58,7 @@ onMount(async () => {
 const hasEpicMilestone = [
 head, neck, shoulders, back, chest, wrists, hands, waist, legs, feet, 
 ring1, ring2, trinket1, trinket2, mainhand, offhand
-].every(item => item && item.item_quality >= ItemQuality.Epic);
+].every(item => item && item.item_quality >= 4 /*ItemQuality.Epic*/);
     let affixList: Affix[] = $state([]);
     let mythicRunAmount = $state('3');    
     async function updateCharacter() {

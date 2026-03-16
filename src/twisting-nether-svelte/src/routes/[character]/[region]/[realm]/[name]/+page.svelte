@@ -1,4 +1,5 @@
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-unused-vars */
   import type { PageData } from './$types';
   import CharacterPane from './components/characterPane/CharacterPane.svelte';
   import CharacterInfoSection from './components/characterInfoSection/CharacterInfoSection.svelte';

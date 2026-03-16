@@ -230,7 +230,7 @@ namespace TwistingNether.DataAccess.RaiderIO
         public List<Affix> affixes { get; set; }
         public string url { get; set; }
     }
-    public class NerubarPalace
+    public class Raid
     {
         public string summary { get; set; }
         public int total_bosses { get; set; }
@@ -238,22 +238,30 @@ namespace TwistingNether.DataAccess.RaiderIO
         public int heroic_bosses_killed { get; set; }
         public int mythic_bosses_killed { get; set; }
     }
-    public class LiberationOfUndermine
-    {
-        public string summary { get; set; }
-        public int total_bosses { get; set; }
-        public int normal_bosses_killed { get; set; }
-        public int heroic_bosses_killed { get; set; }
-        public int mythic_bosses_killed { get; set; }
-    }
-    public class ManaforgeOmega
-    {
-        public string summary { get; set; }
-        public int total_bosses { get; set; }
-        public int normal_bosses_killed { get; set; }
-        public int heroic_bosses_killed { get; set; }
-        public int mythic_bosses_killed { get; set; }
-    }
+    //public class NerubarPalace
+    //{
+    //    public string summary { get; set; }
+    //    public int total_bosses { get; set; }
+    //    public int normal_bosses_killed { get; set; }
+    //    public int heroic_bosses_killed { get; set; }
+    //    public int mythic_bosses_killed { get; set; }
+    //}
+    //public class LiberationOfUndermine
+    //{
+    //    public string summary { get; set; }
+    //    public int total_bosses { get; set; }
+    //    public int normal_bosses_killed { get; set; }
+    //    public int heroic_bosses_killed { get; set; }
+    //    public int mythic_bosses_killed { get; set; }
+    //}
+    //public class ManaforgeOmega
+    //{
+    //    public string summary { get; set; }
+    //    public int total_bosses { get; set; }
+    //    public int normal_bosses_killed { get; set; }
+    //    public int heroic_bosses_killed { get; set; }
+    //    public int mythic_bosses_killed { get; set; }
+    //}
     public class RaidAchievementCurve
     {
         public string raid { get; set; }
@@ -293,15 +301,20 @@ namespace TwistingNether.DataAccess.RaiderIO
 
     public class RaidProgression
     {
-        [JsonProperty("nerubar-palace")]
-        public NerubarPalace nerubarpalace { get; set; }
-        [JsonProperty("liberation-of-undermine")]
-        public LiberationOfUndermine liberationofundermine { get; set; }
-        [JsonProperty("manaforge-omega")]
-        public ManaforgeOmega manaforge_omega { get; set; }        
+        [JsonProperty("tier-mn-1")]
+        public Raid tierMn1 { get; set; }
+
+        //  [JsonProperty("nerubar-palace")]
+        //  public NerubarPalace nerubarpalace { get; set; }
+        //  [JsonProperty("liberation-of-undermine")]
+        //  public LiberationOfUndermine liberationofundermine { get; set; }
+        //  [JsonProperty("manaforge-omega")]
+        //  public ManaforgeOmega manaforge_omega { get; set; }
 
         //  [JsonProperty("amirdrassil-the-dreams-hope")]
         //  public AmirdrassilTheDreamsHope amirdrassilthedreamshope { get; set; }
+        //  [JsonProperty("aberrus-the-shadowed-crucible")]
+        //  public AberrusTheShadowedCrucible aberrustheshadowedcrucible { get; set; }
         //  [JsonProperty("vault-of-the-incarnates")]
         //  public VaultOfTheIncarnates vaultoftheincarnates { get; set; }
 

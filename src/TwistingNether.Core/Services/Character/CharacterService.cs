@@ -29,7 +29,7 @@ namespace TwistingNether.Core.Services.Character
                                  .WithArgument("region", character.Region)
                                  .WithArgument("name", character.Name)
                                  .WithArgument("realm", character.Realm)
-                                 .WithArgument("fields", "raid_progression,mythic_plus_weekly_highest_level_runs,mythic_plus_scores_by_season:current,guild,gear,mythic_plus_highest_level_runs,mythic_plus_best_runs,raid_achievement_curve:manaforge-omega");
+                                 .WithArgument("fields", "raid_progression,mythic_plus_weekly_highest_level_runs,mythic_plus_scores_by_season:current,guild,gear,mythic_plus_highest_level_runs,mythic_plus_best_runs,raid_achievement_curve:tier-mn-1" /* unsure if 'tier-mn-1' will change name, but should refer to the Voidspire raid*/);
                 var raiderIOCharacterDataTask = raiderIOCharacterDataResponse.As<RaiderIOCharacterDataModel>();
                 var characterMediaListTask = _battleNetService.GetCharacterMediaAsync(character);
                 var characterEquipmentTask = _battleNetService.GetCharacterEquipmentAsync(character);

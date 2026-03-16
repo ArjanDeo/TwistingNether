@@ -21,23 +21,25 @@
         Home | Twisting Nether
     </title>
 </svelte:head>
-<section class="bg-primary-foreground p-6 rounded-xl text-center border border-yellow-500 shadow-lg max-w-md mx-auto">
-	<div class="mx-auto">
-<h2 class="text-2xl font-bold text-yellow-400">WoW Token Price</h2>
-  <p class="text-lg text-secondary-foreground mt-3 flex flex-row ">
-	<img src="/money-gold.webp" alt="gold icon" class="h-fit my-auto mr-1 "/>
-	{#if data.token != null}
-    {(data.token.price / 10000).toLocaleString()} Gold
-	{:else}
-	WoW token info not available.
-	{/if}
-  </p>
-	</div>
-</section>
 <div class="w-fit mx-auto my-4 flex flex-row gap-x-2">
-	<div class="bg-primary-foreground p-4 rounded-md max-h-44">
-		<CharacterForm {data} />
-	</div>
+<div class="flex flex-col gap-y-2">
+    <div class="bg-primary-foreground p-4 rounded-md max-h-46">
+            <h1 class="mx-auto font-semibold text-green-600 text-xl">Character Lookup</h1>
+            <CharacterForm {data} />
+        </div>
+    <div class="bg-primary-foreground p-4 rounded-xl border border-yellow-500 shadow-lg w-full mx-auto">
+        <h2 class="text-2xl font-bold text-yellow-400">WoW Token Price</h2>
+            <p class="text-lg text-secondary-foreground mt-3 flex flex-row ">
+                <img src="/money-gold.webp" alt="gold icon" class="h-fit my-auto mr-1 "/>
+                {#if data.token != null}
+                {(data.token.price / 10000).toLocaleString()} Gold
+                {:else}
+                WoW token info not available.
+                {/if}
+            </p>
+    </div>
+</div>
+	
     {#if recentCharacters.length > 0}
 	<div class="w-xs mx-auto">
         <div class="bg-gradient-to-br from-slate-900/90 to-slate-800/90 p-6 rounded-xl backdrop-blur-sm border border-purple-500/30 shadow-2xl">

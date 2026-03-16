@@ -1,4 +1,5 @@
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-unused-vars */
     import { bosses, getScoreColor, type CharacterData } from "$lib/types";
     import * as Tooltip from '$lib/components/ui/tooltip';
     import { CircleQuestionMark } from '@lucide/svelte'
@@ -12,12 +13,13 @@
     import * as DropdownMenu from "$lib/components/ui/dropdown-menu"
 
     let activeTab: string = $state('stats');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let sortedEncounters: any = $state([]);
     let raidBossesKilledThisWeek: WeeklyBosses[] | undefined = $state();
     let raidPerformance: RaidPerformance | undefined = $state();
     let raidPerformanceDifficulty: "LFR" | "Flex" | "Normal" | "Heroic" | "Mythic" | "M+" | "Unknown" | undefined = $state();
     let { character }: { character: Character | undefined } = $props();
-    
+    let mfoIds: Array<number> = [3122, 3129, 3130, 3131, 3132, 3133, 3134, 3135]; // To hide Manaforge: Omega parses during Midnight S1 Preseason.
     function msToTime(ms: number): string {
         const totalSeconds = Math.floor(ms / 1000);
         const minutes = Math.floor(totalSeconds / 60);
@@ -162,6 +164,18 @@ $effect(() => {
         position: relative;
         z-index: 2;
     }
+    .raid-prog-bg {
+        height: 100%;
+        width: 100%;
+
+        background:
+            linear-gradient(to right, transparent 30%, rgba(0,0,0,0.4) 50%, transparent 70%),
+            url("/raids-voidspire.webp") left center / 33% 100% no-repeat,
+            url("/raids-dreamrift.webp") center center / 34% 100% no-repeat,
+            url("/raids-march.webp") right center / 33% 100% no-repeat;
+
+        background-color: #000;
+    }
 </style>
 {#if character}
 <div class="w-4xl h-fit mx-auto p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white rounded-2xl shadow-2xl border border-gray-700">
@@ -239,7 +253,7 @@ $effect(() => {
                     <div class="flex items-center gap-3 mb-3">
                         <span class="text-2xl">🏆</span>
                         <h3 class="text-lg font-semibold">Average Parse</h3>
-                        {#if raidPerformance && raidPerformance.bestPerformanceAverage == null}
+                        {#if raidPerformance && raidPerformance.bestPerformanceAverage == null || raidPerformance && raidPerformance.zone === 44}
                         <div class="ml-auto">
                             <Tooltip.Provider>
                                     <Tooltip.Root>
@@ -256,8 +270,8 @@ $effect(() => {
                         </div>
                         {/if}
                     </div>
-                    <p class="text-3xl font-bold text-center" style="color: {raidPerformance?.bestPerformanceAverage ? getParseColor(Math.ceil(raidPerformance.bestPerformanceAverage)) : '#9d9d9d'}">
-                        {#if raidPerformance && raidPerformance.bestPerformanceAverage != null}
+                    <p class="text-3xl font-bold text-center" style="color: {raidPerformance?.bestPerformanceAverage && raidPerformance.zone !== 44 ? getParseColor(Math.ceil(raidPerformance.bestPerformanceAverage)) : '#9d9d9d'}">
+                        {#if raidPerformance && raidPerformance.bestPerformanceAverage != null && raidPerformance.zone !== 44}
                         {Math.ceil(raidPerformance.bestPerformanceAverage)} ({getRaidDifficultyString(raidPerformance.difficulty)})
                         {:else}
                         N/A
@@ -280,11 +294,11 @@ $effect(() => {
         <!-- Enhanced Raid Tab -->
         <Tabs.Content value="raid" class="tab-enter space-y-8">
             <!-- Raid Progress Section -->
-            <div class="bg-[url('/raids-manaforge-omega.webp')] bg-right  rounded-xl border border-gray-600">
-                <div class="backdrop-blur-sm w-full rounded-xl p-8">
+            <div class="raid-prog-bg bg-right  rounded-xl border border-gray-600">
+                <div class="backdrop-blur-xs w-full rounded-xl p-8">
                     <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">
                     <span class="text-3xl">🏰</span>
-                    Manaforge: Omega Progress
+                    Voidspire, Dreamrift & March on Quel'Danas Progress
                     </h2>
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-12 gap-8">
@@ -293,12 +307,12 @@ $effect(() => {
                             <div class="flex justify-between items-center">
                                 <span class="text-green-400 font-bold text-lg">Normal</span>
                                 <span class="text-xl font-semibold">
-                                    {character.characterData.raid_progression.manaforge_omega.normal_bosses_killed}/{character.characterData.raid_progression.manaforge_omega.total_bosses}
+                                    {character.characterData.raid_progression.tierMn1.normal_bosses_killed}/{character.characterData.raid_progression.tierMn1.total_bosses}
                                 </span>
                             </div>
                             <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
                                 <div class="h-full bg-gradient-to-r from-green-500 to-green-400 progress-bar shadow-lg" 
-                                    style="width: {getProgressPercent(character.characterData.raid_progression.manaforge_omega.normal_bosses_killed, character.characterData.raid_progression.manaforge_omega.total_bosses)}%; box-shadow: 0 0 10px #10b981;"></div>
+                                    style="width: {getProgressPercent(character.characterData.raid_progression.tierMn1.normal_bosses_killed, character.characterData.raid_progression.tierMn1.total_bosses)}%; box-shadow: 0 0 10px #10b981;"></div>
                             </div>
                         </div>
 
@@ -307,12 +321,12 @@ $effect(() => {
                             <div class="flex justify-between items-center">
                                 <span class="text-blue-400 font-bold text-lg">Heroic</span>
                                 <span class="text-xl font-semibold">
-                                    {character.characterData.raid_progression.manaforge_omega.heroic_bosses_killed}/{character.characterData.raid_progression.manaforge_omega.total_bosses}
+                                    {character.characterData.raid_progression.tierMn1.heroic_bosses_killed}/{character.characterData.raid_progression.tierMn1.total_bosses}
                                 </span>
                             </div>
                             <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
                                 <div class="h-full bg-gradient-to-r from-blue-500 to-blue-400 progress-bar shadow-lg" 
-                                    style="width: {getProgressPercent(character.characterData.raid_progression.manaforge_omega.heroic_bosses_killed, character.characterData.raid_progression.manaforge_omega.total_bosses)}%; box-shadow: 0 0 10px #3b82f6;"></div>
+                                    style="width: {getProgressPercent(character.characterData.raid_progression.tierMn1.heroic_bosses_killed, character.characterData.raid_progression.tierMn1.total_bosses)}%; box-shadow: 0 0 10px #3b82f6;"></div>
                             </div>
                         </div>
 
@@ -321,12 +335,12 @@ $effect(() => {
                             <div class="flex justify-between items-center">
                                 <span class="text-purple-400 font-bold text-lg">Mythic</span>
                                 <span class="text-xl font-semibold">
-                                    {character.characterData.raid_progression.manaforge_omega.mythic_bosses_killed}/{character.characterData.raid_progression.manaforge_omega.total_bosses}
+                                    {character.characterData.raid_progression.tierMn1.mythic_bosses_killed}/{character.characterData.raid_progression.tierMn1.total_bosses}
                                 </span>
                             </div>
                             <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
                                 <div class="h-full bg-gradient-to-r from-purple-500 to-purple-400 progress-bar shadow-lg" 
-                                    style="width: {getProgressPercent(character.characterData.raid_progression.manaforge_omega.mythic_bosses_killed, character.characterData.raid_progression.manaforge_omega.total_bosses)}%; box-shadow: 0 0 10px #a855f7;"></div>
+                                    style="width: {getProgressPercent(character.characterData.raid_progression.tierMn1.mythic_bosses_killed, character.characterData.raid_progression.tierMn1.total_bosses)}%; box-shadow: 0 0 10px #a855f7;"></div>
                             </div>
                         </div>
                     </div>
@@ -394,7 +408,7 @@ $effect(() => {
                 </div>
             {/if}
             {#each raidPerformance.rankings as ranking, i}
-                {#if ranking.totalKills != 0}
+                {#if ranking.totalKills != 0 && !mfoIds.find((id) => id !== ranking.encounter.id) }
                     <div class="staggered-item flex items-center  gap-4 p-4 bg-gray-700/50 rounded-lg hover:bg-gray-600/50 transition-all duration-300 h-20" style="{stagger(i)}">
                         <img src={bossIcons[ranking.encounter.id]} class="w-12 h-12 rounded-lg border-2 border-gray-500" alt={ranking.encounter.name} />
                         <div class="flex-1">
@@ -423,7 +437,7 @@ $effect(() => {
                 style="color: {character.classColor};"
                 >
                     <span class="text-3xl">⚡</span>
-                    <span>S3 Top Mythic+ Runs</span>
+                    <span>S1 Top Mythic+ Runs</span>
                     <span 
                         class="text-3xl font-bold ml-auto"
                         style="color: {getScoreColor(character.characterData.mythic_plus_scores_by_season?.[0]?.scores?.all)}"

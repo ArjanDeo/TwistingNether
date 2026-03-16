@@ -1,4 +1,5 @@
 <script lang="ts">
+    /* eslint-disable @typescript-eslint/no-unused-vars */
     import { raceColors, type EquippedGear, type GearPiece } from '$lib/types';
     import { type Character, type CharacterMedia, type EquippedItem } from '$lib/types/character'
     import { classIcons, raceIcons } from '$lib/metadata';
@@ -228,7 +229,8 @@
                     aria-label="raider.io link" 
                     href="https://raider.io/characters/{character.characterData.region}/{character.characterData.realm}/{character.characterData.name}" 
                     target="_blank"
-                    class="external-link p-3"
+                    class="transition-all duration-300 ease-in-out rounded-full border-2 border-transparent bg-[rgba(30,41,59,0.8)] hover:-translate-y-0.5 hover:scale-110 hover:border-[rgba(59,130,246,0.5)] hover:bg-[rgba(59,130,246,0.1)] hover:shadow-[0_8px_25px_rgba(59,130,246,0.3)] p-3"
+                    style=""
                 >
                     <img src="/raiderioicon.webp" class="w-8 h-8" alt="raider io logo">
                 </a>
