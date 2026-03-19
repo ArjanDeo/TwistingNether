@@ -6,10 +6,10 @@
         public string spec { get; set; }
         public double points { get; set; }
         public int possiblePoints { get; set; }
-        public int rank { get; set; }
-        public int regionRank { get; set; }
-        public int serverRank { get; set; }
-        public double rankPercent { get; set; }
+        public string rank { get; set; }
+        public string regionRank { get; set; }
+        public string serverRank { get; set; }
+        public string rankPercent { get; set; }
         public int total { get; set; }
     }
 

@@ -74,14 +74,15 @@ namespace TwistingNether.Core.Services.Character
 
             List<string> validRaidBosses =
             [
-            "Plexus Sentinel",
-            "Loom'ithar",
-            "Soulbinder Naazindhri",
-            "Forgeweaver Araz",
-            "The Soul Hunters",
-            "Fractillus",
-            "Nexus-King Salhadaar",
-            "Dimensius"
+            "Chimaerus",
+            "Imperator Averzian",
+            "Vorasius",
+            "Fallen-King Salhadaar",
+            "Vaelgor & Ezzorak",
+            "Lightblinded Vanguard",
+            "Crown of the Cosmos",
+            "Belo'ren, Child of Al'ar",
+            "Midnight Falls",
             ];
 
             var raidData = await _battleNetService.GetCharacterRaidsAsync(character);

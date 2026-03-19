@@ -19,7 +19,6 @@
     let raidPerformance: RaidPerformance | undefined = $state();
     let raidPerformanceDifficulty: "LFR" | "Flex" | "Normal" | "Heroic" | "Mythic" | "M+" | "Unknown" | undefined = $state();
     let { character }: { character: Character | undefined } = $props();
-    let mfoIds: Array<number> = [3122, 3129, 3130, 3131, 3132, 3133, 3134, 3135]; // To hide Manaforge: Omega parses during Midnight S1 Preseason.
     function msToTime(ms: number): string {
         const totalSeconds = Math.floor(ms / 1000);
         const minutes = Math.floor(totalSeconds / 60);
@@ -408,7 +407,7 @@ $effect(() => {
                 </div>
             {/if}
             {#each raidPerformance.rankings as ranking, i}
-                {#if ranking.totalKills != 0 && !mfoIds.find((id) => id !== ranking.encounter.id) }
+                {#if ranking.totalKills != 0}
                     <div class="staggered-item flex items-center  gap-4 p-4 bg-gray-700/50 rounded-lg hover:bg-gray-600/50 transition-all duration-300 h-20" style="{stagger(i)}">
                         <img src={bossIcons[ranking.encounter.id]} class="w-12 h-12 rounded-lg border-2 border-gray-500" alt={ranking.encounter.name} />
                         <div class="flex-1">
@@ -417,7 +416,7 @@ $effect(() => {
                         </div>
                         <div class="text-right">
                             <span class="text-2xl font-bold px-3 py-1 rounded-lg bg-black/30" style="color: {getParseColor(ranking.medianPercent)};">
-                                {Math.ceil(ranking.medianPercent)}
+                                {Math.floor(ranking.medianPercent)}
                             </span>
                             <p class="text-xs opacity-75 mt-1">{ranking.totalKills} {ranking.totalKills > 1 ? "kills" : "kill"}</p>
                         </div>

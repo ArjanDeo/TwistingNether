@@ -814,14 +814,20 @@ export type GearPiece = {
 }
 
 export const bosses: Encounter[] = [
-  { id: 3129, journalIndex: 1, slug: "plexus-sentinel", name: "Plexus Sentinel" },
-  { id: 3131, journalIndex: 2, slug: "loomithar", name: "Loom'ithar" },
-  { id: 3130, journalIndex: 3,slug: "soulbinder-naazindhri", name: "Soulbinder Naazindhri" },
-  { id: 3132, journalIndex: 4,slug: "forgeweaver-araz", name: "Forgeweaver Araz" },
-  { id: 3122, journalIndex: 5,slug: "the-soul-hunters", name: "The Soul Hunters" },
-  { id: 3133, journalIndex: 6,slug: "fractillus", name: "Fractillus" },
-  { id: 3134, journalIndex: 7,slug: "nexus-king-salhadaar", name: "Nexus-King Salhadaar" },
-  { id: 3135, journalIndex: 8,slug: "dimensius", name: "Dimensius" }
+  // The Voidspire
+  { id: 3176, journalIndex: 1, slug: "imperator-averzian",    name: "Imperator Averzian" },
+  { id: 3177, journalIndex: 2, slug: "vorasius",              name: "Vorasius" },
+  { id: 3178, journalIndex: 3, slug: "fallen-king-salhadaar", name: "Fallen-King Salhadaar" },
+  { id: 3179, journalIndex: 4, slug: "vaelgor-and-ezzorak",   name: "Vaelgor and Ezzorak" },
+  { id: 3180, journalIndex: 5, slug: "lightblinded-vanguard", name: "Lightblinded Vanguard" },
+  { id: 3181, journalIndex: 6, slug: "crown-of-the-cosmos",   name: "Crown of the Cosmos" },
+
+  // The Dreamrift
+  { id: 3306, journalIndex: 7, slug: "chimaerus",             name: "Chimaerus, the Undreamt God" },
+
+  // March on Quel'Danas
+  { id: 3182, journalIndex: 8, slug: "beloren",               name: "Belo'ren, Child of Al'ar" },
+  { id: 3183, journalIndex: 9, slug: "midnight-falls",        name: "Midnight Falls" },
 ];
 
 

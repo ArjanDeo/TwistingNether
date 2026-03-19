@@ -81,14 +81,24 @@ import tier1Icon from '$lib/icons/quality/tier1.webp';
 import tier2Icon from '$lib/icons/quality/tier2.webp';
 import tier3Icon from '$lib/icons/quality/tier3.webp';
 
-import plexusSentinel from '$lib/icons/bosses/3129.webp'
-import forgeweaverAraz from '$lib/icons/bosses/3132.webp'
-import soulbinderNaazdhrini from '$lib/icons/bosses/3130.webp'
-import loomithar from '$lib/icons/bosses/3131.webp'
-import soulHunters from '$lib/icons/bosses/3122.webp'
-import fractillus from '$lib/icons/bosses/3133.webp'
-import nexusKingSalhadaar from '$lib/icons/bosses/3134.webp'
-import dimensius from '$lib/icons/bosses/3135.webp'
+// import plexusSentinel from '$lib/icons/bosses/3129.webp'
+// import forgeweaverAraz from '$lib/icons/bosses/3132.webp'
+// import soulbinderNaazdhrini from '$lib/icons/bosses/3130.webp'
+// import loomithar from '$lib/icons/bosses/3131.webp'
+// import soulHunters from '$lib/icons/bosses/3122.webp'
+// import fractillus from '$lib/icons/bosses/3133.webp'
+// import nexusKingSalhadaar from '$lib/icons/bosses/3134.webp'
+// import dimensius from '$lib/icons/bosses/3135.webp'
+
+import chimaerus from '$lib/icons/bosses/3306.webp'
+import imperatorAverzian from '$lib/icons/bosses/3176.webp'
+import vorasius from '$lib/icons/bosses/3177.webp'
+import vaelgorAndEzzorak from '$lib/icons/bosses/3178.webp'
+import fallenKingSalhadaar from '$lib/icons/bosses/3179.webp'
+import lightblindedVanguard from '$lib/icons/bosses/3180.webp'
+import crownOfTheCosmos from '$lib/icons/bosses/3181.webp'
+import beloren from '$lib/icons/bosses/3182.webp'
+import midnightFalls from '$lib/icons/bosses/3183.webp'
 
 export const raceIcons: Record<string, string> = {
   'bloodelf-male': bloodelfMale,
@@ -176,12 +186,13 @@ export const qualityIcons: Record<string, string> = {
   'Tier 3': tier3Icon
 }
 export const bossIcons: Record<number, string> = {
-  3129: plexusSentinel,
-  3132: forgeweaverAraz,
-  3130: soulbinderNaazdhrini,
-  3131: loomithar,
-  3122: soulHunters,
-  3133: fractillus,
-  3134: nexusKingSalhadaar,
-  3135: dimensius,
+  3306: chimaerus,
+  3176: imperatorAverzian,
+  3177: vorasius,
+  3178: vaelgorAndEzzorak,
+  3179: fallenKingSalhadaar,
+  3180: lightblindedVanguard,
+  3181: crownOfTheCosmos,
+  3182: beloren,
+  3183: midnightFalls,
 }
