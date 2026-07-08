@@ -55,7 +55,26 @@ namespace TwistingNether.API.Controllers
                 return NotFound($"Character couldn't be found.");
             }
         }
-
+        // GET /api/characters/media?name=thrall&realm=area-52&region=us
+        [HttpGet("stats")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetCharacterStatistics([FromQuery] CharacterRequestModel character)
+        {
+            try
+            {
+                return Ok(await _characterService.GetCharacterStatisticsAsync(character));
+            }
+            catch (ApiException ex)
+            {
+                return BadRequest($"Failed to get character stats: {await ex.Response.AsString()}");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound($"Character couldn't be found.");
+            }
+        }
         // GET /api/characters/media?name=thrall&realm=area-52&region=us
         [HttpGet("weekly-bosses")]
         [Produces("application/json")]

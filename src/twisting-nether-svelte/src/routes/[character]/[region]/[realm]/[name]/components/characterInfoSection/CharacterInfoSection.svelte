@@ -8,6 +8,7 @@
     import { API_BASE_URL, getParseColor, getRaidDifficultyId, getRaidDifficultyString } from "$lib/common";
 	import { onMount } from "svelte";
 	import type { Character, WeeklyBosses } from "$lib/types/character";
+    import type {CharacterStats} from "$lib/types"
 	import { toast } from "svelte-sonner";
 	import type { RaidPerformance } from "$lib/types/warcraftLogs";
     import * as DropdownMenu from "$lib/components/ui/dropdown-menu"
@@ -16,6 +17,7 @@
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let sortedEncounters: any = $state([]);
     let raidBossesKilledThisWeek: WeeklyBosses[] | undefined = $state();
+    let stats: CharacterStats | undefined = $state()
     let raidPerformance: RaidPerformance | undefined = $state();
     let raidPerformanceDifficulty: "LFR" | "Flex" | "Normal" | "Heroic" | "Mythic" | "M+" | "Unknown" | undefined = $state();
     let { character }: { character: Character | undefined } = $props();
@@ -55,7 +57,7 @@
         return;
     }
 
-      async function setRaidPerformance(name: string, realm: string, region: string, difficulty: number) {
+    async function setRaidPerformance(name: string, realm: string, region: string, difficulty: number) {
         raidPerformance = undefined;
         const res = await fetch(`${API_BASE_URL}/characters/zone-rankings?name=${name}&realm=${realm}&region=${region}&difficulty=${difficulty}`);
 
@@ -68,10 +70,22 @@
             raidPerformanceDifficulty = getRaidDifficultyString(raidPerformance.difficulty);
         return;
     }
+
+    async function setStats(name: string, realm: string, region: string) {
+        const res = await fetch(`${API_BASE_URL}/characters/stats?name=${name}&realm=${realm}&region=${region}`);
+
+        if (!res.ok) {
+            toast.error('Couldn\'t get character stats.');
+            return;
+        }
+        stats = await res.json();
+        return;
+    }
 onMount(async () => {
     if (character) {
         await setWeeklyBosses(character.characterData.name, character.characterData.realm, character.characterData.region);
         await setRaidPerformance(character.characterData.name, character.characterData.realm, character.characterData.region, 0);
+        await setStats(character.characterData.name, character.characterData.realm, character.characterData.region);
         if (raidBossesKilledThisWeek)
             sortedEncounters = [...raidBossesKilledThisWeek].sort(
                 (a, b) => (bossIndex[a.boss] ?? 999) - (bossIndex[b.boss] ?? 999)
@@ -175,9 +189,19 @@ $effect(() => {
 
         background-color: #000;
     }
+    .raid-prog-bg-sporefall {
+        height: 100%;
+        width: 100%;
+
+        background:
+            linear-gradient(to right, transparent 30%, rgba(0,0,0,0.4) 50%, transparent 70%),
+            url("/raids-sporefall.webp") right center / 100% 100% no-repeat;
+
+        background-color: #000;
+    }
 </style>
 {#if character}
-<div class="w-4xl h-fit mx-auto p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white rounded-2xl shadow-2xl border border-gray-700">
+<div class="w-[950px] h-fit mx-auto p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white rounded-2xl shadow-2xl border border-gray-700">
     <!-- Enhanced Header -->
     <div class="text-center mb-8 relative">
         <div class="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-blue-500/10 rounded-xl blur-xl"></div>
@@ -288,16 +312,28 @@ $effect(() => {
                     </p>
                 </div>
             </div>
+            <div class="mt-5">
+                <div class="staggered-item bg-gradient-to-br from-gray-800 to-gray-700 p-6 rounded-xl border border-gray-600 hover-lift" style="{stagger(2)}">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="text-2xl">⭐</span>
+                        <h3 class="text-lg font-semibold">Stats</h3>
+                    </div>
+                    <p class="text-3xl font-bold text-center" style="color:">
+                        Agility: {stats?.agility.effective}
+                    </p>
+                </div>
+            </div>
         </Tabs.Content>
 
         <!-- Enhanced Raid Tab -->
         <Tabs.Content value="raid" class="tab-enter space-y-8">
             <!-- Raid Progress Section -->
-            <div class="raid-prog-bg bg-right  rounded-xl border border-gray-600">
+            <div class="flex flex-row gap-x-4">
+            <div class="raid-prog-bg bg-right max-w-1/2 max-h-[176px] rounded-xl border border-gray-600">
                 <div class="backdrop-blur-xs w-full rounded-xl p-8">
-                    <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">
-                    <span class="text-3xl">🏰</span>
-                    Voidspire, Dreamrift & March on Quel'Danas Progress
+                    <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                    <span class="text-2xl">🏰</span>
+                    Midnight: Season 1 Raids
                     </h2>
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-12 gap-8">
@@ -346,7 +382,59 @@ $effect(() => {
                 </div>
                 
             </div>
-            
+                <div class="raid-prog-bg-sporefall bg-right max-w-1/2 max-h-2/3  rounded-xl border border-gray-600">
+                    <div class="backdrop-blur-xs w-full rounded-xl p-8">
+                        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                        <span class="text-2xl">🏰</span>
+                        Sporefall
+                        </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-12 gap-8">
+                        <!-- Normal Progress -->
+                        <div class="space-y-4 md:col-span-1 lg:col-span-2 xl:col-span-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-green-400 font-bold text-lg">Normal</span>
+                                <span class="text-xl font-semibold">
+                                    {character.characterData.raid_progression.sporefall.normal_bosses_killed}/{character.characterData.raid_progression.sporefall.total_bosses}
+                                </span>
+                            </div>
+                            <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-green-500 to-green-400 progress-bar shadow-lg" 
+                                    style="width: {getProgressPercent(character.characterData.raid_progression.sporefall.normal_bosses_killed, character.characterData.raid_progression.sporefall.total_bosses)}%; box-shadow: 0 0 10px #10b981;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Heroic Progress -->
+                        <div class="space-y-4 md:col-span-1 lg:col-span-2 xl:col-span-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-blue-400 font-bold text-lg">Heroic</span>
+                                <span class="text-xl font-semibold">
+                                    {character.characterData.raid_progression.sporefall.heroic_bosses_killed}/{character.characterData.raid_progression.sporefall.total_bosses}
+                                </span>
+                            </div>
+                            <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-blue-500 to-blue-400 progress-bar shadow-lg" 
+                                    style="width: {getProgressPercent(character.characterData.raid_progression.sporefall.heroic_bosses_killed, character.characterData.raid_progression.sporefall.total_bosses)}%; box-shadow: 0 0 10px #3b82f6;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Mythic Progress -->
+                        <div class="space-y-4 md:col-span-1 lg:col-span-2 xl:col-span-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-purple-400 font-bold text-lg">Mythic</span>
+                                <span class="text-xl font-semibold">
+                                    {character.characterData.raid_progression.sporefall.mythic_bosses_killed}/{character.characterData.raid_progression.sporefall.total_bosses}
+                                </span>
+                            </div>
+                            <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-purple-500 to-purple-400 progress-bar shadow-lg" 
+                                    style="width: {getProgressPercent(character.characterData.raid_progression.sporefall.mythic_bosses_killed, character.characterData.raid_progression.sporefall.total_bosses)}%; box-shadow: 0 0 10px #a855f7;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
             <!-- This Week's Kills -->
 {#if raidBossesKilledThisWeek && raidBossesKilledThisWeek.length !== 0}
     <div class="bg-gradient-to-br from-gray-800 to-gray-700 p-6 rounded-xl border border-gray-600">
@@ -412,7 +500,7 @@ $effect(() => {
                         <img src={bossIcons[ranking.encounter.id]} class="w-12 h-12 rounded-lg border-2 border-gray-500" alt={ranking.encounter.name} />
                         <div class="flex-1">
                             <p class="font-semibold text-lg">{ranking.encounter.name}</p>
-                            <p class="text-sm opacity-75">{ranking.spec} {character.characterData.char_class}</p>
+                            <p class="text-sm opacity-75" style="color: {character.classColor}">{ranking.spec} {character.characterData.char_class}</p>
                         </div>
                         <div class="text-right">
                             <span class="text-2xl font-bold px-3 py-1 rounded-lg bg-black/30" style="color: {getParseColor(ranking.medianPercent)};">

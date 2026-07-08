@@ -2,6 +2,8 @@
 using Pathoschild.Http.Client;
 using TwistingNether.Core.Services.BattleNet;
 using TwistingNether.Core.Services.WarcraftLogs;
+using TwistingNether.DataAccess.BattleNet.WoW.Character;
+using TwistingNether.DataAccess.Configuration;
 using TwistingNether.DataAccess.RaiderIO;
 using TwistingNether.DataAccess.TwistingNether.Character;
 using TwistingNether.DataAccess.TwistingNether.Raid;
@@ -165,5 +167,26 @@ namespace TwistingNether.Core.Services.Character
             }, TimeSpan.FromHours(6));
             
         }
+        public async Task<WoWCharacterStatisticsModel> GetCharacterStatisticsAsync(CharacterRequestModel character)
+        {
+            return await _cache.GetOrAddAsync($"characterStatistics-{character.Region}-{character.Realm}-{character.Name}", async () =>
+            {
+                Dictionary<string, string> arguments = new()
+                {
+                    { "namespace", $"profile-{character.Region}" },
+                    {":region", character.Region  },
+                    { "locale", "en_US" }
+                };
+               
+                    WoWCharacterStatisticsModel stats = await _client
+               .GetAsync($"https://{character.Region}.api.blizzard.com/profile/wow/character/{character.Realm.ToLower()}/{character.Name.ToLower()}/statistics")
+               .WithArguments(arguments)
+               .WithBearerAuthentication(AppConstants.BattleNetAccessToken.access_token)
+               .As<WoWCharacterStatisticsModel>();
+                    return stats;
+               
+            }, TimeSpan.FromHours(6));
+        }
+
     }
 }

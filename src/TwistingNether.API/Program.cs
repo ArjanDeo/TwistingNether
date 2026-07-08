@@ -1,9 +1,7 @@
 using LazyCache;
 using Microsoft.Extensions.FileProviders;
 using Pathoschild.Http.Client;
-using System.Reflection;
 using System.Web;
-using TwistingNether.Core.Services;
 using TwistingNether.Core.Services.BattleNet;
 using TwistingNether.Core.Services.Character;
 using TwistingNether.Core.Services.WarcraftLogs;

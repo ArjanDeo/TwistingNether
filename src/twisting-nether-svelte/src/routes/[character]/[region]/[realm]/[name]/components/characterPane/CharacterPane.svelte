@@ -157,7 +157,7 @@
     }
 </style>
 {#if character}
-<div class="character-container rounded-2xl p-8 shadow-2xl">
+<div class="character-container rounded-2xl p-8 shadow-2xl self-start">
     <!-- Enhanced Header -->
     <header class="header-glow rounded-xl p-6 mb-8">
         <div class="text-center mb-6">

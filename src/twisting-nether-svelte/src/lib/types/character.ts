@@ -503,6 +503,8 @@ export interface Corruption17 {
 
 export interface RaidProgression {
   tierMn1: Raid
+  sporefall: Raid
+  theVenomousAbyss: Raid
   // nerubarpalace: Nerubarpalace
   // liberationofundermine: Liberationofundermine
   // manaforge_omega: ManaforgeOmega

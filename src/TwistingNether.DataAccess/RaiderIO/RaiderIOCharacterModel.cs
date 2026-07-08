@@ -304,6 +304,11 @@ namespace TwistingNether.DataAccess.RaiderIO
         [JsonProperty("tier-mn-1")]
         public Raid tierMn1 { get; set; }
 
+        [JsonProperty("sporefall")]
+        public Raid sporefall { get; set; }
+        [JsonProperty("the-venomous-abyss")]
+        public Raid theVenomousAbyss { get; set; }
+
         //  [JsonProperty("nerubar-palace")]
         //  public NerubarPalace nerubarpalace { get; set; }
         //  [JsonProperty("liberation-of-undermine")]
