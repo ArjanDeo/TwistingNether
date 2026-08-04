@@ -7,7 +7,7 @@ A full-stack web application for looking up World of Warcraft character profiles
 ![Status](https://img.shields.io/badge/status-in%20development-yellow)
 ![Frontend](https://img.shields.io/badge/frontend-SvelteKit-FF3E00?logo=svelte&logoColor=white)
 ![Backend](https://img.shields.io/badge/backend-.NET-512BD4?logo=dotnet&logoColor=white)
-![CI](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white)
+[![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Deployments-2088FF?logo=githubactions&logoColor=white)](https://github.com/ArjanDeo/TwistingNether/deployments)
 
 <!-- Optional: replace with an actual screenshot once you have one, e.g. -->
 <!-- ![App screenshot](docs/screenshot.png) -->
