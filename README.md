@@ -67,7 +67,11 @@ Separating these keeps the domain logic testable and decoupled from both the web
 - A [Blizzard developer application](https://develop.battle.net/) (client ID/secret) for Battle.net API access
 
 ### Backend
-
+Create an appsettings.json in the API project folder root, with sections dedicated to each KVP accessed in Program.cs through app.Configuration.GetSection[].
+List of current credentials needed to be added in appsettings:
+- WarcraftLogs: ClientID + ClientSecret
+- Battle.Net API Client: ClientID + ClientSecret
+- (If using in conjunction with [old-bnet-tauri](https://github.com/ArjanDeo/old-bnet-tauri)) old-bnet-tauri Battle.Net API Client: ClientID + ClientSecret
 ```bash
 cd src
 dotnet restore src.sln
