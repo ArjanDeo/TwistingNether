@@ -72,22 +72,60 @@
         border: 1px solid rgba(59, 130, 246, 0.2);
     }
 
+    .gear-layout {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: start;
+        justify-items: center;
+        gap: 2rem;
+        min-width: 0;
+    }
+
+    .gear-column,
+    .gear-row {
+        display: flex;
+        width: fit-content;
+        align-items: flex-start;
+        justify-content: flex-start;
+        min-width: 0;
+    }
+
     .gear-column {
+        flex-direction: column;
         align-items: flex-start;
     }
 
     .gear-row {
+        flex-direction: row;
         align-items: flex-start;
+        justify-content: center;
     }
 
     .gear-item {
         display: inline-flex;
         width: fit-content;
+        flex: 0 0 auto;
         flex-shrink: 0;
         align-self: flex-start;
         opacity: 0;
         animation: slideInFade 0.6s ease-out forwards;
         transition: transform 0.3s ease, filter 0.3s ease;
+    }
+
+    @media (max-width: 767px) {
+        .gear-layout {
+            grid-template-columns: 1fr;
+            justify-items: center;
+        }
+
+        .gear-column,
+        .gear-row {
+            width: auto;
+        }
+
+        .gear-column {
+            align-items: center;
+        }
     }
 
     .gear-item:hover {
@@ -267,7 +305,7 @@
     </header>
 
     <!-- Enhanced Gear Layout -->
-    <div class="flex items-start justify-center flex-wrap lg:flex-nowrap gap-8">
+    <div class="gear-layout">
         <!-- Left Gear Column -->
         <div class="gear-column flex flex-col gap-3 order-2 lg:order-1">
             {#if equippedGear}
@@ -417,9 +455,9 @@
     </header>
 
     <!-- Enhanced Gear Layout -->
-    <div class="flex items-start justify-center flex-wrap lg:flex-nowrap gap-8">
+    <div class="gear-layout">
         <!-- Left Gear Column -->
-        <div class="flex flex-col gap-3 order-2 lg:order-1">
+        <div class="gear-column flex flex-col gap-3 order-2 lg:order-1">
                 {#each {length: 8} as _, i}
                     <div class="gear-item" style="{staggerDelay(i)}">
                         <div class="w-12 h-12 animate-pulse bg-gray-500 rounded-md"></div>

@@ -189,13 +189,13 @@ $effect(() => {
 
         background-color: #000;
     }
-    .raid-prog-bg-sporefall {
+    .raid-prog-bg-theTideboundGrotto {
         height: 100%;
         width: 100%;
 
         background:
             linear-gradient(to right, transparent 30%, rgba(0,0,0,0.4) 50%, transparent 70%),
-            url("/raids-sporefall.webp") right center / 100% 100% no-repeat;
+            url("/raids-theTideboundGrotto.webp") right center / 100% 100% no-repeat;
 
         background-color: #000;
     }
@@ -342,12 +342,12 @@ $effect(() => {
                             <div class="flex justify-between items-center">
                                 <span class="text-green-400 font-bold text-lg">Normal</span>
                                 <span class="text-xl font-semibold">
-                                    {character.characterData.raid_progression.tierMn1.normal_bosses_killed}/{character.characterData.raid_progression.tierMn1.total_bosses}
+                                    {character.characterData.raid_progression.theVenomousAbyss.normal_bosses_killed}/{character.characterData.raid_progression.theVenomousAbyss.total_bosses}
                                 </span>
                             </div>
                             <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
                                 <div class="h-full bg-gradient-to-r from-green-500 to-green-400 progress-bar shadow-lg" 
-                                    style="width: {getProgressPercent(character.characterData.raid_progression.tierMn1.normal_bosses_killed, character.characterData.raid_progression.tierMn1.total_bosses)}%; box-shadow: 0 0 10px #10b981;"></div>
+                                    style="width: {getProgressPercent(character.characterData.raid_progression.theVenomousAbyss.normal_bosses_killed, character.characterData.raid_progression.theVenomousAbyss.total_bosses)}%; box-shadow: 0 0 10px #10b981;"></div>
                             </div>
                         </div>
 
@@ -356,12 +356,12 @@ $effect(() => {
                             <div class="flex justify-between items-center">
                                 <span class="text-blue-400 font-bold text-lg">Heroic</span>
                                 <span class="text-xl font-semibold">
-                                    {character.characterData.raid_progression.tierMn1.heroic_bosses_killed}/{character.characterData.raid_progression.tierMn1.total_bosses}
+                                    {character.characterData.raid_progression.theVenomousAbyss.heroic_bosses_killed}/{character.characterData.raid_progression.theVenomousAbyss.total_bosses}
                                 </span>
                             </div>
                             <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
                                 <div class="h-full bg-gradient-to-r from-blue-500 to-blue-400 progress-bar shadow-lg" 
-                                    style="width: {getProgressPercent(character.characterData.raid_progression.tierMn1.heroic_bosses_killed, character.characterData.raid_progression.tierMn1.total_bosses)}%; box-shadow: 0 0 10px #3b82f6;"></div>
+                                    style="width: {getProgressPercent(character.characterData.raid_progression.theVenomousAbyss.heroic_bosses_killed, character.characterData.raid_progression.theVenomousAbyss.total_bosses)}%; box-shadow: 0 0 10px #3b82f6;"></div>
                             </div>
                         </div>
 
@@ -370,23 +370,23 @@ $effect(() => {
                             <div class="flex justify-between items-center">
                                 <span class="text-purple-400 font-bold text-lg">Mythic</span>
                                 <span class="text-xl font-semibold">
-                                    {character.characterData.raid_progression.tierMn1.mythic_bosses_killed}/{character.characterData.raid_progression.tierMn1.total_bosses}
+                                    {character.characterData.raid_progression.theVenomousAbyss.mythic_bosses_killed}/{character.characterData.raid_progression.theVenomousAbyss.total_bosses}
                                 </span>
                             </div>
                             <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
                                 <div class="h-full bg-gradient-to-r from-purple-500 to-purple-400 progress-bar shadow-lg" 
-                                    style="width: {getProgressPercent(character.characterData.raid_progression.tierMn1.mythic_bosses_killed, character.characterData.raid_progression.tierMn1.total_bosses)}%; box-shadow: 0 0 10px #a855f7;"></div>
+                                    style="width: {getProgressPercent(character.characterData.raid_progression.theVenomousAbyss.mythic_bosses_killed, character.characterData.raid_progression.theVenomousAbyss.total_bosses)}%; box-shadow: 0 0 10px #a855f7;"></div>
                             </div>
                         </div>
                     </div>
                 </div>
                 
             </div>
-                <div class="raid-prog-bg-sporefall bg-right max-w-1/2 max-h-2/3  rounded-xl border border-gray-600">
+                <div class="raid-prog-bg-theTideboundGrotto bg-right max-w-1/2 max-h-2/3  rounded-xl border border-gray-600">
                     <div class="backdrop-blur-xs w-full rounded-xl p-8">
                         <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
                         <span class="text-2xl">🏰</span>
-                        Sporefall
+                        theTideboundGrotto
                         </h2>
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-12 gap-8">
@@ -395,12 +395,12 @@ $effect(() => {
                             <div class="flex justify-between items-center">
                                 <span class="text-green-400 font-bold text-lg">Normal</span>
                                 <span class="text-xl font-semibold">
-                                    {character.characterData.raid_progression.sporefall.normal_bosses_killed}/{character.characterData.raid_progression.sporefall.total_bosses}
+                                    {character.characterData.raid_progression.theTideboundGrotto.normal_bosses_killed}/{character.characterData.raid_progression.theTideboundGrotto.total_bosses}
                                 </span>
                             </div>
                             <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
                                 <div class="h-full bg-gradient-to-r from-green-500 to-green-400 progress-bar shadow-lg" 
-                                    style="width: {getProgressPercent(character.characterData.raid_progression.sporefall.normal_bosses_killed, character.characterData.raid_progression.sporefall.total_bosses)}%; box-shadow: 0 0 10px #10b981;"></div>
+                                    style="width: {getProgressPercent(character.characterData.raid_progression.theTideboundGrotto.normal_bosses_killed, character.characterData.raid_progression.theTideboundGrotto.total_bosses)}%; box-shadow: 0 0 10px #10b981;"></div>
                             </div>
                         </div>
 
@@ -409,12 +409,12 @@ $effect(() => {
                             <div class="flex justify-between items-center">
                                 <span class="text-blue-400 font-bold text-lg">Heroic</span>
                                 <span class="text-xl font-semibold">
-                                    {character.characterData.raid_progression.sporefall.heroic_bosses_killed}/{character.characterData.raid_progression.sporefall.total_bosses}
+                                    {character.characterData.raid_progression.theTideboundGrotto.heroic_bosses_killed}/{character.characterData.raid_progression.theTideboundGrotto.total_bosses}
                                 </span>
                             </div>
                             <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
                                 <div class="h-full bg-gradient-to-r from-blue-500 to-blue-400 progress-bar shadow-lg" 
-                                    style="width: {getProgressPercent(character.characterData.raid_progression.sporefall.heroic_bosses_killed, character.characterData.raid_progression.sporefall.total_bosses)}%; box-shadow: 0 0 10px #3b82f6;"></div>
+                                    style="width: {getProgressPercent(character.characterData.raid_progression.theTideboundGrotto.heroic_bosses_killed, character.characterData.raid_progression.theTideboundGrotto.total_bosses)}%; box-shadow: 0 0 10px #3b82f6;"></div>
                             </div>
                         </div>
 
@@ -423,12 +423,12 @@ $effect(() => {
                             <div class="flex justify-between items-center">
                                 <span class="text-purple-400 font-bold text-lg">Mythic</span>
                                 <span class="text-xl font-semibold">
-                                    {character.characterData.raid_progression.sporefall.mythic_bosses_killed}/{character.characterData.raid_progression.sporefall.total_bosses}
+                                    {character.characterData.raid_progression.theTideboundGrotto.mythic_bosses_killed}/{character.characterData.raid_progression.theTideboundGrotto.total_bosses}
                                 </span>
                             </div>
                             <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
                                 <div class="h-full bg-gradient-to-r from-purple-500 to-purple-400 progress-bar shadow-lg" 
-                                    style="width: {getProgressPercent(character.characterData.raid_progression.sporefall.mythic_bosses_killed, character.characterData.raid_progression.sporefall.total_bosses)}%; box-shadow: 0 0 10px #a855f7;"></div>
+                                    style="width: {getProgressPercent(character.characterData.raid_progression.theTideboundGrotto.mythic_bosses_killed, character.characterData.raid_progression.theTideboundGrotto.total_bosses)}%; box-shadow: 0 0 10px #a855f7;"></div>
                             </div>
                         </div>
                     </div>

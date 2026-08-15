@@ -301,14 +301,15 @@ namespace TwistingNether.DataAccess.RaiderIO
 
     public class RaidProgression
     {
-        [JsonProperty("tier-mn-1")]
-        public Raid tierMn1 { get; set; }
-
-        [JsonProperty("sporefall")]
-        public Raid sporefall { get; set; }
         [JsonProperty("the-venomous-abyss")]
         public Raid theVenomousAbyss { get; set; }
-
+        [JsonProperty("the-tidebound-grotto")]
+        public Raid theTideboundGrotto { get; set; }
+        // [JsonProperty("tier-mn-1")]
+        // public Raid tierMn1 { get; set; }
+        // [JsonProperty("sporefall")]
+        // public Raid sporefall { get; set; }
+        
         //  [JsonProperty("nerubar-palace")]
         //  public NerubarPalace nerubarpalace { get; set; }
         //  [JsonProperty("liberation-of-undermine")]
