@@ -60,6 +60,10 @@
 <style>
     .gear-slot {
         position: relative;
+        display: inline-flex;
+        width: fit-content;
+        min-width: 48px;
+        min-height: 48px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border-radius: 8px;
         overflow: visible;
@@ -70,7 +74,15 @@
         transform: translateY(-3px) scale(1.05);
     }
 
+    .gear-slot a {
+        display: inline-block;
+        width: 48px;
+        height: 48px;
+        flex-shrink: 0;
+    }
+
     .gear-icon {
+        display: block;
         width: 48px;
         height: 48px;
         border-radius: 6px;

@@ -72,7 +72,19 @@
         border: 1px solid rgba(59, 130, 246, 0.2);
     }
 
+    .gear-column {
+        align-items: flex-start;
+    }
+
+    .gear-row {
+        align-items: flex-start;
+    }
+
     .gear-item {
+        display: inline-flex;
+        width: fit-content;
+        flex-shrink: 0;
+        align-self: flex-start;
         opacity: 0;
         animation: slideInFade 0.6s ease-out forwards;
         transition: transform 0.3s ease, filter 0.3s ease;
@@ -257,7 +269,7 @@
     <!-- Enhanced Gear Layout -->
     <div class="flex items-start justify-center flex-wrap lg:flex-nowrap gap-8">
         <!-- Left Gear Column -->
-        <div class="flex flex-col gap-3 order-2 lg:order-1">
+        <div class="gear-column flex flex-col gap-3 order-2 lg:order-1">
             {#if equippedGear}
                 {#each [
                     { slot: 'Head', gear: equippedGear.head },
@@ -303,7 +315,7 @@
             </div>
 
             <!-- Weapons -->
-            <div class="flex gap-6 mt-6">
+            <div class="gear-row flex gap-6 mt-6">
                 {#if equippedGear}
                     {#each [
                         { slot: 'Main Hand', gear: equippedGear.mainhand },
@@ -322,7 +334,7 @@
         </div>
 
         <!-- Right Gear Column -->
-        <div class="flex flex-col gap-3 order-3">
+        <div class="gear-column flex flex-col gap-3 order-3">
             {#if equippedGear}
                 {#each [
                     { slot: 'Hands', gear: equippedGear.hands },
