@@ -61,3 +61,6 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+###############################################################################
+# exclude shadcn-svelte components from linguist
+/src/twisting-nether-svelte/src/lib/components/ui/** linguist-vendored
