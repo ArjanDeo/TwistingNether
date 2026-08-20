@@ -1108,3 +1108,6 @@ export type CharacterStats = {
     rating_normalized: number
   }
 }
+export type TwistingNetherSettings = {
+  useWowheadTooltips: boolean
+}

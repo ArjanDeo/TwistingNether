@@ -183,9 +183,7 @@ $effect(() => {
 
         background:
             linear-gradient(to right, transparent 30%, rgba(0,0,0,0.4) 50%, transparent 70%),
-            url("/raids-voidspire.webp") left center / 33% 100% no-repeat,
-            url("/raids-dreamrift.webp") center center / 34% 100% no-repeat,
-            url("/raids-march.webp") right center / 33% 100% no-repeat;
+            url("/raids-theVenomousAbyss.webp") right center / 100% 100% no-repeat;
 
         background-color: #000;
     }
@@ -201,21 +199,9 @@ $effect(() => {
     }
 </style>
 {#if character}
-<div class="w-[950px] h-fit mx-auto p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white rounded-2xl shadow-2xl border border-gray-700">
-    <!-- Enhanced Header -->
-    <div class="text-center mb-8 relative">
-        <div class="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-blue-500/10 rounded-xl blur-xl"></div>
-        <div class="relative">
-            <h1 class="text-4xl font-bold mb-2" style="color: {character.classColor}">
-                {character.characterData.name || 'Character'}
-            </h1>
-            <p class="text-xl font-semibold" style="color: {character.classColor};">
-                {character.characterData.active_spec_name} {character.characterData.char_class}
-            </p>
-        </div>
-    </div>
+<div class="max-w-[803.6px] w-full h-fit mx-auto p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white rounded-2xl shadow-2xl border border-gray-700">
 
-    <Tabs.Root bind:value={activeTab} class="w-full ">
+    <Tabs.Root bind:value={activeTab} class="w-full max-w-full">
         <!-- Enhanced Tab Buttons -->
         <Tabs.List class="flex border-b-2 border-gray-700 mb-6 bg-gray-800/50 rounded-t-lg p-1">
             <Tabs.Trigger 
@@ -312,36 +298,25 @@ $effect(() => {
                     </p>
                 </div>
             </div>
-            <div class="mt-5">
-                <div class="staggered-item bg-gradient-to-br from-gray-800 to-gray-700 p-6 rounded-xl border border-gray-600 hover-lift" style="{stagger(2)}">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="text-2xl">⭐</span>
-                        <h3 class="text-lg font-semibold">Stats</h3>
-                    </div>
-                    <p class="text-3xl font-bold text-center" style="color:">
-                        Agility: {stats?.agility.effective}
-                    </p>
-                </div>
-            </div>
         </Tabs.Content>
 
         <!-- Enhanced Raid Tab -->
         <Tabs.Content value="raid" class="tab-enter space-y-8">
             <!-- Raid Progress Section -->
-            <div class="flex flex-row gap-x-4">
-            <div class="raid-prog-bg bg-right max-w-1/2 max-h-[176px] rounded-xl border border-gray-600">
+            <div class="flex flex-row items-stretch gap-x-4">
+            <div class="raid-prog-bg max-h-2/3 bg-right min-w-0 flex-1 rounded-xl border border-gray-600">
                 <div class="backdrop-blur-xs w-full rounded-xl p-8">
                     <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
                     <span class="text-2xl">🏰</span>
-                    Midnight: Season 1 Raids
+                    The Venomous Abyss
                     </h2>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-12 gap-8">
+                    <div class="flex flex-row gap-4 mx-0">
                         <!-- Normal Progress -->
                         <div class="space-y-4 md:col-span-1 lg:col-span-2 xl:col-span-4">
                             <div class="flex justify-between items-center">
                                 <span class="text-green-400 font-bold text-lg">Normal</span>
-                                <span class="text-xl font-semibold">
+                                <span class="font-semibold text-lg ml-2">
                                     {character.characterData.raid_progression.theVenomousAbyss.normal_bosses_killed}/{character.characterData.raid_progression.theVenomousAbyss.total_bosses}
                                 </span>
                             </div>
@@ -355,7 +330,7 @@ $effect(() => {
                         <div class="space-y-4 md:col-span-1 lg:col-span-2 xl:col-span-4">
                             <div class="flex justify-between items-center">
                                 <span class="text-blue-400 font-bold text-lg">Heroic</span>
-                                <span class="text-xl font-semibold">
+                                <span class="font-semibold text-lg ml-2">
                                     {character.characterData.raid_progression.theVenomousAbyss.heroic_bosses_killed}/{character.characterData.raid_progression.theVenomousAbyss.total_bosses}
                                 </span>
                             </div>
@@ -369,7 +344,7 @@ $effect(() => {
                         <div class="space-y-4 md:col-span-1 lg:col-span-2 xl:col-span-4">
                             <div class="flex justify-between items-center">
                                 <span class="text-purple-400 font-bold text-lg">Mythic</span>
-                                <span class="text-xl font-semibold">
+                                <span class="font-semibold text-lg ml-2">
                                     {character.characterData.raid_progression.theVenomousAbyss.mythic_bosses_killed}/{character.characterData.raid_progression.theVenomousAbyss.total_bosses}
                                 </span>
                             </div>
@@ -382,19 +357,19 @@ $effect(() => {
                 </div>
                 
             </div>
-                <div class="raid-prog-bg-theTideboundGrotto bg-right max-w-1/2 max-h-2/3  rounded-xl border border-gray-600">
+                <div class="raid-prog-bg-theTideboundGrotto bg-right min-w-0 flex-1 rounded-xl border border-gray-600">
                     <div class="backdrop-blur-xs w-full rounded-xl p-8">
                         <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
                         <span class="text-2xl">🏰</span>
-                        theTideboundGrotto
+                        The Tidebound Grotto
                         </h2>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-12 gap-8">
+                    <div class="flex flex-row gap-4 mx-0">
                         <!-- Normal Progress -->
                         <div class="space-y-4 md:col-span-1 lg:col-span-2 xl:col-span-4">
                             <div class="flex justify-between items-center">
                                 <span class="text-green-400 font-bold text-lg">Normal</span>
-                                <span class="text-xl font-semibold">
+                                <span class="font-semibold text-lg ml-2">
                                     {character.characterData.raid_progression.theTideboundGrotto.normal_bosses_killed}/{character.characterData.raid_progression.theTideboundGrotto.total_bosses}
                                 </span>
                             </div>
@@ -408,7 +383,7 @@ $effect(() => {
                         <div class="space-y-4 md:col-span-1 lg:col-span-2 xl:col-span-4">
                             <div class="flex justify-between items-center">
                                 <span class="text-blue-400 font-bold text-lg">Heroic</span>
-                                <span class="text-xl font-semibold">
+                                <span class="font-semibold text-lg ml-2">
                                     {character.characterData.raid_progression.theTideboundGrotto.heroic_bosses_killed}/{character.characterData.raid_progression.theTideboundGrotto.total_bosses}
                                 </span>
                             </div>
@@ -422,7 +397,7 @@ $effect(() => {
                         <div class="space-y-4 md:col-span-1 lg:col-span-2 xl:col-span-4">
                             <div class="flex justify-between items-center">
                                 <span class="text-purple-400 font-bold text-lg">Mythic</span>
-                                <span class="text-xl font-semibold">
+                                <span class="font-semibold text-lg ml-2">
                                     {character.characterData.raid_progression.theTideboundGrotto.mythic_bosses_killed}/{character.characterData.raid_progression.theTideboundGrotto.total_bosses}
                                 </span>
                             </div>
@@ -524,7 +499,7 @@ $effect(() => {
                 style="color: {character.classColor};"
                 >
                     <span class="text-3xl">⚡</span>
-                    <span>S1 Top Mythic+ Runs</span>
+                    <span>S2 Top Mythic+ Runs</span>
                     <span 
                         class="text-3xl font-bold ml-auto"
                         style="color: {getScoreColor(character.characterData.mythic_plus_scores_by_season?.[0]?.scores?.all)}"

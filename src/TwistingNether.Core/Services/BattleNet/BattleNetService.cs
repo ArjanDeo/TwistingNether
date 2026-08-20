@@ -67,7 +67,7 @@ namespace TwistingNether.Core.Services.BattleNet
                 IResponse data = await _client
                     .GetAsync($"https://{character.Region}.api.blizzard.com/profile/wow/character/{character.Realm}/{character.Name}/character-media?namespace=profile-{character.Region}&locale=en_US&:region={character.Region}")
                     .WithBearerAuthentication(AppConstants.BattleNetAccessToken.access_token);
-
+                string reee = await data.AsString();
                 WoWCharacterMediaModel characterMedia = await data.As<WoWCharacterMediaModel>();
 
                 return characterMedia.assets

@@ -10,7 +10,9 @@ export const load = (async ({ fetch, params }) => {
         if (!res.ok) {
             throw error(404, `Error fetching character. Status: ${res.status} ${res.statusText}`);
         }
-        return res.json() as Promise<Character>;
+        const data = await res.json();
+        console.log(data);
+        return data as Promise<Character>;
     })();
     return {
         // SvelteKit will treat this as deferred data

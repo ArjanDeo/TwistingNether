@@ -46,8 +46,6 @@ declare module '$env/static/private' {
 	export const npm_config_local_prefix: string;
 	export const ZSH: string;
 	export const COPILOT_DEBUG_NONCE: string;
-	export const GIT_EDITOR: string;
-	export const AI_AGENT: string;
 	export const USER: string;
 	export const LS_COLORS: string;
 	export const COMMAND_MODE: string;
@@ -61,6 +59,7 @@ declare module '$env/static/private' {
 	export const PATH: string;
 	export const npm_package_json: string;
 	export const npm_config_engine_strict: string;
+	export const _: string;
 	export const npm_config_userconfig: string;
 	export const npm_config_init_module: string;
 	export const USER_ZDOTDIR: string;
@@ -74,7 +73,6 @@ declare module '$env/static/private' {
 	export const npm_config_npm_version: string;
 	export const VSCODE_GIT_ASKPASS_EXTRA_ARGS: string;
 	export const XPC_FLAGS: string;
-	export const GIT_MERGE_AUTOEDIT: string;
 	export const npm_config_node_gyp: string;
 	export const npm_package_version: string;
 	export const XPC_SERVICE_NAME: string;
@@ -88,19 +86,15 @@ declare module '$env/static/private' {
 	export const LOGNAME: string;
 	export const npm_lifecycle_script: string;
 	export const VSCODE_GIT_IPC_HANDLE: string;
-	export const DEBIAN_FRONTEND: string;
 	export const npm_config_user_agent: string;
 	export const VSCODE_GIT_ASKPASS_NODE: string;
 	export const GIT_ASKPASS: string;
 	export const INFOPATH: string;
 	export const HOMEBREW_CELLAR: string;
-	export const COPILOT_AGENT: string;
 	export const OSLogRateLimit: string;
-	export const GIT_PAGER: string;
 	export const npm_node_execpath: string;
 	export const npm_config_prefix: string;
 	export const COLORTERM: string;
-	export const _: string;
 	export const NODE_ENV: string;
 	export const VIPSHOME: string;
 }
@@ -152,8 +146,6 @@ declare module '$env/dynamic/private' {
 		npm_config_local_prefix: string;
 		ZSH: string;
 		COPILOT_DEBUG_NONCE: string;
-		GIT_EDITOR: string;
-		AI_AGENT: string;
 		USER: string;
 		LS_COLORS: string;
 		COMMAND_MODE: string;
@@ -167,6 +159,7 @@ declare module '$env/dynamic/private' {
 		PATH: string;
 		npm_package_json: string;
 		npm_config_engine_strict: string;
+		_: string;
 		npm_config_userconfig: string;
 		npm_config_init_module: string;
 		USER_ZDOTDIR: string;
@@ -180,7 +173,6 @@ declare module '$env/dynamic/private' {
 		npm_config_npm_version: string;
 		VSCODE_GIT_ASKPASS_EXTRA_ARGS: string;
 		XPC_FLAGS: string;
-		GIT_MERGE_AUTOEDIT: string;
 		npm_config_node_gyp: string;
 		npm_package_version: string;
 		XPC_SERVICE_NAME: string;
@@ -194,19 +186,15 @@ declare module '$env/dynamic/private' {
 		LOGNAME: string;
 		npm_lifecycle_script: string;
 		VSCODE_GIT_IPC_HANDLE: string;
-		DEBIAN_FRONTEND: string;
 		npm_config_user_agent: string;
 		VSCODE_GIT_ASKPASS_NODE: string;
 		GIT_ASKPASS: string;
 		INFOPATH: string;
 		HOMEBREW_CELLAR: string;
-		COPILOT_AGENT: string;
 		OSLogRateLimit: string;
-		GIT_PAGER: string;
 		npm_node_execpath: string;
 		npm_config_prefix: string;
 		COLORTERM: string;
-		_: string;
 		NODE_ENV: string;
 		VIPSHOME: string;
 		[key: `PUBLIC_${string}`]: undefined;

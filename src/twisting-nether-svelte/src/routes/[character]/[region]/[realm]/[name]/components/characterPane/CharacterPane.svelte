@@ -7,7 +7,8 @@
 	import { onMount } from 'svelte';
 	import { API_BASE_URL } from '$lib/common';
 	import { toast } from 'svelte-sonner';
-    
+    	import { appSettings } from "$lib/settings.svelte";
+
     let { character }: { character: Character | undefined } = $props();
     let equipped: EquippedItem[] | undefined = $state()
     let equippedGear: EquippedGear | undefined = $state();
@@ -331,13 +332,13 @@
         </div>
 
         <!-- Character Render -->
-        <div class="flex flex-col items-center order-1 lg:order-2">
-            <div class="relative">
+            <div class="flex flex-col items-center order-1 lg:order-2">
+                <div class="relative">
                 <!-- Floating animation wrapper -->
                 <div class="floating overflow-hidden">
                     {#if characterMedia}
                     <img 
-                        src={characterMedia[2].link ? `https://wsrv.nl/?url=${characterMedia[2].link}&w800&output=webp&q=80` : '/default-image.webp'} 
+                        src={characterMedia[1].link ? `https://wsrv.nl/?url=${characterMedia[1].link}&w800&output=webp&q=80` : '/default-image.webp'} 
                         alt="Character Render" 
                         class="character-render max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl rounded-2xl object-cover"
                         fetchpriority="high"
@@ -389,6 +390,7 @@
                             gear={gear} 
                             slot={slot} 
                             characterSpec={character.characterData.active_spec_name}
+                            
                         />
                     </div>
                 {/each}
