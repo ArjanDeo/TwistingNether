@@ -12,6 +12,7 @@
 node_modules
 .env
 config.json
+.DS_Store
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -364,3 +365,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /src/TwistingNether.API/appsettings.json
+src/twisting-nether-svelte/src/lib/.DS_Store

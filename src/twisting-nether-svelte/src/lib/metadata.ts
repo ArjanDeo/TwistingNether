@@ -56,7 +56,10 @@ import zandalaritrollMale from '$lib/races/zandalaritroll-male.webp';
 import zandalaritrollFemale from '$lib/races/zandalaritroll-female.webp';
 import dracthyrMale from '$lib/races/dracthyr-male.webp';
 import dracthyrFemale from '$lib/races/dracthyr-female.webp';
-
+import earthernMale from '$lib/races/earthen-male.webp'
+import earthernFemale from '$lib/races/earthen-female.webp'
+import haranirMale from '$lib/races/haranir-male.webp'
+import haranirFemale from '$lib/races/haranir-female.webp'
 // Equipment
 import chestIcon from '$lib/icons/chest.webp';
 import feetIcon from '$lib/icons/feet.webp';
@@ -89,6 +92,16 @@ import tier3Icon from '$lib/icons/quality/tier3.webp';
 // import fractillus from '$lib/icons/bosses/3133.webp'
 // import nexusKingSalhadaar from '$lib/icons/bosses/3134.webp'
 // import dimensius from '$lib/icons/bosses/3135.webp'
+
+// import chimaerus from '$lib/icons/bosses/3306.webp'
+// import imperatorAverzian from '$lib/icons/bosses/3176.webp'
+// import vorasius from '$lib/icons/bosses/3177.webp'
+// import vaelgorAndEzzorak from '$lib/icons/bosses/3178.webp'
+// import fallenKingSalhadaar from '$lib/icons/bosses/3179.webp'
+// import lightblindedVanguard from '$lib/icons/bosses/3180.webp'
+// import crownOfTheCosmos from '$lib/icons/bosses/3181.webp'
+// import beloren from '$lib/icons/bosses/3182.webp'
+// import midnightFalls from '$lib/icons/bosses/3183.webp'
 
 import nekzaliTheSoulcoiler from '$lib/icons/bosses/3470.webp'
 import entombedSentinels from '$lib/icons/bosses/3445.webp'
@@ -141,7 +154,11 @@ export const raceIcons: Record<string, string> = {
   'zandalaritroll-male': zandalaritrollMale,
   'zandalaritroll-female': zandalaritrollFemale,
   'dracthyr-male': dracthyrMale,
-  'dracthyr-female': dracthyrFemale
+  'dracthyr-female': dracthyrFemale,
+  'earthern-male': earthernMale,
+  'earthern-female': earthernFemale,
+  'haranir-male': haranirMale,
+  'haranir-female': haranirFemale,
 };
 
 export const classIcons: Record<string, string> = {
