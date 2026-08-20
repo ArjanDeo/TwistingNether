@@ -814,23 +814,20 @@ export type GearPiece = {
 }
 
 export const bosses: Encounter[] = [
-  // The Voidspire
-  { id: 3176, journalIndex: 1, slug: "imperator-averzian",    name: "Imperator Averzian" },
-  { id: 3177, journalIndex: 2, slug: "vorasius",              name: "Vorasius" },
-  { id: 3178, journalIndex: 3, slug: "fallen-king-salhadaar", name: "Fallen-King Salhadaar" },
-  { id: 3179, journalIndex: 4, slug: "vaelgor-and-ezzorak",   name: "Vaelgor and Ezzorak" },
-  { id: 3180, journalIndex: 5, slug: "lightblinded-vanguard", name: "Lightblinded Vanguard" },
-  { id: 3181, journalIndex: 6, slug: "crown-of-the-cosmos",   name: "Crown of the Cosmos" },
+  // The Venomous Abyss
+{ id: 3470, journalIndex: 1, slug: "nekzali-the-soulcoiler", name: "Nek'zali the Soulcoiler" },
+{ id: 3445, journalIndex: 2, slug: "entombed-sentinels", name: "Entombed Sentinels" },
+{ id: 3455, journalIndex: 3, slug: "vashnik-the-malignant", name: "Vashnik the Malignant" },
+{ id: 3497, journalIndex: 4, slug: "the-lost-explorers", name: "The Lost Explorers" },
+{ id: 3420, journalIndex: 5, slug: "sszorak", name: "Sszorak" },
+{ id: 3421, journalIndex: 6, slug: "the-twin-fangs",  name: "The Twin Fangs" },
+{ id: 3429, journalIndex: 7, slug: "the-coiled-altar", name: "The Coiled Altar" },
+{ id: 3492, journalIndex: 8, slug: "ulatek", name: "Ula'tek" },
 
-  // The Dreamrift
-  { id: 3306, journalIndex: 7, slug: "chimaerus",             name: "Chimaerus, the Undreamt God" },
 
-  // March on Quel'Danas
-  { id: 3182, journalIndex: 8, slug: "beloren",               name: "Belo'ren, Child of Al'ar" },
-  { id: 3183, journalIndex: 9, slug: "midnight-falls",        name: "Midnight Falls" },
+// The Tidebound Grotto
+{ id: 3379, journalIndex: 1, slug: "nymrissa-wavecaller",     name: "Nymrissa Wavecaller" },
 ];
-
-
 
 export enum MainStats {
   AGILITY = 'Agility',

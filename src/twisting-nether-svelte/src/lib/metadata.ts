@@ -90,15 +90,14 @@ import tier3Icon from '$lib/icons/quality/tier3.webp';
 // import nexusKingSalhadaar from '$lib/icons/bosses/3134.webp'
 // import dimensius from '$lib/icons/bosses/3135.webp'
 
-import chimaerus from '$lib/icons/bosses/3306.webp'
-import imperatorAverzian from '$lib/icons/bosses/3176.webp'
-import vorasius from '$lib/icons/bosses/3177.webp'
-import vaelgorAndEzzorak from '$lib/icons/bosses/3178.webp'
-import fallenKingSalhadaar from '$lib/icons/bosses/3179.webp'
-import lightblindedVanguard from '$lib/icons/bosses/3180.webp'
-import crownOfTheCosmos from '$lib/icons/bosses/3181.webp'
-import beloren from '$lib/icons/bosses/3182.webp'
-import midnightFalls from '$lib/icons/bosses/3183.webp'
+import nekzaliTheSoulcoiler from '$lib/icons/bosses/3470.webp'
+import entombedSentinels from '$lib/icons/bosses/3445.webp'
+import vashnikTheMalignant from '$lib/icons/bosses/3455.webp'
+import theLostExplorers from '$lib/icons/bosses/3497.webp'
+import sszorak from '$lib/icons/bosses/3420.webp'
+import theTwinFangs from '$lib/icons/bosses/3421.webp'
+import theCoiledAltar from '$lib/icons/bosses/3429.webp'
+import ulatek from '$lib/icons/bosses/3492.webp'
 
 export const raceIcons: Record<string, string> = {
   'bloodelf-male': bloodelfMale,
@@ -186,13 +185,12 @@ export const qualityIcons: Record<string, string> = {
   'Tier 3': tier3Icon
 }
 export const bossIcons: Record<number, string> = {
-  3306: chimaerus,
-  3176: imperatorAverzian,
-  3177: vorasius,
-  3178: vaelgorAndEzzorak,
-  3179: fallenKingSalhadaar,
-  3180: lightblindedVanguard,
-  3181: crownOfTheCosmos,
-  3182: beloren,
-  3183: midnightFalls,
+	3470: nekzaliTheSoulcoiler,
+	3445: entombedSentinels,
+	3455: vashnikTheMalignant,
+	3497: theLostExplorers,
+	3420: sszorak,
+	3421: theTwinFangs,
+	3429: theCoiledAltar,
+	3492: ulatek,
 }
