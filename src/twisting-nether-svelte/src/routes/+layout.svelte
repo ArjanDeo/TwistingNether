@@ -3,10 +3,7 @@ import "../app.css";
 import { Toaster } from "$lib/components/ui/sonner";
 	import SettingsModal from "./components/settings-modal.svelte";
 let { children } = $props();
-import { ModeWatcher, toggleMode } from "mode-watcher";
-import SunIcon from "@lucide/svelte/icons/sun";
-import MoonIcon from "@lucide/svelte/icons/moon";
-import { Button } from "$lib/components/ui/button";
+import { ModeWatcher } from "mode-watcher";
 </script>
 
 <ModeWatcher />
