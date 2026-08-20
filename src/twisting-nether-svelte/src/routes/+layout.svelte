@@ -1,9 +1,13 @@
 <script lang="ts">
 import "../app.css";
 import { Toaster } from "$lib/components/ui/sonner";
-	import SettingsModal from "./components/settings-modal.svelte";
+import SettingsModal from "./components/settings-modal.svelte";
 let { children } = $props();
 import { ModeWatcher } from "mode-watcher";
+import { dev } from '$app/environment';
+import { injectAnalytics } from '@vercel/analytics/sveltekit';
+
+injectAnalytics({ mode: dev ? 'development' : 'production' });
 </script>
 
 <ModeWatcher />
@@ -12,8 +16,7 @@ import { ModeWatcher } from "mode-watcher";
 	<title>The Twisting Nether</title>
 </svelte:head>
 
-
-<main class="">
+<main>
 <nav class="bg-primary-foreground w-auto sticky top-0 z-20 p-2 ">
 	<div class="flex flex-row lg:gap-x-3">
 		<a href="/" class="flex">
