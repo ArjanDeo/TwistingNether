@@ -214,7 +214,7 @@ $effect(() => {
                 class="flex-1 px-6 py-3 text-sm font-semibold rounded-md transition-all duration-300 relative overflow-hidden group"
             >
                 <span class="flex items-center justify-center gap-2 relative z-10">
-                    📊 Stats
+                    Stats
                 </span>
                 {#if activeTab === 'stats'}
                     <div class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-md"></div>
@@ -226,7 +226,7 @@ $effect(() => {
                 class="flex-1 px-6 py-3 text-sm font-semibold rounded-md transition-all duration-300 relative overflow-hidden group"
             >
                 <span class="flex items-center justify-center gap-2 relative z-10">
-                    ⚔️ Raid
+                    Raid
                 </span>
                 {#if activeTab === 'raid'}
                     <div class="absolute inset-0 bg-gradient-to-r from-red-500/20 to-orange-500/20 rounded-md"></div>
@@ -238,7 +238,7 @@ $effect(() => {
                 class="flex-1 px-6 py-3 text-sm font-semibold rounded-md transition-all duration-300 relative overflow-hidden group"
             >
                 <span class="flex items-center justify-center gap-2 relative z-10">
-                    ⚡ M+
+                    M+
                 </span>
                 {#if activeTab === 'm+'}
                     <div class="absolute inset-0 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 rounded-md"></div>
@@ -251,7 +251,6 @@ $effect(() => {
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="staggered-item bg-gradient-to-br from-gray-800 to-gray-700 p-6 rounded-xl border border-gray-600 hover-lift glow" style="{stagger(0)}">
                     <div class="flex items-center gap-3 mb-3">
-                        <span class="text-2xl">🛡️</span>
                         <h3 class="text-lg font-semibold">Item Level</h3>
                     </div>
                     <p class="text-3xl font-bold text-yellow-400">
@@ -265,7 +264,6 @@ $effect(() => {
 
                 <div class="staggered-item bg-gradient-to-br from-gray-800 to-gray-700 p-6 rounded-xl border border-gray-600 hover-lift" style="{stagger(1)}">
                     <div class="flex items-center gap-3 mb-3">
-                        <span class="text-2xl">🏆</span>
                         <h3 class="text-lg font-semibold">Average Parse</h3>
                         {#if raidPerformance && raidPerformance.bestPerformanceAverage == null || raidPerformance && raidPerformance.zone === 44}
                         <div class="ml-auto">
@@ -295,7 +293,6 @@ $effect(() => {
 
                 <div class="staggered-item bg-gradient-to-br from-gray-800 to-gray-700 p-6 rounded-xl border border-gray-600 hover-lift" style="{stagger(2)}">
                     <div class="flex items-center gap-3 mb-3">
-                        <span class="text-2xl">⭐</span>
                         <h3 class="text-lg font-semibold">M+ Rating</h3>
                     </div>
                     <p class="text-3xl font-bold text-center" style="color: {getScoreColor(character.characterData.mythic_plus_scores_by_season?.[0]?.scores?.all)}">
@@ -312,7 +309,6 @@ $effect(() => {
             <div class="raid-prog-bg max-h-2/3 bg-right min-w-0 flex-1 rounded-xl border border-gray-600">
                 <div class="backdrop-blur-xs w-full rounded-xl p-8">
                     <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
-                    <span class="text-2xl">🏰</span>
                     The Venomous Abyss
                     </h2>
                     
@@ -365,7 +361,6 @@ $effect(() => {
                 <div class="raid-prog-bg-theTideboundGrotto bg-right min-w-0 flex-1 rounded-xl border border-gray-600">
                     <div class="backdrop-blur-xs w-full rounded-xl p-8">
                         <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
-                        <span class="text-2xl">🏰</span>
                         The Tidebound Grotto
                         </h2>
                     
@@ -419,7 +414,6 @@ $effect(() => {
 {#if raidBossesKilledThisWeek && raidBossesKilledThisWeek.length !== 0}
     <div class="bg-gradient-to-br from-gray-800 to-gray-700 p-6 rounded-xl border border-gray-600">
         <h3 class="text-2xl font-bold mb-4 flex items-center gap-3">
-            <span class="text-2xl">🗡️</span>
             Bosses Killed This Week
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -444,7 +438,6 @@ $effect(() => {
     </div>
 {:else}
     <div class="text-center py-12 bg-gray-800/50 rounded-xl border border-gray-700">
-        <span class="text-6xl mb-4 block opacity-50">😴</span>
         <p class="text-xl text-gray-400">No boss kills this week!</p>
     </div>
 {/if}
@@ -452,7 +445,6 @@ $effect(() => {
 <!-- Performance Rankings -->
     <div class="bg-gradient-to-br from-gray-800 to-gray-700 p-6 rounded-xl border border-gray-600">
         <h3 class="text-2xl font-bold mb-4 flex items-center gap-3">
-            <span class="text-2xl">📊</span>
             Top Parses
             <DropdownMenu.Root>
                 <DropdownMenu.Trigger class="bg-slate-900 hover:bg-slate-800 p-2 rounded-md">{raidPerformanceDifficulty}</DropdownMenu.Trigger>
@@ -470,7 +462,6 @@ $effect(() => {
         <div class="space-y-3 grid grid-cols-2 gap-2">
             {#if !raidPerformance.rankings.find(r => r.totalKills > 0)}
                 <div class="text-center py-12 bg-gray-800/50 rounded-xl border border-gray-700 col-span-2">
-                    <span class="text-6xl mb-4 block opacity-50">📊</span>
                     <p class="text-xl text-gray-400">No parses for {raidPerformanceDifficulty}</p>
                 </div>
             {/if}
@@ -503,7 +494,6 @@ $effect(() => {
                 class="text-3xl font-bold flex items-center gap-3"
                 style="color: {character.classColor};"
                 >
-                    <span class="text-3xl">⚡</span>
                     <span>S2 Top Mythic+ Runs</span>
                     <span 
                         class="text-3xl font-bold ml-auto"
@@ -519,7 +509,6 @@ $effect(() => {
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     {#if character.characterData.mythic_plus_best_runs.length === 0}
                         <div class="lg:col-span-2 text-center py-16 bg-gray-800/50 rounded-xl border border-gray-700">
-                            <span class="text-6xl mb-4 block opacity-50">⚡</span>
                             <p class="text-xl text-gray-400">No Mythic+ runs found.</p>
                         </div>
                     {:else}
@@ -547,23 +536,13 @@ $effect(() => {
                                         
                                         <div class="flex items-center gap-4 text-sm text-gray-300">
                                             <div class="flex items-center gap-1">
-                                                <span>⏱️</span>
                                                 <span class="font-medium">{msToTime(run.clear_time_ms)}</span>
                                             </div>
                                             <div class="flex items-center gap-1">
-                                                <span>📅</span>
                                                 <span>{new Date(run.completed_at).toLocaleDateString()}</span>
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                    {#if run.num_keystone_upgrades > 0}
-                                        <div class="flex gap-0.5">
-                                            {#each Array.from({length: run.num_keystone_upgrades}, (_, i) => i) as star}
-                                                <span class="text-yellow-400 text-lg">⭐</span>
-                                            {/each}
-                                        </div>
-                                    {/if}
                                 </div>
                             </div>
                         </a>

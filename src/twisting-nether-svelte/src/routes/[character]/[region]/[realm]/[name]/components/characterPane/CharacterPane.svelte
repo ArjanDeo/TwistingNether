@@ -230,48 +230,39 @@
             {/if}
 
             <!-- Character Info Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="@container mb-6">
+            <div class="grid grid-cols-1 @sm:grid-cols-2 gap-4">
                 <!-- Race Card -->
-                <div class="stat-card rounded-lg p-4 flex items-center gap-3">
+                <div class="stat-card rounded-lg p-4 flex items-center gap-3 min-w-0">
                     <img 
                         src={raceIcons[raceGenderString]} 
                         alt={character.characterData.race} 
-                        class="w-10 h-10 rounded-full border-2 border-gray-600"
+                        class="w-10 h-10 shrink-0 rounded-full border-2 border-gray-600"
                     />
-                    <div>
+                    <div class="min-w-0 text-left">
                         <p class="text-xs text-gray-400 uppercase tracking-wide">Race</p>
                         <p class="text-lg font-semibold " style="color: {raceColors[character.characterData.race]}">{character.characterData.race}</p>
                     </div>
                 </div>
 
                 <!-- Class Card -->
-                <div class="stat-card rounded-lg p-4 flex items-center gap-3">
+                <div class="stat-card rounded-lg p-4 flex items-center gap-3 min-w-0">
                     <img 
                         src={classIcons[character.characterData.char_class]} 
                         alt={character.characterData.char_class} 
-                        class="w-10 h-10 rounded-full border-2 border-gray-600"
+                        class="w-10 h-10 shrink-0 rounded-full border-2 border-gray-600"
                     />
-                    <div>
+                    <div class="min-w-0 text-left">
                         <p class="text-xs text-gray-400 uppercase tracking-wide">Class</p>
                         <p class="text-lg font-semibold" style="color: {character.classColor};">
                             {character.characterData.char_class}
                         </p>
-                        <p class="-mt-2 text-sm text-center">
+                        <p class="text-sm text-gray-300">
                             {character.characterData.active_spec_name}
                         </p>
                     </div>
                 </div>
-
-                <!-- Item Level Card -->
-                <div class="stat-card rounded-lg p-4 flex items-center gap-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-                        <span class="text-xl">⚔️</span>
-                    </div>
-                    <div>
-                        <p class="text-xs text-gray-400 uppercase tracking-wide">Item Level</p>
-                        <p class="text-lg font-semibold text-yellow-400">{character.characterData.gear.item_level_equipped}</p>
-                    </div>
-                </div>
+            </div>
             </div>
 
             <!-- External Links -->
@@ -280,26 +271,26 @@
                     aria-label="raider.io link" 
                     href="https://raider.io/characters/{character.characterData.region}/{character.characterData.realm}/{character.characterData.name}" 
                     target="_blank"
-                    class="transition-all duration-300 ease-in-out rounded-full border-2 border-transparent bg-[rgba(30,41,59,0.8)] hover:-translate-y-0.5 hover:scale-110 hover:border-[rgba(59,130,246,0.5)] hover:bg-[rgba(59,130,246,0.1)] hover:shadow-[0_8px_25px_rgba(59,130,246,0.3)] p-3"
+                    class="transition-all duration-300 ease-in-out rounded-full border-2 border-transparent bg-[rgba(30,41,59,0.8)] hover:-translate-y-0.5 hover:scale-110 hover:border-[rgba(59,130,246,0.5)] hover:bg-[rgba(59,130,246,0.1)] hover:shadow-[0_8px_25px_rgba(59,130,246,0.3)] p-3 flex items-center justify-center"
                     style=""
                 >
-                    <img src="/raiderioicon.webp" class="w-8 h-8" alt="raider io logo">
+                    <img src="/raiderioicon.webp" class="w-8 h-8 block" alt="raider io logo">
                 </a>
                 <a 
                     aria-label="warcraft logs link"
                     href="https://www.warcraftlogs.com/character/{character.characterData.region}/{character.characterData.realm}/{character.characterData.name}" 
                     target="_blank"
-                    class="external-link p-3"
+                    class="external-link p-3 flex items-center justify-center"
                 >
-                    <img src="/warcraftlogsicon.webp" class="w-8 h-8" alt="warcraft logs logo"/>
+                    <img src="/warcraftlogsicon.webp" class="w-8 h-8 block" alt="warcraft logs logo"/>
                 </a>
                 <a 
                     aria-label="world of warcraft armory link"
                     href="https://worldofwarcraft.blizzard.com/en-gb/character/{character.characterData.region}/{character.characterData.realm}/{character.characterData.name}" 
                     target="_blank"
-                    class="external-link p-3"
+                    class="external-link p-3 flex items-center justify-center"
                 >
-                    <img src="/wowicon.webp" class="w-8 h-8" alt="world of warcraft logo"/>
+                    <img src="/wowicon.webp" class="w-8 h-8 block" alt="world of warcraft logo"/>
                 </a>
             </div>
         </div>
@@ -407,41 +398,33 @@
                 <span class="text-2xl lg:text-3xl w-10 animate-pulse h-10 bg-gray-700 "></span>
             </div>
             <!-- Character Info Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="@container mb-6">
+            <div class="grid grid-cols-1 @sm:grid-cols-2 gap-4">
                 <!-- Race Card -->
-                <div class="stat-card rounded-lg p-4 flex items-center gap-3">
+                <div class="stat-card rounded-lg p-4 flex items-center gap-3 min-w-0">
                     <div 
-                        class="w-10 h-10 rounded-full border-2 border-gray-600 animate-pulse bg-gray-700"
+                        class="w-10 h-10 shrink-0 rounded-full border-2 border-gray-600 animate-pulse bg-gray-700"
                     ></div>
-                    <div>
+                    <div class="min-w-0 text-left">
                         <p class="text-xs text-gray-400 uppercase tracking-wide">Race</p>
                         <p class="text-lg font-semibold  animate-pulse w-12"></p>
                     </div>
                 </div>
 
                 <!-- Class Card -->
-                <div class="stat-card rounded-lg p-4 flex items-center gap-3">
+                <div class="stat-card rounded-lg p-4 flex items-center gap-3 min-w-0">
                     <div 
-                        class="w-10 h-10 rounded-full border-2 border-gray-600 animate-pulse bg-gray-700"
+                        class="w-10 h-10 shrink-0 rounded-full border-2 border-gray-600 animate-pulse bg-gray-700"
                     ></div>
-                    <div>
+                    <div class="min-w-0 text-left">
                         <p class="text-xs text-gray-400 uppercase tracking-wide">Class</p>
                         <p class="text-lg font-semibold animate-pulse w-12" >
                         </p>
-                        <p class="-mt-2 text-sm text-center animate-pulse w-12">
+                        <p class="text-sm animate-pulse w-12">
                         </p>
                     </div>
                 </div>
-
-                <!-- Item Level Card -->
-                <div class="stat-card rounded-lg p-4 flex items-center gap-3">
-                    <div class="w-10 h-10 animate-pulse bg-gray-700 border-gray-600 border-2 rounded-full flex items-center justify-center">
-                    </div>
-                    <div>
-                        <p class="text-xs text-gray-400 uppercase tracking-wide">Item Level</p>
-                        <p class="text-lg font-semibold text-yellow-400 w-10 animate-pulse"></p>
-                    </div>
-                </div>
+            </div>
             </div>
 
             <!-- External Links -->

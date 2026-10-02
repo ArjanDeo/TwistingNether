@@ -29,7 +29,7 @@ injectAnalytics({ mode: dev ? 'development' : 'production' });
 			<a class="text-center my-auto hover:text-green-700 transition-colors ease-in-out" href="/">Home</a>
 			<a class="text-center my-auto hover:text-green-700 transition-colors ease-in-out" href="/about">About</a>
 		</div>
-		<div class="my-auto">
+		<div class="flex items-center">
 			<SettingsModal />
 		</div>
 	</div>
