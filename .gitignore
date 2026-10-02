@@ -366,3 +366,7 @@ MigrationBackup/
 FodyWeavers.xsd
 /src/TwistingNether.API/appsettings.json
 src/twisting-nether-svelte/src/lib/.DS_Store
+
+# SvelteKit / Vercel build output
+.svelte-kit/
+.vercel/
