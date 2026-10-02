@@ -1,5 +1,5 @@
 # The Twisting Nether
-
+## (Note: Claude or other LLMs are only ever used for minor changes - feature implementation and design is 100% human).
 A full-stack web application for looking up World of Warcraft character profiles and live in-game economy data, built on a SvelteKit front end and a .NET Web API back end.
 
 **Live site:** [twistingnether.furyshiftz.com](https://twistingnether.furyshiftz.com)
