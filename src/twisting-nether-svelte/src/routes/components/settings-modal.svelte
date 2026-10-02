@@ -52,7 +52,7 @@
 	<Dialog.Trigger
 		type="button"
 		onclick={openSettings}
-		class="bg-primary-foreground cursor-pointer hover:text-green-700 transition-colors ease-in-out"
+		class="flex bg-primary-foreground cursor-pointer hover:text-green-700 transition-colors ease-in-out"
 	>
 		<SettingsIcon />
 	</Dialog.Trigger>

@@ -3,6 +3,8 @@
   import type { PageData } from './$types';
   import CharacterPane from './components/characterPane/CharacterPane.svelte';
   import CharacterInfoSection from './components/characterInfoSection/CharacterInfoSection.svelte';
+  import CharacterError from './components/CharacterError.svelte';
+  import CharacterNotFound from './components/CharacterNotFound.svelte';
 	import { browser } from '$app/environment';
 import type { Character } from '$lib/types/character'
 import type { CharacterCache, ClassColors } from '$lib/types';
@@ -46,6 +48,10 @@ function saveCharacter(character: Character) {
     <title>
       {char.characterData.name} - {char.characterData.realm}
     </title>
+    {:catch error}
+    <title>
+        {error?.status === 404 ? "Character not found" : "Something went wrong"}
+    </title>
     {/await}
     {/if}
 </svelte:head>
@@ -67,8 +73,12 @@ function saveCharacter(character: Character) {
     <CharacterInfoSection character={character}/>
   </div>
 {:catch error}
-  <div class="text-red-500 text-center mt-20">
-    Failed to load character: {error.message}
+  <div class="p-8">
+    {#if error?.status === 404}
+      <CharacterNotFound />
+    {:else}
+      <CharacterError status={error?.status} />
+    {/if}
   </div>
 {/await}
 
