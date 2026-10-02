@@ -1,5 +1,8 @@
 # The Twisting Nether
 ## (Note: Claude or other LLMs are only ever used for minor changes - feature implementation and design is 100% human).
+
+![Character page screenshot](docs/screenshot.webp)
+
 A full-stack web application for looking up World of Warcraft character profiles and live in-game economy data, built on a SvelteKit front end and a .NET Web API back end.
 
 **Live site:** [twistingnether.furyshiftz.com](https://twistingnether.furyshiftz.com)
@@ -8,9 +11,6 @@ A full-stack web application for looking up World of Warcraft character profiles
 ![Frontend](https://img.shields.io/badge/frontend-SvelteKit-FF3E00?logo=svelte&logoColor=white)
 ![Backend](https://img.shields.io/badge/backend-.NET-512BD4?logo=dotnet&logoColor=white)
 [![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Deployments-2088FF?logo=githubactions&logoColor=white)](https://github.com/ArjanDeo/TwistingNether/deployments)
-
-<!-- Optional: replace with an actual screenshot once you have one, e.g. -->
-<!-- ![App screenshot](docs/screenshot.png) -->
 
 ## About
 
