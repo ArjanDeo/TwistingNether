@@ -7,7 +7,7 @@
     import { bossIcons } from "$lib/metadata";
     import { API_BASE_URL, getParseColor, getRaidDifficultyId, getRaidDifficultyString } from "$lib/common";
 	import { onMount } from "svelte";
-	import type { Character, WeeklyBosses } from "$lib/types/character";
+	import type { Character, Raid, WeeklyBosses } from "$lib/types/character";
     import type {CharacterStats} from "$lib/types"
 	import { toast } from "svelte-sonner";
 	import type { RaidPerformance } from "$lib/types/warcraftLogs";
@@ -32,8 +32,13 @@
         return `${formattedMinutes}:${formattedSeconds}`;
     }
 
+    // The API omits raids the character has no progress in, so default to empty progress.
+    const emptyRaid: Raid = { summary: '', total_bosses: 0, normal_bosses_killed: 0, heroic_bosses_killed: 0, mythic_bosses_killed: 0 };
+    const venomousAbyss = $derived(character?.characterData.raid_progression?.theVenomousAbyss ?? emptyRaid);
+    const tideboundGrotto = $derived(character?.characterData.raid_progression?.theTideboundGrotto ?? emptyRaid);
+
     function getProgressPercent(current: number, total: number): number {
-        return (current / total) * 100;
+        return total > 0 ? (current / total) * 100 : 0;
     }
 
     // Animation helper for staggered entrance
@@ -317,12 +322,12 @@ $effect(() => {
                             <div class="flex justify-between items-center">
                                 <span class="text-green-400 font-bold text-lg">Normal</span>
                                 <span class="font-semibold text-lg ml-2">
-                                    {character.characterData.raid_progression.theVenomousAbyss.normal_bosses_killed}/{character.characterData.raid_progression.theVenomousAbyss.total_bosses}
+                                    {venomousAbyss.normal_bosses_killed}/{venomousAbyss.total_bosses}
                                 </span>
                             </div>
                             <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
                                 <div class="h-full bg-gradient-to-r from-green-500 to-green-400 progress-bar shadow-lg" 
-                                    style="width: {getProgressPercent(character.characterData.raid_progression.theVenomousAbyss.normal_bosses_killed, character.characterData.raid_progression.theVenomousAbyss.total_bosses)}%; box-shadow: 0 0 10px #10b981;"></div>
+                                    style="width: {getProgressPercent(venomousAbyss.normal_bosses_killed, venomousAbyss.total_bosses)}%; box-shadow: 0 0 10px #10b981;"></div>
                             </div>
                         </div>
 
@@ -331,12 +336,12 @@ $effect(() => {
                             <div class="flex justify-between items-center">
                                 <span class="text-blue-400 font-bold text-lg">Heroic</span>
                                 <span class="font-semibold text-lg ml-2">
-                                    {character.characterData.raid_progression.theVenomousAbyss.heroic_bosses_killed}/{character.characterData.raid_progression.theVenomousAbyss.total_bosses}
+                                    {venomousAbyss.heroic_bosses_killed}/{venomousAbyss.total_bosses}
                                 </span>
                             </div>
                             <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
                                 <div class="h-full bg-gradient-to-r from-blue-500 to-blue-400 progress-bar shadow-lg" 
-                                    style="width: {getProgressPercent(character.characterData.raid_progression.theVenomousAbyss.heroic_bosses_killed, character.characterData.raid_progression.theVenomousAbyss.total_bosses)}%; box-shadow: 0 0 10px #3b82f6;"></div>
+                                    style="width: {getProgressPercent(venomousAbyss.heroic_bosses_killed, venomousAbyss.total_bosses)}%; box-shadow: 0 0 10px #3b82f6;"></div>
                             </div>
                         </div>
 
@@ -345,12 +350,12 @@ $effect(() => {
                             <div class="flex justify-between items-center">
                                 <span class="text-purple-400 font-bold text-lg">Mythic</span>
                                 <span class="font-semibold text-lg ml-2">
-                                    {character.characterData.raid_progression.theVenomousAbyss.mythic_bosses_killed}/{character.characterData.raid_progression.theVenomousAbyss.total_bosses}
+                                    {venomousAbyss.mythic_bosses_killed}/{venomousAbyss.total_bosses}
                                 </span>
                             </div>
                             <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
                                 <div class="h-full bg-gradient-to-r from-purple-500 to-purple-400 progress-bar shadow-lg" 
-                                    style="width: {getProgressPercent(character.characterData.raid_progression.theVenomousAbyss.mythic_bosses_killed, character.characterData.raid_progression.theVenomousAbyss.total_bosses)}%; box-shadow: 0 0 10px #a855f7;"></div>
+                                    style="width: {getProgressPercent(venomousAbyss.mythic_bosses_killed, venomousAbyss.total_bosses)}%; box-shadow: 0 0 10px #a855f7;"></div>
                             </div>
                         </div>
                     </div>
@@ -370,12 +375,12 @@ $effect(() => {
                             <div class="flex justify-between items-center">
                                 <span class="text-green-400 font-bold text-lg">Normal</span>
                                 <span class="font-semibold text-lg ml-2">
-                                    {character.characterData.raid_progression.theTideboundGrotto.normal_bosses_killed}/{character.characterData.raid_progression.theTideboundGrotto.total_bosses}
+                                    {tideboundGrotto.normal_bosses_killed}/{tideboundGrotto.total_bosses}
                                 </span>
                             </div>
                             <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
                                 <div class="h-full bg-gradient-to-r from-green-500 to-green-400 progress-bar shadow-lg" 
-                                    style="width: {getProgressPercent(character.characterData.raid_progression.theTideboundGrotto.normal_bosses_killed, character.characterData.raid_progression.theTideboundGrotto.total_bosses)}%; box-shadow: 0 0 10px #10b981;"></div>
+                                    style="width: {getProgressPercent(tideboundGrotto.normal_bosses_killed, tideboundGrotto.total_bosses)}%; box-shadow: 0 0 10px #10b981;"></div>
                             </div>
                         </div>
 
@@ -384,12 +389,12 @@ $effect(() => {
                             <div class="flex justify-between items-center">
                                 <span class="text-blue-400 font-bold text-lg">Heroic</span>
                                 <span class="font-semibold text-lg ml-2">
-                                    {character.characterData.raid_progression.theTideboundGrotto.heroic_bosses_killed}/{character.characterData.raid_progression.theTideboundGrotto.total_bosses}
+                                    {tideboundGrotto.heroic_bosses_killed}/{tideboundGrotto.total_bosses}
                                 </span>
                             </div>
                             <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
                                 <div class="h-full bg-gradient-to-r from-blue-500 to-blue-400 progress-bar shadow-lg" 
-                                    style="width: {getProgressPercent(character.characterData.raid_progression.theTideboundGrotto.heroic_bosses_killed, character.characterData.raid_progression.theTideboundGrotto.total_bosses)}%; box-shadow: 0 0 10px #3b82f6;"></div>
+                                    style="width: {getProgressPercent(tideboundGrotto.heroic_bosses_killed, tideboundGrotto.total_bosses)}%; box-shadow: 0 0 10px #3b82f6;"></div>
                             </div>
                         </div>
 
@@ -398,12 +403,12 @@ $effect(() => {
                             <div class="flex justify-between items-center">
                                 <span class="text-purple-400 font-bold text-lg">Mythic</span>
                                 <span class="font-semibold text-lg ml-2">
-                                    {character.characterData.raid_progression.theTideboundGrotto.mythic_bosses_killed}/{character.characterData.raid_progression.theTideboundGrotto.total_bosses}
+                                    {tideboundGrotto.mythic_bosses_killed}/{tideboundGrotto.total_bosses}
                                 </span>
                             </div>
                             <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
                                 <div class="h-full bg-gradient-to-r from-purple-500 to-purple-400 progress-bar shadow-lg" 
-                                    style="width: {getProgressPercent(character.characterData.raid_progression.theTideboundGrotto.mythic_bosses_killed, character.characterData.raid_progression.theTideboundGrotto.total_bosses)}%; box-shadow: 0 0 10px #a855f7;"></div>
+                                    style="width: {getProgressPercent(tideboundGrotto.mythic_bosses_killed, tideboundGrotto.total_bosses)}%; box-shadow: 0 0 10px #a855f7;"></div>
                             </div>
                         </div>
                     </div>
