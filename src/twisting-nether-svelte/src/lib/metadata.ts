@@ -112,6 +112,9 @@ import theTwinFangs from '$lib/icons/bosses/3421.webp'
 import theCoiledAltar from '$lib/icons/bosses/3429.webp'
 import ulatek from '$lib/icons/bosses/3492.webp'
 
+// The Tidebound Grotto
+import nymrissaWavecaller from '$lib/icons/bosses/3379.webp'
+
 export const raceIcons: Record<string, string> = {
   'bloodelf-male': bloodelfMale,
   'bloodelf-female': bloodelfFemale,
@@ -210,4 +213,5 @@ export const bossIcons: Record<number, string> = {
 	3421: theTwinFangs,
 	3429: theCoiledAltar,
 	3492: ulatek,
+	3379: nymrissaWavecaller,
 }
